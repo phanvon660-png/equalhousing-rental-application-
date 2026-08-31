@@ -3,828 +3,948 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Residential Rental Application</title>
+<meta name="theme-color" content="#050505">
+<title>Contractor Applications</title>
 
 <style>
-*{box-sizing:border-box}
+:root{
+  --black:#030303;
+  --black2:#0b0b0b;
+  --yellow:#fff000;
+  --yellow2:#ffd900;
+  --cream:#fff7b8;
+  --cream2:#fffbe1;
+  --white:#ffffff;
+  --gray:#a9a9a9;
+  --line:rgba(255,240,0,.22);
+  --glass:rgba(255,255,255,.055);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:#eaf5fa;
-  color:#17263a;
-}
-
-.header{
-  background:linear-gradient(135deg,#061426,#0d4779);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",
+  "Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(255,240,0,.18),transparent 34%),
+    radial-gradient(circle at 100% 60%,rgba(255,217,0,.08),transparent 30%),
+    #030303;
   color:white;
-  padding:35px 20px 45px;
+  min-height:100vh;
 }
 
-.header-inner{
-  max-width:850px;
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  background:rgba(3,3,3,.76);
+  border-bottom:1px solid rgba(255,240,0,.12);
+}
+
+.nav{
+  max-width:1100px;
   margin:auto;
+  padding:13px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 
-.label{
-  color:#67c8f5;
-  font-size:11px;
+.logo{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-.5px;
+}
+
+.logo span{
+  color:var(--yellow);
+  text-shadow:
+    0 0 7px rgba(255,240,0,.8),
+    0 0 22px rgba(255,220,0,.55);
+}
+
+select{
+  appearance:none;
+  border:1px solid rgba(255,240,0,.35);
+  background:rgba(255,240,0,.08);
+  color:var(--yellow);
+  border-radius:14px;
+  padding:10px 14px;
   font-weight:700;
-  letter-spacing:2px;
+  outline:none;
+}
+
+option{
+  background:#111;
+  color:white;
+}
+
+.hero{
+  max-width:1100px;
+  margin:auto;
+  padding:70px 18px 35px;
+  text-align:center;
+}
+
+.badge{
+  display:inline-block;
+  padding:8px 14px;
+  border:1px solid rgba(255,240,0,.35);
+  background:rgba(255,240,0,.07);
+  border-radius:999px;
+  color:var(--yellow);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1.4px;
   text-transform:uppercase;
+  box-shadow:0 0 25px rgba(255,240,0,.08);
 }
 
 h1{
-  font-family:Georgia,serif;
-  font-size:42px;
-  font-weight:500;
-  margin:10px 0;
+  margin-top:20px;
+  font-size:clamp(42px,9vw,82px);
+  line-height:.94;
+  letter-spacing:-4px;
+  font-weight:950;
 }
 
-.header p{
-  max-width:620px;
-  color:#c8d9e7;
-  line-height:1.6;
+.gold{
+  color:var(--yellow);
+  text-shadow:
+    0 0 8px rgba(255,240,0,.9),
+    0 0 25px rgba(255,220,0,.65),
+    0 0 60px rgba(255,220,0,.25);
 }
 
-.container{
-  max-width:850px;
-  margin:-25px auto 50px;
-  padding:0 15px;
+.hero p{
+  max-width:650px;
+  margin:25px auto 0;
+  color:#c9c9c9;
+  line-height:1.65;
+  font-size:16px;
+}
+
+.apps{
+  max-width:1100px;
+  margin:25px auto 70px;
+  padding:0 18px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
 }
 
 .card{
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 15px 35px rgba(0,30,60,.12);
   overflow:hidden;
+  border-radius:30px;
+  border:1px solid rgba(255,240,0,.2);
+  background:linear-gradient(
+    145deg,
+    rgba(255,255,255,.08),
+    rgba(255,255,255,.025)
+  );
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.55),
+    inset 0 1px rgba(255,255,255,.09);
+  backdrop-filter:blur(20px);
 }
 
-.notice{
-  padding:18px 22px;
-  background:#edf8fc;
-  border-bottom:1px solid #c9dce6;
-  font-size:12px;
+.card-image{
+  height:280px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+
+.cleaner-image{
+  background-image:
+    linear-gradient(180deg,transparent 25%,rgba(0,0,0,.88)),
+    url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=85");
+}
+
+.handyman-image{
+  background-image:
+    linear-gradient(180deg,transparent 25%,rgba(0,0,0,.88)),
+    url("https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1400&q=85");
+}
+
+.card-image-content{
+  position:absolute;
+  bottom:22px;
+  left:22px;
+  right:22px;
+}
+
+.icon{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:var(--yellow);
+  color:#050505;
+  font-size:25px;
+  box-shadow:
+    0 0 12px rgba(255,240,0,.95),
+    0 0 35px rgba(255,220,0,.5);
+}
+
+.card h2{
+  margin-top:12px;
+  font-size:34px;
+  letter-spacing:-1.5px;
+}
+
+.card-body{
+  padding:24px;
+}
+
+.card-body p{
+  color:#bbb;
+  line-height:1.6;
+  margin-bottom:22px;
+}
+
+.btn{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:17px;
+  background:
+    linear-gradient(180deg,#fff95a 0%,#fff000 45%,#e8c900 100%);
+  color:#050505;
+  font-weight:950;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:
+    0 4px 0 #9c8700,
+    0 0 16px rgba(255,240,0,.75),
+    0 0 45px rgba(255,220,0,.22);
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn:active{
+  transform:translateY(2px);
+  box-shadow:0 1px 0 #9c8700,0 0 18px rgba(255,240,0,.7);
 }
 
 .section{
-  padding:25px 22px;
-  border-bottom:1px solid #d7e5eb;
+  display:none;
+  max-width:900px;
+  margin:20px auto 80px;
+  padding:0 18px;
 }
 
-.section h2{
-  margin:0 0 17px;
-  color:#0b2948;
-  font-size:17px;
+.section.active{
+  display:block;
+}
+
+.application{
+  border:1px solid rgba(255,240,0,.25);
+  background:rgba(255,255,255,.045);
+  border-radius:30px;
+  overflow:hidden;
+  box-shadow:0 25px 80px rgba(0,0,0,.6);
+  backdrop-filter:blur(25px);
+}
+
+.application-header{
+  padding:30px 24px;
+  background:
+    radial-gradient(circle at 90% 0%,rgba(255,240,0,.25),transparent 35%),
+    #080808;
+  border-bottom:1px solid var(--line);
+}
+
+.application-header h2{
+  font-size:38px;
+  letter-spacing:-1.5px;
+}
+
+.application-header p{
+  margin-top:8px;
+  color:#aaa;
+}
+
+.form{
+  padding:25px;
+}
+
+.form-title{
+  color:var(--yellow);
+  margin:28px 0 14px;
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:1.3px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
 
-.full{
+.field{
+  margin-bottom:4px;
+}
+
+.field.full{
   grid-column:1/-1;
 }
 
 label{
   display:block;
-  margin-bottom:5px;
-  font-size:11px;
-  font-weight:700;
-  color:#40556a;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:11px;
-  border:1px solid #c8dce6;
-  border-radius:8px;
-  background:#fbfdfe;
+  margin:0 0 7px 4px;
   font-size:12px;
-  outline:none;
+  color:#aaa;
+  font-weight:700;
 }
 
-input:focus,select:focus,textarea:focus{
-  border-color:#39aee4;
-  box-shadow:0 0 0 3px rgba(57,174,228,.12);
+input,textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.11);
+  outline:none;
+  border-radius:15px;
+  padding:15px;
+  background:rgba(255,255,255,.055);
+  color:white;
+  font:inherit;
+  transition:.2s;
+}
+
+input:focus,textarea:focus{
+  border-color:rgba(255,240,0,.7);
+  box-shadow:0 0 0 3px rgba(255,240,0,.08);
 }
 
 textarea{
-  min-height:75px;
+  min-height:120px;
   resize:vertical;
 }
 
-.info{
-  padding:14px;
-  background:#f1f8fb;
-  border:1px solid #c9e0ea;
-  border-radius:9px;
-  font-size:11px;
-  line-height:1.6;
-  margin-bottom:14px;
+.agreement{
+  margin-top:20px;
+  padding:20px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,rgba(255,240,0,.09),rgba(255,255,255,.025));
+  border:1px solid rgba(255,240,0,.18);
+  color:#d5d5d5;
+  line-height:1.65;
+  font-size:14px;
 }
 
-.checkbox{
+.agreement h3{
+  color:var(--yellow);
+  margin-bottom:12px;
+}
+
+.agreement ol{
+  padding-left:20px;
+}
+
+.agreement li{
+  margin-bottom:9px;
+}
+
+.check{
   display:flex;
-  gap:9px;
   align-items:flex-start;
-  font-size:11px;
+  gap:10px;
+  margin:20px 0;
+  color:#ddd;
+  font-size:14px;
   line-height:1.5;
 }
 
-.checkbox input{
-  width:16px;
-  height:16px;
-  margin-top:2px;
+.check input{
+  width:20px;
+  height:20px;
+  accent-color:var(--yellow);
+  margin-top:1px;
 }
 
 .signature{
-  width:100%;
-  height:130px;
-  border:1px solid #bcd6e2;
-  border-radius:9px;
-  background:white;
-  touch-action:none;
-}
-
-.clear{
-  margin-top:7px;
-  padding:7px 11px;
-  border:1px solid #bfd8e4;
-  border-radius:7px;
-  background:white;
-  color:#1676ad;
-  font-size:10px;
-}
-
-.submit-area{
-  padding:30px 22px;
-  text-align:center;
-  background:linear-gradient(135deg,#061426,#0d3157);
-  color:white;
-}
-
-.submit-area h2{
-  font-family:Georgia,serif;
-  font-weight:500;
-  font-size:25px;
-}
-
-.submit-area p{
-  color:#bfd4e3;
-  font-size:11px;
-}
-
-button.primary{
-  border:0;
-  border-radius:9px;
-  padding:12px 25px;
-  background:linear-gradient(135deg,#1595d0,#48b8f5);
-  color:white;
-  font-weight:800;
-  cursor:pointer;
-}
-
-.panel{
-  display:none;
-  margin-top:18px;
+  background:var(--cream);
+  color:#111;
+  border-radius:20px;
   padding:20px;
-  border-radius:11px;
-  background:white;
-  color:#17263a;
-  text-align:left;
+  margin-top:20px;
 }
 
-.panel.show{
+.signature label{
+  color:#333;
+}
+
+.signature input{
+  color:#111;
+  background:rgba(255,255,255,.55);
+  border-color:rgba(0,0,0,.15);
+}
+
+.submit{
+  margin-top:22px;
+}
+
+.back{
+  margin:0 auto 18px;
   display:block;
-}
-
-.choice{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
-}
-
-.choice button{
-  flex:1;
-  padding:12px;
-  border:1px solid #b9d7e5;
-  border-radius:8px;
-  background:#f8fcfe;
-  color:#126fa5;
-  font-weight:700;
-}
-
-.upload{
-  padding:15px;
-  margin-top:12px;
-  border:1px dashed #9fc9dd;
-  border-radius:9px;
-  background:#f7fcfe;
-}
-
-.upload small{
-  display:block;
-  margin:5px 0 10px;
-  color:#687d8e;
-  font-size:9px;
-}
-
-.receipt-number{
-  margin:12px 0;
-  padding:12px;
-  border-radius:8px;
-  background:#eaf7fc;
-  color:#126fa5;
-  font-weight:800;
-  font-size:18px;
-  letter-spacing:1px;
+  border:1px solid rgba(255,240,0,.25);
+  background:transparent;
+  color:var(--yellow);
+  border-radius:14px;
+  padding:11px 16px;
+  cursor:pointer;
 }
 
 footer{
   text-align:center;
-  color:#64798a;
-  font-size:10px;
-  padding:25px;
+  color:#777;
+  padding:30px 18px 60px;
+  font-size:12px;
 }
 
-@media(max-width:650px){
-  .grid{grid-template-columns:1fr}
-  .full{grid-column:auto}
-  h1{font-size:34px}
-  .choice{flex-direction:column}
+@media(max-width:720px){
+  .apps{
+    grid-template-columns:1fr;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  h1{
+    letter-spacing:-2.5px;
+  }
+
+  .hero{
+    padding-top:50px;
+  }
+
+  .card-image{
+    height:245px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="label">Residential Leasing</div>
-    <h1>Rental Application</h1>
-    <p>
-      Please complete the application below with accurate information.
-      Required fields are marked with an asterisk.
-    </p>
-  </div>
+<header>
+  <nav class="nav">
+    <div class="logo">CONTRACTOR<span>+</span></div>
+
+    <select id="language" onchange="translatePage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="uk">Українська</option>
+      <option value="ru">Русский</option>
+      <option value="ar">العربية</option>
+    </select>
+  </nav>
 </header>
 
-<div class="container">
+<main id="home">
 
-<div class="card">
+<section class="hero">
+  <span class="badge" data-i18n="badge">Independent Contractor Applications</span>
 
-<div class="notice">
-<strong>Application Processing</strong><br>
-Your application will be reviewed after submission and applicable
-processing requirements have been completed.
+  <h1>
+    Work with<br>
+    <span class="gold">Confidence.</span>
+  </h1>
+
+  <p data-i18n="hero">
+    Apply to become a professional property-service contractor.
+    Choose your service below and complete the application.
+  </p>
+</section>
+
+<section class="apps">
+
+  <!-- CLEANER -->
+  <article class="card">
+    <div class="card-image cleaner-image">
+      <div class="card-image-content">
+        <div class="icon">🧹</div>
+        <h2 data-i18n="cleaner">Cleaner</h2>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <p data-i18n="cleanerDesc">
+        Residential cleaning, turnover cleaning, deep cleaning,
+        property preparation and related services.
+      </p>
+
+      <button class="btn" onclick="openApp('cleaner')" data-i18n="applyCleaner">
+        Apply as Cleaner
+      </button>
+    </div>
+  </article>
+
+  <!-- HANDYMAN -->
+  <article class="card">
+    <div class="card-image handyman-image">
+      <div class="card-image-content">
+        <div class="icon">🔧</div>
+        <h2 data-i18n="handyman">Handyman</h2>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <p data-i18n="handymanDesc">
+        General property maintenance, repairs, installations,
+        inspections and approved handyman services.
+      </p>
+
+      <button class="btn" onclick="openApp('handyman')" data-i18n="applyHandyman">
+        Apply as Handyman
+      </button>
+    </div>
+  </article>
+
+</section>
+
+</main>
+
+
+<!-- CLEANER APPLICATION -->
+
+<section class="section" id="cleanerSection">
+
+<button class="back" onclick="goHome()">← Back</button>
+
+<div class="application">
+
+<div class="application-header">
+  <h2>🧹 <span class="gold">Cleaner</span></h2>
+  <p>Independent Contractor Application & Agreement</p>
 </div>
 
-<form id="application">
+<form class="form" onsubmit="submitApplication(event,'Cleaner')">
 
-<section class="section">
-<h2>1. Property Information</h2>
+<div class="form-title">Contractor Information</div>
 
 <div class="grid">
 
-<div class="full">
-<label>Property Address *</label>
-<input name="propertyAddress" required>
+<div class="field">
+<label>Full Legal Name</label>
+<input required type="text" name="name">
 </div>
 
-<div>
-<label>Desired Move-In Date</label>
-<input type="date" name="moveInDate">
+<div class="field">
+<label>Phone Number</label>
+<input required type="tel" name="phone">
 </div>
 
-<div>
-<label>Lease Term</label>
-<select name="leaseTerm">
-<option value="">Select</option>
-<option>6 Months</option>
-<option>12 Months</option>
-<option>18 Months</option>
-<option>24 Months</option>
-</select>
+<div class="field">
+<label>Email Address</label>
+<input required type="email" name="email">
 </div>
 
-</div>
-</section>
-
-
-<section class="section">
-<h2>2. Applicant Information</h2>
-
-<div class="grid">
-
-<div>
-<label>First Name *</label>
-<input name="firstName" required>
+<div class="field">
+<label>City / State</label>
+<input required type="text" name="location">
 </div>
 
-<div>
-<label>Last Name *</label>
-<input name="lastName" required>
+<div class="field full">
+<label>Service Address / Property</label>
+<input type="text" name="property">
 </div>
 
-<div>
-<label>Email *</label>
-<input type="email" name="email" required>
-</div>
-
-<div>
-<label>Phone *</label>
-<input type="tel" name="phone" required>
-</div>
-
-<div class="full">
-<label>Current Address *</label>
-<input name="currentAddress" required>
-</div>
-
-<div>
-<label>City</label>
-<input name="city">
-</div>
-
-<div>
-<label>State</label>
-<input name="state">
-</div>
-
-<div>
-<label>ZIP Code</label>
-<input name="zip">
+<div class="field full">
+<label>Cleaning Experience</label>
+<textarea name="experience"
+placeholder="Tell us about your cleaning experience..."></textarea>
 </div>
 
 </div>
-</section>
 
+<div class="form-title">Cleaner Contractor Agreement</div>
 
-<section class="section">
-<h2>3. Employment & Income</h2>
+<div class="agreement">
 
-<div class="grid">
+<h3>1. Services</h3>
+<p>
+The Contractor may provide residential cleaning, move-in/move-out
+cleaning, turnover cleaning, deep cleaning, surface cleaning,
+bathroom and kitchen cleaning, floor care, trash removal and
+other cleaning services agreed upon by the parties.
+</p>
 
-<div>
-<label>Employer</label>
-<input name="employer">
-</div>
+<h3>2. Work Standards</h3>
+<p>
+Contractor agrees to perform services professionally, safely,
+carefully and in accordance with the property owner's instructions
+and any agreed scope of work.
+</p>
 
-<div>
-<label>Job Title</label>
-<input name="jobTitle">
-</div>
+<h3>3. Payment</h3>
+<p>
+The parties will agree upon the rate, service fee or project price
+before work begins. Payment is subject to completion of the agreed
+scope of work.
+</p>
 
-<div>
-<label>Employer Phone</label>
-<input type="tel" name="employerPhone">
-</div>
+<h3>4. Property Access</h3>
+<p>
+Keys, access codes and other property-access information must be
+kept confidential and used only for authorized work.
+</p>
 
-<div>
-<label>Monthly Gross Income</label>
-<input type="number" name="income" min="0">
-</div>
+<h3>5. Documentation</h3>
+<p>
+Contractor may be required to provide photographs or written
+confirmation showing completed work and reporting maintenance
+issues discovered during service.
+</p>
 
-<div class="full">
-<label>Additional Income Information</label>
-<textarea name="additionalIncome"></textarea>
-</div>
+<h3>6. Independent Contractor</h3>
+<p>
+The Contractor is engaged as an independent contractor and is
+responsible for their own taxes, licenses, permits, insurance and
+business expenses to the extent required by applicable law.
+</p>
 
-</div>
-</section>
+<h3>7. Safety & Property Care</h3>
+<p>
+Contractor agrees to exercise reasonable care and immediately
+report damage, hazards, leaks, security concerns or other material
+property issues discovered during the work.
+</p>
 
-
-<section class="section">
-<h2>4. Rental History</h2>
-
-<div class="grid">
-
-<div>
-<label>Previous Landlord</label>
-<input name="landlord">
-</div>
-
-<div>
-<label>Landlord Phone</label>
-<input type="tel" name="landlordPhone">
-</div>
-
-<div class="full">
-<label>Previous Rental Address</label>
-<input name="previousAddress">
-</div>
-
-<div class="full">
-<label>Reason for Moving</label>
-<textarea name="movingReason"></textarea>
-</div>
+<h3>8. Termination</h3>
+<p>
+Either party may end the working relationship subject to any
+applicable written agreement and applicable law.
+</p>
 
 </div>
-</section>
 
-
-<section class="section">
-<h2>5. Household & Pets</h2>
-
-<div class="grid">
-
-<div>
-<label>Number of Adults *</label>
-<input type="number" name="adults" min="1" required>
-</div>
-
-<div>
-<label>Number of Children</label>
-<input type="number" name="children" min="0">
-</div>
-
-<div>
-<label>Do you have pets?</label>
-<select name="pets">
-<option value="">Select</option>
-<option>Yes</option>
-<option>No</option>
-</select>
-</div>
-
-<div>
-<label>Number of Pets</label>
-<input type="number" name="petCount" min="0">
-</div>
-
-<div class="full">
-<label>Pet Details</label>
-<textarea name="petDetails"></textarea>
-</div>
-
-</div>
-</section>
-
-
-<section class="section">
-<h2>6. Identification</h2>
-
-<div class="info">
-If identification is required for your application, upload clear
-images of the front and back of your government-issued ID.
-Only upload documents through the secure application system.
-</div>
-
-<div class="upload">
-<strong>ID — Front</strong>
-<small>Accepted: JPG, PNG or WEBP</small>
-<input type="file" name="idFront"
-accept="image/jpeg,image/png,image/webp">
-</div>
-
-<div class="upload">
-<strong>ID — Back</strong>
-<small>Accepted: JPG, PNG or WEBP</small>
-<input type="file" name="idBack"
-accept="image/jpeg,image/png,image/webp">
-</div>
-
-</section>
-
-
-<section class="section">
-<h2>7. Authorization</h2>
-
-<div class="info">
-I certify that the information supplied in this application is true
-and complete to the best of my knowledge. I authorize verification
-of information relevant to the rental application as permitted by
-applicable law.
-</div>
-
-<div class="checkbox">
-<input type="checkbox" id="authorization" required>
-<label for="authorization">
-I agree to the authorization above. *
+<label class="check">
+<input type="checkbox" required>
+<span>
+I have reviewed the Cleaner Independent Contractor Agreement and
+agree to the terms applicable to the services I perform.
+</span>
 </label>
+
+<div class="signature">
+
+<label>Contractor Electronic Signature</label>
+<input required type="text" name="signature"
+placeholder="Type your full legal name">
+
+<label style="margin-top:14px;">Date</label>
+<input required type="date" name="date">
+
 </div>
 
-</section>
-
-
-<section class="section">
-<h2>8. Applicant Signature</h2>
-
-<div class="grid">
-
-<div>
-<label>Full Name *</label>
-<input name="signatureName" required>
-</div>
-
-<div>
-<label>Date *</label>
-<input type="date" name="signatureDate" required>
-</div>
-
-<div class="full">
-
-<label>Draw Signature *</label>
-
-<canvas id="signature" class="signature"></canvas>
-
-<button type="button" class="clear" id="clear">
-Clear Signature
+<button class="btn submit" type="submit">
+Submit Cleaner Application
 </button>
-
-</div>
-
-</div>
-</section>
-
-
-<div class="submit-area">
-
-<h2>Submit Your Application</h2>
-
-<p>
-Please review your information before submitting.
-</p>
-
-<button class="primary" type="submit">
-Submit Application
-</button>
-
-
-<div class="panel" id="holdPanel">
-
-<h3>Application Submitted</h3>
-
-<p>
-Would you like to request that the property be held while your
-application is being reviewed?
-</p>
-
-<div class="choice">
-
-<button type="button" id="yes">
-Yes
-</button>
-
-<button type="button" id="no">
-No
-</button>
-
-</div>
-
-</div>
-
-
-<div class="panel" id="feePanel">
-
-<h3>Application Fee Confirmation</h3>
-
-<p>
-Please select the amount you paid and upload your payment
-confirmation screenshot.
-</p>
-
-<label>Amount Paid *</label>
-
-<select id="amount">
-<option value="">Select amount</option>
-<option>$75</option>
-<option>$150</option>
-<option>$225</option>
-<option>$300</option>
-<option>Other</option>
-</select>
-
-<div class="upload">
-
-<strong>Payment Confirmation Screenshot *</strong>
-
-<small>
-Upload a clear screenshot of your payment confirmation.
-</small>
-
-<input
-type="file"
-id="paymentScreenshot"
-accept="image/jpeg,image/png,image/webp">
-
-</div>
-
-<br>
-
-<button
-type="button"
-class="primary"
-id="feeSubmit">
-
-Submit Fee Confirmation
-
-</button>
-
-</div>
-
-
-<div class="panel" id="receiptPanel">
-
-<h3>Submission Received</h3>
-
-<p>
-Your application information and fee confirmation have been
-submitted for review.
-</p>
-
-<div>
-Confirmation Number:
-</div>
-
-<div class="receipt-number" id="receipt">
-</div>
-
-<p>
-Please keep this confirmation number for your records.
-You will receive an email from us within approximately
-<strong>3 hours</strong> with the next steps.
-</p>
-
-</div>
-
-</div>
 
 </form>
+</div>
+</section>
+
+
+<!-- HANDYMAN APPLICATION -->
+
+<section class="section" id="handymanSection">
+
+<button class="back" onclick="goHome()">← Back</button>
+
+<div class="application">
+
+<div class="application-header">
+  <h2>🔧 <span class="gold">Handyman</span></h2>
+  <p>Independent Contractor Application & Agreement</p>
+</div>
+
+<form class="form" onsubmit="submitApplication(event,'Handyman')">
+
+<div class="form-title">Contractor Information</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Full Legal Name</label>
+<input required type="text" name="name">
+</div>
+
+<div class="field">
+<label>Phone Number</label>
+<input required type="tel" name="phone">
+</div>
+
+<div class="field">
+<label>Email Address</label>
+<input required type="email" name="email">
+</div>
+
+<div class="field">
+<label>City / State</label>
+<input required type="text" name="location">
+</div>
+
+<div class="field full">
+<label>Service Address / Property</label>
+<input type="text" name="property">
+</div>
+
+<div class="field full">
+<label>Skills / Services Offered</label>
+<textarea name="skills"
+placeholder="Examples: drywall, painting, doors, fixtures, repairs, installations..."></textarea>
+</div>
 
 </div>
+
+<div class="form-title">Handyman Contractor Agreement</div>
+
+<div class="agreement">
+
+<h3>1. Services</h3>
+<p>
+The Contractor may provide general property maintenance,
+minor repairs, installations, painting, drywall work, fixture
+replacement, hardware installation, property inspections and
+other services specifically approved by the parties.
+</p>
+
+<h3>2. Authorization</h3>
+<p>
+Contractor must obtain approval before performing work outside
+the agreed scope. Major repairs, regulated work or work requiring
+a permit must be handled in accordance with applicable laws and
+property-owner instructions.
+</p>
+
+<h3>3. Materials</h3>
+<p>
+Material purchases, reimbursements and limits should be approved
+before purchase unless otherwise agreed in writing.
+</p>
+
+<h3>4. Payment</h3>
+<p>
+The parties will establish labor rates, project prices or other
+payment terms before work begins. Additional work requires
+appropriate authorization.
+</p>
+
+<h3>5. Property Access</h3>
+<p>
+Keys, access codes and property information are confidential and
+may only be used for authorized work.
+</p>
+
+<h3>6. Documentation</h3>
+<p>
+Contractor may be required to provide photographs, receipts,
+descriptions of completed work and notice of any additional
+maintenance concerns.
+</p>
+
+<h3>7. Independent Contractor</h3>
+<p>
+The Contractor is engaged as an independent contractor and is
+responsible for their own taxes, licenses, permits, insurance and
+business expenses to the extent required by applicable law.
+</p>
+
+<h3>8. Safety & Compliance</h3>
+<p>
+Contractor agrees to perform work safely and comply with applicable
+building, electrical, plumbing, occupational and other requirements.
+</p>
+
+<h3>9. Termination</h3>
+<p>
+Either party may end the working relationship subject to any
+applicable written agreement and applicable law.
+</p>
+
 </div>
+
+<label class="check">
+<input type="checkbox" required>
+<span>
+I have reviewed the Handyman Independent Contractor Agreement and
+agree to the terms applicable to the services I perform.
+</span>
+</label>
+
+<div class="signature">
+
+<label>Contractor Electronic Signature</label>
+<input required type="text" name="signature"
+placeholder="Type your full legal name">
+
+<label style="margin-top:14px;">Date</label>
+<input required type="date" name="date">
+
+</div>
+
+<button class="btn submit" type="submit">
+Submit Handyman Application
+</button>
+
+</form>
+</div>
+</section>
+
 
 <footer>
-<strong>© 2026 Residential Leasing</strong><br>
-Equal Housing Opportunity<br>
-Application processing is subject to applicable law.
+© 2026 Contractor Services. All rights reserved.
+<br><br>
+Applications are subject to review and applicable independent-contractor laws.
 </footer>
 
 
 <script>
 
-const form=document.getElementById("application");
+const translations = {
 
-const canvas=document.getElementById("signature");
-const ctx=canvas.getContext("2d");
+en:{
+badge:"Independent Contractor Applications",
+hero:"Apply to become a professional property-service contractor. Choose your service below and complete the application.",
+cleaner:"Cleaner",
+handyman:"Handyman",
+cleanerDesc:"Residential cleaning, turnover cleaning, deep cleaning, property preparation and related services.",
+handymanDesc:"General property maintenance, repairs, installations, inspections and approved handyman services.",
+applyCleaner:"Apply as Cleaner",
+applyHandyman:"Apply as Handyman"
+},
 
-let drawing=false;
-let signed=false;
+es:{
+badge:"Solicitudes de Contratistas Independientes",
+hero:"Solicita convertirte en contratista profesional de servicios inmobiliarios. Elige tu servicio y completa la solicitud.",
+cleaner:"Limpieza",
+handyman:"Mantenimiento",
+cleanerDesc:"Limpieza residencial, limpieza profunda, preparación de propiedades y servicios relacionados.",
+handymanDesc:"Mantenimiento general, reparaciones, instalaciones, inspecciones y servicios de mantenimiento aprobados.",
+applyCleaner:"Solicitar como Limpiador",
+applyHandyman:"Solicitar como Técnico"
+},
 
-function resize(){
+uk:{
+badge:"Заявки незалежних підрядників",
+hero:"Подайте заявку на професійні послуги з обслуговування нерухомості. Оберіть послугу та заповніть заявку.",
+cleaner:"Прибиральник",
+handyman:"Майстер",
+cleanerDesc:"Прибирання житлових приміщень, генеральне прибирання та підготовка нерухомості.",
+handymanDesc:"Обслуговування нерухомості, ремонт, монтаж, перевірки та погоджені роботи.",
+applyCleaner:"Подати заявку прибиральника",
+applyHandyman:"Подати заявку майстра"
+},
 
-const ratio=window.devicePixelRatio||1;
+ru:{
+badge:"Заявки независимых подрядчиков",
+hero:"Подайте заявку на профессиональное обслуживание недвижимости. Выберите услугу и заполните заявку.",
+cleaner:"Уборка",
+handyman:"Мастер",
+cleanerDesc:"Уборка жилых помещений, генеральная уборка, подготовка недвижимости и связанные услуги.",
+handymanDesc:"Обслуживание недвижимости, ремонт, установка, проверки и согласованные работы.",
+applyCleaner:"Подать заявку уборщика",
+applyHandyman:"Подать заявку мастера"
+},
 
-const rect=canvas.getBoundingClientRect();
-
-canvas.width=rect.width*ratio;
-canvas.height=rect.height*ratio;
-
-ctx.setTransform(ratio,0,0,ratio,0,0);
-
-ctx.lineWidth=2;
-ctx.lineCap="round";
-ctx.strokeStyle="#123f73";
-
+ar:{
+badge:"طلبات المتعاقدين المستقلين",
+hero:"تقدم للعمل كمقاول محترف لخدمات العقارات. اختر الخدمة وأكمل الطلب.",
+cleaner:"عامل تنظيف",
+handyman:"فني صيانة",
+cleanerDesc:"تنظيف المنازل، التنظيف العميق، تجهيز العقارات والخدمات ذات الصلة.",
+handymanDesc:"صيانة العقارات، الإصلاحات، التركيبات، الفحوصات والخدمات المعتمدة.",
+applyCleaner:"التقديم كعامل تنظيف",
+applyHandyman:"التقديم كفني صيانة"
 }
-
-resize();
-
-function point(e){
-
-const r=canvas.getBoundingClientRect();
-
-return {
-x:e.clientX-r.left,
-y:e.clientY-r.top
-};
-
-}
-
-canvas.addEventListener("pointerdown",e=>{
-
-drawing=true;
-signed=true;
-
-const p=point(e);
-
-ctx.beginPath();
-ctx.moveTo(p.x,p.y);
-
-});
-
-canvas.addEventListener("pointermove",e=>{
-
-if(!drawing)return;
-
-const p=point(e);
-
-ctx.lineTo(p.x,p.y);
-ctx.stroke();
-
-});
-
-canvas.addEventListener("pointerup",()=>{
-drawing=false;
-});
-
-canvas.addEventListener("pointercancel",()=>{
-drawing=false;
-});
-
-document.getElementById("clear").onclick=()=>{
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-signed=false;
 
 };
 
+function translatePage(){
 
-form.addEventListener("submit",e=>{
+const lang=document.getElementById("language").value;
+const data=translations[lang] || translations.en;
 
-e.preventDefault();
+document.documentElement.dir=lang==="ar" ? "rtl" : "ltr";
 
-if(!signed){
-
-alert("Please draw your signature before submitting.");
-
-return;
-
-}
-
-document.getElementById("holdPanel").classList.add("show");
-
-document.getElementById("holdPanel")
-.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
-
-});
-
-
-function showFee(){
-
-document.getElementById("holdPanel").style.display="none";
-
-document.getElementById("feePanel").classList.add("show");
-
-document.getElementById("feePanel")
-.scrollIntoView({
-behavior:"smooth",
-block:"center"
+document.querySelectorAll("[data-i18n]").forEach(el=>{
+  const key=el.getAttribute("data-i18n");
+  if(data[key]) el.textContent=data[key];
 });
 
 }
 
-document.getElementById("yes").onclick=showFee;
+function openApp(type){
 
-document.getElementById("no").onclick=showFee;
+document.getElementById("home").style.display="none";
 
+document.getElementById("cleanerSection").classList.remove("active");
+document.getElementById("handymanSection").classList.remove("active");
 
-document.getElementById("feeSubmit").onclick=()=>{
-
-const amount=document.getElementById("amount").value;
-
-const screenshot=document.getElementById("paymentScreenshot").files[0];
-
-if(!amount){
-
-alert("Please select the amount paid.");
-
-return;
-
+if(type==="cleaner"){
+  document.getElementById("cleanerSection").classList.add("active");
+}else{
+  document.getElementById("handymanSection").classList.add("active");
 }
 
-if(!screenshot){
-
-alert("Please upload your payment confirmation screenshot.");
-
-return;
-
+window.scrollTo(0,0);
 }
 
-const confirmation=
-"RL-"+Math.floor(10000000+Math.random()*90000000);
+function goHome(){
 
-document.getElementById("receipt").textContent=confirmation;
+document.getElementById("cleanerSection").classList.remove("active");
+document.getElementById("handymanSection").classList.remove("active");
+document.getElementById("home").style.display="block";
 
-document.getElementById("feePanel").style.display="none";
+window.scrollTo(0,0);
+}
 
-document.getElementById("receiptPanel").classList.add("show");
+function submitApplication(event,type){
 
-document.getElementById("receiptPanel")
-.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
+event.preventDefault();
 
-};
+alert(
+"Thank you. Your "+type+
+" application has been completed. The application is ready for review."
+);
+
+}
 
 </script>
 
