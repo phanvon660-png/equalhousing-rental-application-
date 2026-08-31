@@ -3,816 +3,459 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Residential Leasing | Rental Application</title>
+<title>Residential Rental Application</title>
 
 <style>
-:root {
-    --navy:#071426;
-    --deep-blue:#0b1f3a;
-    --royal-blue:#1769aa;
-    --sky:#48b8f5;
-    --matte-blue:#dcecf4;
-    --form-blue:#eaf5fa;
-    --white:#ffffff;
-    --text:#17263a;
-    --muted:#6d7d90;
-    --border:#c9dce6;
-    --shadow:0 16px 38px rgba(4,20,40,.12);
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:#eaf5fa;
+  color:#17263a;
 }
 
-* { box-sizing:border-box; }
-
-html { scroll-behavior:smooth; }
-
-body {
-    margin:0;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",
-    Roboto,Helvetica,Arial,sans-serif;
-    background:var(--matte-blue);
-    color:var(--text);
+.header{
+  background:linear-gradient(135deg,#061426,#0d4779);
+  color:white;
+  padding:35px 20px 45px;
 }
 
-.top-header {
-    background:
-    radial-gradient(circle at 88% 0%,rgba(72,184,245,.22),transparent 28%),
-    linear-gradient(135deg,#041020,#0a2444 58%,#0d4779);
-    color:white;
-    padding:22px 20px 42px;
+.header-inner{
+  max-width:850px;
+  margin:auto;
 }
 
-.header-inner {
-    max-width:1120px;
-    margin:auto;
+.label{
+  color:#67c8f5;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-.brand-row {
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:25px;
+h1{
+  font-family:Georgia,serif;
+  font-size:42px;
+  font-weight:500;
+  margin:10px 0;
 }
 
-.brand-mark {
-    width:42px;
-    height:42px;
-    border-radius:11px;
-    overflow:hidden;
-    box-shadow:0 8px 18px rgba(0,0,0,.22);
+.header p{
+  max-width:620px;
+  color:#c8d9e7;
+  line-height:1.6;
 }
 
-.brand-mark img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.container{
+  max-width:850px;
+  margin:-25px auto 50px;
+  padding:0 15px;
 }
 
-.brand-text strong {
-    display:block;
-    letter-spacing:1.8px;
-    font-size:12px;
+.card{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 15px 35px rgba(0,30,60,.12);
+  overflow:hidden;
 }
 
-.brand-text span {
-    display:block;
-    margin-top:4px;
-    color:#a9dfff;
-    font-size:10px;
-    letter-spacing:1.2px;
-    text-transform:uppercase;
+.notice{
+  padding:18px 22px;
+  background:#edf8fc;
+  border-bottom:1px solid #c9dce6;
+  font-size:12px;
 }
 
-.eyebrow {
-    color:#78cef8;
-    text-transform:uppercase;
-    font-size:10px;
-    font-weight:800;
-    letter-spacing:2.4px;
-    margin-bottom:9px;
+.section{
+  padding:25px 22px;
+  border-bottom:1px solid #d7e5eb;
 }
 
-.header-content h1 {
-    margin:0;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:clamp(32px,5vw,52px);
-    font-weight:500;
-    line-height:1.03;
+.section h2{
+  margin:0 0 17px;
+  color:#0b2948;
+  font-size:17px;
 }
 
-.header-content p {
-    max-width:620px;
-    margin:12px 0 0;
-    color:#c7d9e8;
-    font-size:13px;
-    line-height:1.55;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-.page {
-    max-width:1120px;
-    margin:-22px auto 45px;
-    padding:0 14px;
+.full{
+  grid-column:1/-1;
 }
 
-.application-shell {
-    background:var(--form-blue);
-    border-radius:18px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
+label{
+  display:block;
+  margin-bottom:5px;
+  font-size:11px;
+  font-weight:700;
+  color:#40556a;
 }
 
-.intro-bar {
-    padding:15px 22px;
-    background:#e4f1f6;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #c8dce6;
+  border-radius:8px;
+  background:#fbfdfe;
+  font-size:12px;
+  outline:none;
 }
 
-.intro-bar strong {
-    color:var(--deep-blue);
-    font-size:12px;
+input:focus,select:focus,textarea:focus{
+  border-color:#39aee4;
+  box-shadow:0 0 0 3px rgba(57,174,228,.12);
 }
 
-.intro-bar span {
-    color:var(--muted);
-    font-size:11px;
+textarea{
+  min-height:75px;
+  resize:vertical;
 }
 
-.fair-housing {
-    margin:18px 22px 5px;
-    padding:15px 17px;
-    border-radius:12px;
-    background:linear-gradient(135deg,#071426,#0e3158);
-    color:white;
+.info{
+  padding:14px;
+  background:#f1f8fb;
+  border:1px solid #c9e0ea;
+  border-radius:9px;
+  font-size:11px;
+  line-height:1.6;
+  margin-bottom:14px;
 }
 
-.fair-housing h3 {
-    margin:0 0 5px;
-    font-size:11px;
-    letter-spacing:1px;
-    text-transform:uppercase;
+.checkbox{
+  display:flex;
+  gap:9px;
+  align-items:flex-start;
+  font-size:11px;
+  line-height:1.5;
 }
 
-.fair-housing p {
-    margin:0;
-    color:#c8dceb;
-    line-height:1.5;
-    font-size:10px;
+.checkbox input{
+  width:16px;
+  height:16px;
+  margin-top:2px;
 }
 
-.section {
-    padding:22px;
-    border-bottom:1px solid var(--border);
+.signature{
+  width:100%;
+  height:130px;
+  border:1px solid #bcd6e2;
+  border-radius:9px;
+  background:white;
+  touch-action:none;
 }
 
-.section-heading {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:16px;
+.clear{
+  margin-top:7px;
+  padding:7px 11px;
+  border:1px solid #bfd8e4;
+  border-radius:7px;
+  background:white;
+  color:#1676ad;
+  font-size:10px;
 }
 
-.number {
-    width:31px;
-    height:31px;
-    border-radius:9px;
-    display:grid;
-    place-items:center;
-    color:white;
-    font-size:10px;
-    font-weight:800;
-    background:linear-gradient(145deg,var(--royal-blue),var(--sky));
+.submit-area{
+  padding:30px 22px;
+  text-align:center;
+  background:linear-gradient(135deg,#061426,#0d3157);
+  color:white;
 }
 
-.section-heading h2 {
-    margin:0;
-    color:var(--deep-blue);
-    font-size:15px;
+.submit-area h2{
+  font-family:Georgia,serif;
+  font-weight:500;
+  font-size:25px;
 }
 
-.section-heading p {
-    margin:2px 0 0;
-    color:var(--muted);
-    font-size:10px;
+.submit-area p{
+  color:#bfd4e3;
+  font-size:11px;
 }
 
-.grid {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:11px 14px;
+button.primary{
+  border:0;
+  border-radius:9px;
+  padding:12px 25px;
+  background:linear-gradient(135deg,#1595d0,#48b8f5);
+  color:white;
+  font-weight:800;
+  cursor:pointer;
 }
 
-.grid.three {
-    grid-template-columns:repeat(3,minmax(0,1fr));
+.panel{
+  display:none;
+  margin-top:18px;
+  padding:20px;
+  border-radius:11px;
+  background:white;
+  color:#17263a;
+  text-align:left;
 }
 
-.field {
-    display:flex;
-    flex-direction:column;
-    gap:4px;
+.panel.show{
+  display:block;
 }
 
-.field.full {
-    grid-column:1/-1;
+.choice{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
 }
 
-label {
-    font-size:10px;
-    font-weight:700;
-    color:#304257;
+.choice button{
+  flex:1;
+  padding:12px;
+  border:1px solid #b9d7e5;
+  border-radius:8px;
+  background:#f8fcfe;
+  color:#126fa5;
+  font-weight:700;
 }
 
-.required {
-    color:#1686c7;
+.upload{
+  padding:15px;
+  margin-top:12px;
+  border:1px dashed #9fc9dd;
+  border-radius:9px;
+  background:#f7fcfe;
 }
 
-input,
-select,
-textarea {
-    width:100%;
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.72);
-    color:var(--text);
-    padding:9px 10px;
-    border-radius:8px;
-    outline:none;
-    font:inherit;
-    font-size:11px;
+.upload small{
+  display:block;
+  margin:5px 0 10px;
+  color:#687d8e;
+  font-size:9px;
 }
 
-textarea {
-    min-height:62px;
-    resize:vertical;
+.receipt-number{
+  margin:12px 0;
+  padding:12px;
+  border-radius:8px;
+  background:#eaf7fc;
+  color:#126fa5;
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:1px;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    border-color:var(--sky);
-    box-shadow:0 0 0 3px rgba(72,184,245,.13);
-    background:white;
+footer{
+  text-align:center;
+  color:#64798a;
+  font-size:10px;
+  padding:25px;
 }
 
-.authorization {
-    padding:13px;
-    border-radius:10px;
-    background:rgba(255,255,255,.48);
-    border:1px solid #c9e0ea;
-    color:#506276;
-    font-size:10px;
-    line-height:1.5;
-    margin-bottom:12px;
-}
-
-.check-row {
-    display:flex;
-    gap:8px;
-    align-items:flex-start;
-    padding:10px;
-    border-radius:9px;
-    background:rgba(255,255,255,.5);
-    border:1px solid var(--border);
-}
-
-.check-row input {
-    width:15px;
-    height:15px;
-}
-
-.signature-pad {
-    width:100%;
-    height:125px;
-    display:block;
-    background:white;
-    border:1px solid #b9d4e1;
-    border-radius:10px;
-    touch-action:none;
-}
-
-.signature-actions {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:7px;
-}
-
-.signature-hint {
-    color:var(--muted);
-    font-size:9px;
-}
-
-.clear-signature {
-    border:1px solid #b9d4e1;
-    background:#f7fcff;
-    color:var(--royal-blue);
-    border-radius:7px;
-    padding:6px 9px;
-    font-size:9px;
-}
-
-.submit-area {
-    padding:25px 22px 27px;
-    text-align:center;
-    background:
-    radial-gradient(circle at 50% 0%,rgba(72,184,245,.18),transparent 38%),
-    linear-gradient(145deg,#071426,#0b284a);
-    color:white;
-}
-
-.submit-area h2 {
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:23px;
-    font-weight:500;
-    margin:0 0 6px;
-}
-
-.submit-area p {
-    color:#bfd4e4;
-    max-width:650px;
-    margin:0 auto 15px;
-    font-size:10px;
-    line-height:1.5;
-}
-
-button {
-    cursor:pointer;
-}
-
-.submit-button,
-.primary-button {
-    border:0;
-    border-radius:9px;
-    padding:11px 22px;
-    color:white;
-    background:linear-gradient(135deg,#1595d0,#48b8f5);
-    font-size:11px;
-    font-weight:800;
-    box-shadow:0 8px 18px rgba(0,0,0,.22);
-}
-
-.success-panel,
-.fee-panel,
-.receipt-panel {
-    display:none;
-    margin-top:18px;
-    padding:20px;
-    border-radius:12px;
-    background:#f4fbff;
-    color:var(--text);
-    border:1px solid #b9dce9;
-    text-align:left;
-}
-
-.show {
-    display:block;
-}
-
-.choice-buttons {
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:15px;
-}
-
-.choice-button {
-    flex:1;
-    min-width:180px;
-    padding:12px;
-    border:1px solid #b9dce9;
-    border-radius:9px;
-    background:white;
-    color:var(--royal-blue);
-    font-weight:700;
-}
-
-.choice-button:hover {
-    background:#eaf7fd;
-}
-
-.upload-box {
-    border:1.5px dashed #a8cde1;
-    background:rgba(255,255,255,.45);
-    border-radius:11px;
-    padding:14px;
-    margin-top:12px;
-}
-
-.upload-box strong {
-    display:block;
-    font-size:11px;
-    color:var(--deep-blue);
-    margin-bottom:4px;
-}
-
-.upload-box small {
-    display:block;
-    color:var(--muted);
-    font-size:9px;
-    line-height:1.4;
-    margin-bottom:8px;
-}
-
-.receipt-number {
-    font-size:18px;
-    font-weight:800;
-    color:var(--royal-blue);
-    letter-spacing:1px;
-    margin:10px 0;
-}
-
-footer {
-    text-align:center;
-    padding:20px 15px 30px;
-    color:#60778a;
-    font-size:10px;
-    line-height:1.6;
-}
-
-footer strong {
-    color:var(--deep-blue);
-}
-
-@media(max-width:760px) {
-    .grid,
-    .grid.three {
-        grid-template-columns:1fr;
-    }
-
-    .field.full {
-        grid-column:auto;
-    }
-
-    .section,
-    .intro-bar,
-    .submit-area {
-        padding-left:15px;
-        padding-right:15px;
-    }
-
-    .fair-housing {
-        margin-left:15px;
-        margin-right:15px;
-    }
+@media(max-width:650px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  h1{font-size:34px}
+  .choice{flex-direction:column}
 }
 </style>
 </head>
 
 <body>
 
-<header class="top-header">
-<div class="header-inner">
-
-<div class="brand-row">
-<div class="brand-mark">
-<img
-src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=160&q=80"
-alt="Single-family house">
-</div>
-
-<div class="brand-text">
-<strong>RESIDENTIAL LEASING</strong>
-<span>Private Rental Application Portal</span>
-</div>
-</div>
-
-<div class="header-content">
-<div class="eyebrow">Residential Leasing</div>
-<h1>Rental Application</h1>
-<p>
-A simple, secure application for your next home.
-Please provide complete and accurate information for review.
-</p>
-</div>
-
-</div>
+<header class="header">
+  <div class="header-inner">
+    <div class="label">Residential Leasing</div>
+    <h1>Rental Application</h1>
+    <p>
+      Please complete the application below with accurate information.
+      Required fields are marked with an asterisk.
+    </p>
+  </div>
 </header>
 
+<div class="container">
 
-<main class="page">
+<div class="card">
 
-<div class="application-shell">
-
-<div class="intro-bar">
-<strong>APPLICATION PROCESSING</strong>
-<span>Complete all required fields marked with *</span>
+<div class="notice">
+<strong>Application Processing</strong><br>
+Your application will be reviewed after submission and applicable
+processing requirements have been completed.
 </div>
 
-<div class="fair-housing">
-<h3>Fair Housing & Application Processing</h3>
-<p>
-Applications are considered without unlawful discrimination based
-on protected characteristics under applicable federal, state, and
-local law. Processing begins after the application and applicable
-fee are received.
-</p>
-</div>
-
-
-<form id="rentalApplication">
-
-<!-- 01 -->
+<form id="application">
 
 <section class="section">
-
-<div class="section-heading">
-<div class="number">01</div>
-<div>
-<h2>Property Information</h2>
-<p>Tell us about the home you are applying for.</p>
-</div>
-</div>
+<h2>1. Property Information</h2>
 
 <div class="grid">
 
-<div class="field full">
-<label>Property Address <span class="required">*</span></label>
-<input type="text" name="propertyAddress" required>
+<div class="full">
+<label>Property Address *</label>
+<input name="propertyAddress" required>
 </div>
 
-<div class="field">
+<div>
 <label>Desired Move-In Date</label>
 <input type="date" name="moveInDate">
 </div>
 
-<div class="field">
-<label>Desired Lease Term</label>
-
+<div>
+<label>Lease Term</label>
 <select name="leaseTerm">
-<option value="">Select lease term</option>
+<option value="">Select</option>
 <option>6 Months</option>
 <option>12 Months</option>
 <option>18 Months</option>
 <option>24 Months</option>
-<option>Other</option>
 </select>
-
 </div>
+
 </div>
 </section>
 
 
-<!-- 02 -->
-
 <section class="section">
-
-<div class="section-heading">
-<div class="number">02</div>
-<div>
-<h2>Applicant Information</h2>
-<p>Your basic contact and residence information.</p>
-</div>
-</div>
+<h2>2. Applicant Information</h2>
 
 <div class="grid">
 
-<div class="field">
-<label>First Name <span class="required">*</span></label>
-<input type="text" name="firstName" required>
+<div>
+<label>First Name *</label>
+<input name="firstName" required>
 </div>
 
-<div class="field">
-<label>Last Name <span class="required">*</span></label>
-<input type="text" name="lastName" required>
+<div>
+<label>Last Name *</label>
+<input name="lastName" required>
 </div>
 
-<div class="field">
-<label>Email Address <span class="required">*</span></label>
+<div>
+<label>Email *</label>
 <input type="email" name="email" required>
 </div>
 
-<div class="field">
-<label>Phone Number <span class="required">*</span></label>
+<div>
+<label>Phone *</label>
 <input type="tel" name="phone" required>
 </div>
 
-<div class="field full">
-<label>Current Address <span class="required">*</span></label>
-<input type="text" name="currentAddress" required>
+<div class="full">
+<label>Current Address *</label>
+<input name="currentAddress" required>
 </div>
 
-<div class="field">
+<div>
 <label>City</label>
-<input type="text" name="city">
+<input name="city">
 </div>
 
-<div class="field">
+<div>
 <label>State</label>
-<input type="text" name="state">
+<input name="state">
 </div>
 
-<div class="field">
+<div>
 <label>ZIP Code</label>
-<input type="text" name="zip">
-</div>
-
-<div class="field">
-<label>Time at Current Address</label>
-<input type="text" name="timeAtAddress">
+<input name="zip">
 </div>
 
 </div>
 </section>
 
 
-<!-- 03 -->
-
 <section class="section">
-
-<div class="section-heading">
-<div class="number">03</div>
-<div>
-<h2>Employment & Income</h2>
-<p>Employment and income information for lawful screening.</p>
-</div>
-</div>
+<h2>3. Employment & Income</h2>
 
 <div class="grid">
 
-<div class="field">
+<div>
 <label>Employer</label>
-<input type="text" name="employer">
+<input name="employer">
 </div>
 
-<div class="field">
+<div>
 <label>Job Title</label>
-<input type="text" name="jobTitle">
+<input name="jobTitle">
 </div>
 
-<div class="field">
+<div>
 <label>Employer Phone</label>
 <input type="tel" name="employerPhone">
 </div>
 
-<div class="field">
-<label>Employment Start Date</label>
-<input type="date" name="employmentStartDate">
-</div>
-
-<div class="field">
+<div>
 <label>Monthly Gross Income</label>
-<input type="number" name="monthlyIncome" min="0" step="0.01">
+<input type="number" name="income" min="0">
 </div>
 
-<div class="field">
-<label>Other Monthly Income</label>
-<input type="number" name="otherIncome" min="0" step="0.01">
-</div>
-
-<div class="field full">
-<label>Other Income Source</label>
-<input type="text" name="otherIncomeSource">
+<div class="full">
+<label>Additional Income Information</label>
+<textarea name="additionalIncome"></textarea>
 </div>
 
 </div>
 </section>
 
 
-<!-- 04 -->
-
 <section class="section">
-
-<div class="section-heading">
-<div class="number">04</div>
-<div>
-<h2>Rental History</h2>
-<p>Previous housing information.</p>
-</div>
-</div>
+<h2>4. Rental History</h2>
 
 <div class="grid">
 
-<div class="field">
+<div>
 <label>Previous Landlord</label>
-<input type="text" name="previousLandlord">
+<input name="landlord">
 </div>
 
-<div class="field">
+<div>
 <label>Landlord Phone</label>
 <input type="tel" name="landlordPhone">
 </div>
 
-<div class="field full">
+<div class="full">
 <label>Previous Rental Address</label>
-<input type="text" name="previousRentalAddress">
+<input name="previousAddress">
 </div>
 
-<div class="field">
-<label>Previous Monthly Rent</label>
-<input type="number" name="previousRent" min="0" step="0.01">
-</div>
-
-<div class="field">
+<div class="full">
 <label>Reason for Moving</label>
-<input type="text" name="reasonForMoving">
+<textarea name="movingReason"></textarea>
 </div>
 
 </div>
 </section>
 
 
-<!-- 05 -->
-
 <section class="section">
+<h2>5. Household & Pets</h2>
 
-<div class="section-heading">
-<div class="number">05</div>
+<div class="grid">
+
 <div>
-<h2>Household Information</h2>
-<p>Tell us about the household occupying the home.</p>
-</div>
-</div>
-
-<div class="grid three">
-
-<div class="field">
-<label>Number of Adults <span class="required">*</span></label>
-<input type="number" name="numberAdults" min="1" value="1" required>
+<label>Number of Adults *</label>
+<input type="number" name="adults" min="1" required>
 </div>
 
-<div class="field">
+<div>
 <label>Number of Children</label>
-<input type="number" name="numberChildren" min="0">
+<input type="number" name="children" min="0">
 </div>
 
-<div class="field">
-<label>Additional Occupants</label>
-<input type="text" name="additionalOccupants">
-</div>
-
-</div>
-</section>
-
-
-<!-- 06 -->
-
-<section class="section">
-
-<div class="section-heading">
-<div class="number">06</div>
 <div>
-<h2>Vehicle Information</h2>
-<p>Optional vehicle information.</p>
-</div>
-</div>
-
-<div class="grid">
-
-<div class="field">
-<label>Vehicle Make</label>
-<input type="text" name="vehicleMake">
-</div>
-
-<div class="field">
-<label>Vehicle Model</label>
-<input type="text" name="vehicleModel">
-</div>
-
-<div class="field">
-<label>Vehicle Year</label>
-<input type="text" name="vehicleYear">
-</div>
-
-<div class="field">
-<label>License Plate</label>
-<input type="text" name="licensePlate">
-</div>
-
-</div>
-</section>
-
-
-<!-- 07 -->
-
-<section class="section">
-
-<div class="section-heading">
-<div class="number">07</div>
-<div>
-<h2>Pet Information</h2>
-<p>Provide information about pets occupying the property.</p>
-</div>
-</div>
-
-<div class="grid">
-
-<div class="field">
 <label>Do you have pets?</label>
-
-<select name="hasPets">
+<select name="pets">
 <option value="">Select</option>
 <option>Yes</option>
 <option>No</option>
 </select>
-
 </div>
 
-<div class="field">
+<div>
 <label>Number of Pets</label>
-<input type="number" name="numberPets" min="0">
+<input type="number" name="petCount" min="0">
 </div>
 
-<div class="field full">
+<div class="full">
 <label>Pet Details</label>
 <textarea name="petDetails"></textarea>
 </div>
@@ -821,270 +464,113 @@ fee are received.
 </section>
 
 
-<!-- 08 -->
-
 <section class="section">
+<h2>6. Identification</h2>
 
-<div class="section-heading">
-<div class="number">08</div>
-<div>
-<h2>Personal Reference</h2>
-<p>An optional personal reference.</p>
-</div>
-</div>
-
-<div class="grid">
-
-<div class="field">
-<label>Reference Name</label>
-<input type="text" name="referenceName">
+<div class="info">
+If identification is required for your application, upload clear
+images of the front and back of your government-issued ID.
+Only upload documents through the secure application system.
 </div>
 
-<div class="field">
-<label>Relationship</label>
-<input type="text" name="referenceRelationship">
+<div class="upload">
+<strong>ID — Front</strong>
+<small>Accepted: JPG, PNG or WEBP</small>
+<input type="file" name="idFront"
+accept="image/jpeg,image/png,image/webp">
 </div>
 
-<div class="field">
-<label>Phone</label>
-<input type="tel" name="referencePhone">
-</div>
-
-<div class="field">
-<label>Email</label>
-<input type="email" name="referenceEmail">
-</div>
-
-</div>
-</section>
-
-
-<!-- 09 -->
-
-<section class="section">
-
-<div class="section-heading">
-<div class="number">09</div>
-<div>
-<h2>Identity Verification</h2>
-<p>Government-issued identification.</p>
-</div>
-</div>
-
-<div class="authorization">
-Upload a clear image of the front and back of your
-government-issued identification document if required.
-</div>
-
-<div class="upload-box">
-
-<strong>ID / Driver's License — Front *</strong>
-
-<small>
-Upload a clear image of the front of the document.
-</small>
-
-<input
-type="file"
-name="idFront"
-accept="image/jpeg,image/png,image/webp"
-required>
-
-</div>
-
-<div class="upload-box">
-
-<strong>ID / Driver's License — Back *</strong>
-
-<small>
-Upload a clear image of the back of the document.
-</small>
-
-<input
-type="file"
-name="idBack"
-accept="image/jpeg,image/png,image/webp"
-required>
-
+<div class="upload">
+<strong>ID — Back</strong>
+<small>Accepted: JPG, PNG or WEBP</small>
+<input type="file" name="idBack"
+accept="image/jpeg,image/png,image/webp">
 </div>
 
 </section>
 
 
-<!-- 10 -->
-
 <section class="section">
+<h2>7. Authorization</h2>
 
-<div class="section-heading">
-<div class="number">10</div>
-<div>
-<h2>Application Fee</h2>
-<p>Application processing information.</p>
-</div>
-</div>
-
-<div class="authorization">
-
-<strong>Application Fee: $75 per adult applicant age 18 or older.</strong>
-
-<br><br>
-
-Processing begins after the applicable fee is received.
+<div class="info">
+I certify that the information supplied in this application is true
+and complete to the best of my knowledge. I authorize verification
+of information relevant to the rental application as permitted by
+applicable law.
 </div>
 
-</section>
-
-
-<!-- 11 -->
-
-<section class="section">
-
-<div class="section-heading">
-<div class="number">11</div>
-<div>
-<h2>Authorization</h2>
-<p>Please read carefully before submitting.</p>
-</div>
-</div>
-
-<div class="authorization">
-
-I certify that the information provided in this application
-is true and complete to the best of my knowledge. I authorize
-the property owner or authorized representative to verify
-information relevant to this rental application, where
-permitted by applicable law.
-
-</div>
-
-<div class="check-row">
-
-<input
-type="checkbox"
-id="authorization"
-name="authorization"
-required>
-
+<div class="checkbox">
+<input type="checkbox" id="authorization" required>
 <label for="authorization">
-
-I have read and agree to the authorization above.
-<span class="required">*</span>
-
+I agree to the authorization above. *
 </label>
-
 </div>
 
 </section>
 
 
-<!-- 12 -->
-
 <section class="section">
-
-<div class="section-heading">
-<div class="number">12</div>
-<div>
-<h2>Applicant Signature</h2>
-<p>Sign directly on your phone, tablet, or computer.</p>
-</div>
-</div>
+<h2>8. Applicant Signature</h2>
 
 <div class="grid">
 
-<div class="field">
-<label>Applicant Full Name <span class="required">*</span></label>
-<input type="text" name="signatureName" required>
+<div>
+<label>Full Name *</label>
+<input name="signatureName" required>
 </div>
 
-<div class="field">
-<label>Date <span class="required">*</span></label>
+<div>
+<label>Date *</label>
 <input type="date" name="signatureDate" required>
 </div>
 
-<div class="field full">
+<div class="full">
 
-<label>Draw Your Signature <span class="required">*</span></label>
+<label>Draw Signature *</label>
 
-<canvas id="signaturePad" class="signature-pad"></canvas>
+<canvas id="signature" class="signature"></canvas>
 
-<input
-type="hidden"
-name="signatureImage"
-id="signatureImage">
-
-<div class="signature-actions">
-
-<span class="signature-hint">
-Use your finger or mouse to sign above.
-</span>
-
-<button
-type="button"
-class="clear-signature"
-id="clearSignature">
-
+<button type="button" class="clear" id="clear">
 Clear Signature
-
 </button>
 
 </div>
 
 </div>
-
-</div>
 </section>
 
-
-<!-- SUBMIT -->
 
 <div class="submit-area">
 
 <h2>Submit Your Application</h2>
 
 <p>
-Review your information carefully before submitting.
+Please review your information before submitting.
 </p>
 
-<button
-type="submit"
-class="submit-button">
-
-Submit Rental Application
-
+<button class="primary" type="submit">
+Submit Application
 </button>
 
 
-<!-- HOLD QUESTION -->
+<div class="panel" id="holdPanel">
 
-<div
-id="holdPanel"
-class="success-panel">
-
-<h3>Application Received</h3>
+<h3>Application Submitted</h3>
 
 <p>
-Would you like to request that the property be held while
-your application is being reviewed?
+Would you like to request that the property be held while your
+application is being reviewed?
 </p>
 
-<div class="choice-buttons">
+<div class="choice">
 
-<button
-type="button"
-class="choice-button"
-id="holdYes">
-
-Yes, I'd like to request a hold
-
+<button type="button" id="yes">
+Yes
 </button>
 
-<button
-type="button"
-class="choice-button"
-id="holdNo">
-
-No, continue without a hold
-
+<button type="button" id="no">
+No
 </button>
 
 </div>
@@ -1092,42 +578,32 @@ No, continue without a hold
 </div>
 
 
-<!-- FEE CONFIRMATION -->
+<div class="panel" id="feePanel">
 
-<div
-id="feePanel"
-class="fee-panel">
-
-<h3>Submit Application Fee Confirmation</h3>
+<h3>Application Fee Confirmation</h3>
 
 <p>
 Please select the amount you paid and upload your payment
 confirmation screenshot.
 </p>
 
-<div class="field">
+<label>Amount Paid *</label>
 
-<label>Amount Paid <span class="required">*</span></label>
-
-<select id="amountPaid">
-
+<select id="amount">
 <option value="">Select amount</option>
-<option value="75">$75</option>
-<option value="150">$150</option>
-<option value="225">$225</option>
-<option value="300">$300</option>
-<option value="other">Other</option>
-
+<option>$75</option>
+<option>$150</option>
+<option>$225</option>
+<option>$300</option>
+<option>Other</option>
 </select>
 
-</div>
+<div class="upload">
 
-<div class="upload-box">
-
-<strong>Payment Screenshot</strong>
+<strong>Payment Confirmation Screenshot *</strong>
 
 <small>
-Upload a clear screenshot showing your payment confirmation.
+Upload a clear screenshot of your payment confirmation.
 </small>
 
 <input
@@ -1141,8 +617,8 @@ accept="image/jpeg,image/png,image/webp">
 
 <button
 type="button"
-class="primary-button"
-id="submitFee">
+class="primary"
+id="feeSubmit">
 
 Submit Fee Confirmation
 
@@ -1151,26 +627,20 @@ Submit Fee Confirmation
 </div>
 
 
-<!-- RECEIPT -->
-
-<div
-id="receiptPanel"
-class="receipt-panel">
+<div class="panel" id="receiptPanel">
 
 <h3>Submission Received</h3>
 
 <p>
-Thank you. Your application and fee confirmation have been
-received for review.
+Your application information and fee confirmation have been
+submitted for review.
 </p>
 
 <div>
-Confirmation Number
+Confirmation Number:
 </div>
 
-<div
-class="receipt-number"
-id="receiptNumber">
+<div class="receipt-number" id="receipt">
 </div>
 
 <p>
@@ -1186,280 +656,144 @@ You will receive an email from us within approximately
 </form>
 
 </div>
-</main>
-
+</div>
 
 <footer>
-
-<strong>© 2026 Residential Leasing</strong>
-· Equal Housing Opportunity
-
-<br>
-
-Application processing is subject to applicable federal,
-state, and local laws.
-
+<strong>© 2026 Residential Leasing</strong><br>
+Equal Housing Opportunity<br>
+Application processing is subject to applicable law.
 </footer>
 
 
 <script>
 
-/* =========================
-SIGNATURE
-========================= */
+const form=document.getElementById("application");
 
-const canvas =
-document.getElementById("signaturePad");
+const canvas=document.getElementById("signature");
+const ctx=canvas.getContext("2d");
 
-const ctx =
-canvas.getContext("2d");
+let drawing=false;
+let signed=false;
 
-const signatureInput =
-document.getElementById("signatureImage");
+function resize(){
 
-const clearButton =
-document.getElementById("clearSignature");
+const ratio=window.devicePixelRatio||1;
 
-let drawing = false;
-let hasSignature = false;
+const rect=canvas.getBoundingClientRect();
 
-function resizeCanvas() {
+canvas.width=rect.width*ratio;
+canvas.height=rect.height*ratio;
 
-const ratio =
-Math.max(window.devicePixelRatio || 1,1);
+ctx.setTransform(ratio,0,0,ratio,0,0);
 
-const rect =
-canvas.getBoundingClientRect();
-
-canvas.width =
-rect.width * ratio;
-
-canvas.height =
-rect.height * ratio;
-
-ctx.setTransform(
-ratio,
-0,
-0,
-ratio,
-0,
-0
-);
-
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.lineJoin = "round";
-ctx.strokeStyle = "#123f73";
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.strokeStyle="#123f73";
 
 }
 
-function position(event) {
+resize();
 
-const rect =
-canvas.getBoundingClientRect();
+function point(e){
+
+const r=canvas.getBoundingClientRect();
 
 return {
-x:event.clientX - rect.left,
-y:event.clientY - rect.top
+x:e.clientX-r.left,
+y:e.clientY-r.top
 };
 
 }
 
-canvas.addEventListener(
-"pointerdown",
-function(event) {
+canvas.addEventListener("pointerdown",e=>{
 
-event.preventDefault();
+drawing=true;
+signed=true;
 
-drawing = true;
-hasSignature = true;
-
-const p = position(event);
+const p=point(e);
 
 ctx.beginPath();
 ctx.moveTo(p.x,p.y);
 
-}
-);
+});
 
-canvas.addEventListener(
-"pointermove",
-function(event) {
+canvas.addEventListener("pointermove",e=>{
 
-if(!drawing) return;
+if(!drawing)return;
 
-event.preventDefault();
-
-const p = position(event);
+const p=point(e);
 
 ctx.lineTo(p.x,p.y);
 ctx.stroke();
 
-}
-);
+});
 
-function stopDrawing() {
+canvas.addEventListener("pointerup",()=>{
+drawing=false;
+});
 
-if(!drawing) return;
+canvas.addEventListener("pointercancel",()=>{
+drawing=false;
+});
 
-drawing = false;
+document.getElementById("clear").onclick=()=>{
 
-signatureInput.value =
-canvas.toDataURL("image/png");
+ctx.clearRect(0,0,canvas.width,canvas.height);
 
-}
+signed=false;
 
-canvas.addEventListener(
-"pointerup",
-stopDrawing
-);
-
-canvas.addEventListener(
-"pointercancel",
-stopDrawing
-);
-
-canvas.addEventListener(
-"pointerleave",
-stopDrawing
-);
-
-clearButton.addEventListener(
-"click",
-function() {
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-signatureInput.value = "";
-hasSignature = false;
-
-}
-);
-
-resizeCanvas();
+};
 
 
-/* =========================
-APPLICATION FLOW
-========================= */
+form.addEventListener("submit",e=>{
 
-const form =
-document.getElementById("rentalApplication");
+e.preventDefault();
 
-const holdPanel =
-document.getElementById("holdPanel");
+if(!signed){
 
-const feePanel =
-document.getElementById("feePanel");
-
-const receiptPanel =
-document.getElementById("receiptPanel");
-
-let holdRequested = null;
-
-
-/*
-This currently demonstrates the front-end flow.
-
-The actual secure submission endpoint will be
-connected after the Cloudflare deployment is working.
-*/
-
-form.addEventListener(
-"submit",
-function(event) {
-
-event.preventDefault();
-
-if(!hasSignature) {
-
-alert(
-"Please draw your signature before submitting."
-);
+alert("Please draw your signature before submitting.");
 
 return;
 
 }
 
-holdPanel.classList.add("show");
+document.getElementById("holdPanel").classList.add("show");
 
-holdPanel.scrollIntoView({
+document.getElementById("holdPanel")
+.scrollIntoView({
 behavior:"smooth",
 block:"center"
 });
 
-}
-);
+});
 
 
-/* YES */
+function showFee(){
 
-document
-.getElementById("holdYes")
-.addEventListener(
-"click",
-function() {
+document.getElementById("holdPanel").style.display="none";
 
-holdRequested = true;
+document.getElementById("feePanel").classList.add("show");
 
-showFeePanel();
-
-}
-);
-
-
-/* NO */
-
-document
-.getElementById("holdNo")
-.addEventListener(
-"click",
-function() {
-
-holdRequested = false;
-
-showFeePanel();
-
-}
-);
-
-
-function showFeePanel() {
-
-holdPanel.style.display = "none";
-
-feePanel.classList.add("show");
-
-feePanel.scrollIntoView({
+document.getElementById("feePanel")
+.scrollIntoView({
 behavior:"smooth",
 block:"center"
 });
 
 }
 
+document.getElementById("yes").onclick=showFee;
 
-/* =========================
-FEE CONFIRMATION
-========================= */
+document.getElementById("no").onclick=showFee;
 
-document
-.getElementById("submitFee")
-.addEventListener(
-"click",
-function() {
 
-const amount =
-document.getElementById("amountPaid").value;
+document.getElementById("feeSubmit").onclick=()=>{
 
-const screenshot =
-document.getElementById("paymentScreenshot").files[0];
+const amount=document.getElementById("amount").value;
 
-if(!amount) {
+const screenshot=document.getElementById("paymentScreenshot").files[0];
+
+if(!amount){
 
 alert("Please select the amount paid.");
 
@@ -1467,43 +801,30 @@ return;
 
 }
 
-if(!screenshot) {
+if(!screenshot){
 
-alert(
-"Please upload your payment confirmation screenshot."
-);
+alert("Please upload your payment confirmation screenshot.");
 
 return;
 
 }
 
+const confirmation=
+"RL-"+Math.floor(10000000+Math.random()*90000000);
 
-/*
-Generate a temporary confirmation number.
+document.getElementById("receipt").textContent=confirmation;
 
-The final backend version will generate this
-server-side so it cannot be manipulated.
-*/
+document.getElementById("feePanel").style.display="none";
 
-const number =
-"RL-" +
-Date.now().toString().slice(-8);
+document.getElementById("receiptPanel").classList.add("show");
 
-document.getElementById(
-"receiptNumber"
-).textContent = number;
-
-feePanel.style.display = "none";
-
-receiptPanel.classList.add("show");
-
-receiptPanel.scrollIntoView({
+document.getElementById("receiptPanel")
+.scrollIntoView({
 behavior:"smooth",
 block:"center"
 });
 
-}
-);
+};
 
 </script>
 
