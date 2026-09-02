@@ -3,1506 +3,1296 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#071a33">
-
-<title>Rental & Contractor Applications</title>
-
+<title>Residential Leasing | Rental Application</title>
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-:root{
-  --blue:#087cff;
-  --blue-dark:#0455b5;
-  --blue-light:#eef6ff;
-  --cream:#f7f9fc;
-  --text:#101828;
-  --muted:#667085;
-
-  --black:#050505;
-  --black2:#111111;
-  --yellow:#fff000;
-  --yellow2:#ffd900;
-  --cream-yellow:#fff8b5;
-}
-
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
-  "SF Pro Text","Segoe UI",sans-serif;
-  background:#f5f7fa;
-  color:var(--text);
-}
-
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-/* =========================
-   MAIN HEADER
-========================= */
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(255,255,255,.88);
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-  border-bottom:1px solid #e5e7eb;
-}
-
-.topbar-inner{
-  max-width:1100px;
-  margin:auto;
-  padding:13px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.logo{
-  font-size:19px;
-  font-weight:900;
-  letter-spacing:-.7px;
-}
-
-.logo span{
-  color:var(--blue);
-}
-
-.language{
-  border:1px solid #d0d5dd;
-  background:white;
-  color:#101828;
-  border-radius:14px;
-  padding:9px 12px;
-  outline:none;
-}
-
-/* =========================
-   HOME
-========================= */
-
-.home{
-  display:block;
-}
-
-.hero{
-  background:
-    radial-gradient(circle at 50% 0%,#d9ecff,transparent 48%),
-    linear-gradient(180deg,#ffffff,#f4f8fd);
-  padding:70px 18px 55px;
-  text-align:center;
-}
-
-.hero h1{
-  font-size:clamp(42px,9vw,78px);
-  line-height:.96;
-  letter-spacing:-4px;
-  font-weight:950;
-}
-
-.blue{
-  color:var(--blue);
-}
-
-.hero p{
-  max-width:650px;
-  margin:23px auto 0;
-  color:#667085;
-  line-height:1.65;
-}
-
-.home-grid{
-  max-width:1050px;
-  margin:0 auto;
-  padding:28px 18px 70px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-.home-card{
-  border-radius:30px;
-  overflow:hidden;
-  background:white;
-  border:1px solid #e4e7ec;
-  box-shadow:0 18px 50px rgba(16,24,40,.09);
-}
-
-.home-image{
-  height:260px;
-  background-size:cover;
-  background-position:center;
-  position:relative;
-}
-
-.rental-image{
-  background-image:
-    linear-gradient(180deg,transparent 20%,rgba(0,37,80,.78)),
-    url("https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1400&q=85");
-}
-
-.hiring-image{
-  background-image:
-    linear-gradient(180deg,transparent 20%,rgba(0,0,0,.85)),
-    url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=85");
-}
-
-.image-title{
-  position:absolute;
-  bottom:20px;
-  left:22px;
-  right:22px;
-  color:white;
-}
-
-.image-title h2{
-  font-size:32px;
-  letter-spacing:-1px;
-}
-
-.image-title p{
-  margin-top:5px;
-  opacity:.9;
-}
-
-.home-body{
-  padding:24px;
-}
-
-.home-body p{
-  color:#667085;
-  line-height:1.6;
-  margin-bottom:20px;
-}
-
-/* =========================
-   BLUE RENTAL
-========================= */
-
-.blue-btn{
-  width:100%;
-  border:0;
-  border-radius:17px;
-  padding:16px;
-  background:linear-gradient(180deg,#1991ff,#087cff);
-  color:white;
-  font-weight:850;
-  box-shadow:0 8px 22px rgba(8,124,255,.28);
-}
-
-.blue-btn:active{
-  transform:scale(.99);
-}
-
-/* =========================
-   HIRING MENU
-========================= */
-
-.hiring-menu{
-  display:none;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 50% -10%,rgba(255,240,0,.16),transparent 38%),
-    #050505;
-  color:white;
-  padding-bottom:70px;
-}
-
-.hiring-menu.active{
-  display:block;
-}
-
-.hiring-hero{
-  max-width:1000px;
-  margin:auto;
-  padding:65px 18px 35px;
-  text-align:center;
-}
-
-.hiring-hero h1{
-  font-size:clamp(42px,9vw,76px);
-  line-height:.95;
-  letter-spacing:-3px;
-}
-
-.shiny{
-  color:var(--yellow);
-  text-shadow:
-    0 0 8px rgba(255,240,0,.95),
-    0 0 24px rgba(255,230,0,.7),
-    0 0 55px rgba(255,220,0,.3);
-}
-
-.hiring-hero p{
-  color:#aaa;
-  max-width:620px;
-  margin:20px auto;
-  line-height:1.6;
-}
-
-.hiring-grid{
-  max-width:1000px;
-  margin:auto;
-  padding:0 18px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-.dark-card{
-  background:linear-gradient(145deg,#151515,#080808);
-  border:1px solid rgba(255,240,0,.18);
-  border-radius:30px;
-  overflow:hidden;
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.55),
-    inset 0 1px rgba(255,255,255,.08);
-}
-
-.dark-image{
-  height:260px;
-  background-size:cover;
-  background-position:center;
-  position:relative;
-}
-
-.cleaner-header{
-  background-image:
-    linear-gradient(180deg,transparent 20%,rgba(0,0,0,.9)),
-    url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=85");
-}
-
-.handyman-header{
-  background-image:
-    linear-gradient(180deg,transparent 20%,rgba(0,0,0,.9)),
-    url("https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=1400&q=85");
-}
-
-.dark-title{
-  position:absolute;
-  bottom:20px;
-  left:22px;
-}
-
-.dark-title h2{
-  font-size:34px;
-}
-
-.dark-body{
-  padding:24px;
-}
-
-.dark-body p{
-  color:#aaa;
-  line-height:1.6;
-  margin-bottom:20px;
-}
-
-.yellow-btn{
-  width:100%;
-  border:0;
-  border-radius:17px;
-  padding:16px;
-  background:
-    linear-gradient(180deg,#fff95c 0%,#fff000 45%,#e4c500 100%);
-  color:#050505;
-  font-weight:950;
-  box-shadow:
-    0 0 12px rgba(255,240,0,.8),
-    0 8px 28px rgba(255,220,0,.22);
-}
-
-/* =========================
-   APPLICATIONS
-========================= */
-
-.application{
-  display:none;
-  min-height:100vh;
-}
-
-.application.active{
-  display:block;
-}
-
-/* BLUE RENTAL APPLICATION */
-
-.rental-app{
-  background:#f5f8fc;
-  min-height:100vh;
-}
-
-.rental-head{
-  background:
-    linear-gradient(135deg,#087cff,#0057bd);
-  color:white;
-  padding:42px 20px;
-}
-
-.rental-head-inner{
-  max-width:850px;
-  margin:auto;
-}
-
-.rental-head h2{
-  font-size:40px;
-  letter-spacing:-1.5px;
-}
-
-.rental-head p{
-  margin-top:8px;
-  opacity:.9;
-}
-
-.rental-form{
-  max-width:850px;
-  margin:22px auto 70px;
-  padding:0 18px;
-}
-
-.white-card{
-  background:white;
-  border:1px solid #e4e7ec;
-  border-radius:24px;
-  padding:22px;
-  margin-bottom:16px;
-  box-shadow:0 8px 30px rgba(16,24,40,.05);
-}
-
-.form-title{
-  font-size:18px;
-  font-weight:850;
-  margin-bottom:17px;
-  color:#17365f;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.field.full{
-  grid-column:1/-1;
-}
-
-label{
-  display:block;
-  margin:0 0 7px 3px;
-  color:#475467;
-  font-size:12px;
-  font-weight:750;
-}
-
-input,
-textarea{
-  width:100%;
-  border:1px solid #d0d5dd;
-  border-radius:14px;
-  padding:14px;
-  background:#fff;
-  color:#101828;
-  outline:none;
-}
-
-input:focus,
-textarea:focus{
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(8,124,255,.1);
-}
-
-textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.submit-blue{
-  width:100%;
-  border:0;
-  border-radius:17px;
-  padding:17px;
-  background:#087cff;
-  color:white;
-  font-weight:900;
-  box-shadow:0 8px 25px rgba(8,124,255,.25);
-}
-
-/* DARK CONTRACTOR APPLICATION */
-
-.contractor-app{
-  background:
-    radial-gradient(circle at 50% -10%,rgba(255,240,0,.16),transparent 38%),
-    #050505;
-  color:white;
-  min-height:100vh;
-  padding-bottom:70px;
-}
-
-.contractor-head{
-  max-width:900px;
-  margin:auto;
-  padding:40px 20px 25px;
-}
-
-.contractor-head h2{
-  font-size:40px;
-  letter-spacing:-1.5px;
-}
-
-.contractor-head p{
-  color:#aaa;
-  margin-top:7px;
-}
-
-.dark-form{
-  max-width:900px;
-  margin:auto;
-  padding:0 18px;
-}
-
-.dark-card-form{
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,240,0,.17);
-  border-radius:25px;
-  padding:22px;
-  margin-bottom:16px;
-  box-shadow:inset 0 1px rgba(255,255,255,.06);
-}
-
-.dark-form .form-title{
-  color:var(--yellow);
-}
-
-.dark-form label{
-  color:#aaa;
-}
-
-.dark-form input,
-.dark-form textarea{
-  background:rgba(255,255,255,.055);
-  border-color:rgba(255,255,255,.12);
-  color:white;
-}
-
-.dark-form input:focus,
-.dark-form textarea:focus{
-  border-color:var(--yellow);
-  box-shadow:0 0 0 3px rgba(255,240,0,.08);
-}
-
-.agreement{
-  color:#c7c7c7;
-  line-height:1.65;
-  font-size:14px;
-}
-
-.agreement h3{
-  color:var(--yellow);
-  margin:18px 0 6px;
-}
-
-.agreement h3:first-child{
-  margin-top:0;
-}
-
-.agreement p{
-  margin-bottom:10px;
-}
-
-.check{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  color:#ccc;
-  line-height:1.5;
-  margin:18px 0;
-}
-
-.check input{
-  width:20px;
-  height:20px;
-  accent-color:var(--yellow);
-  margin-top:2px;
-}
-
-.signature-box{
-  background:var(--cream-yellow);
-  color:#111;
-  padding:20px;
-  border-radius:20px;
-}
-
-.signature-box label{
-  color:#333;
-}
-
-.signature-box input{
-  background:rgba(255,255,255,.7);
-  color:#111;
-  border-color:rgba(0,0,0,.15);
-}
-
-.submit-yellow{
-  width:100%;
-  border:0;
-  border-radius:17px;
-  padding:17px;
-  background:
-    linear-gradient(180deg,#fff95c,#fff000,#e2c400);
-  color:#050505;
-  font-weight:950;
-  box-shadow:
-    0 0 15px rgba(255,240,0,.65),
-    0 10px 30px rgba(255,220,0,.2);
-}
-
-.back{
-  max-width:900px;
-  margin:20px auto;
-  padding:0 18px;
-}
-
-.back button{
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.06);
-  color:white;
-  border-radius:13px;
-  padding:10px 15px;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-  text-align:center;
-  padding:35px 18px 55px;
-  color:#98a2b3;
-  font-size:12px;
-  background:#f5f7fa;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:720px){
-
-  .home-grid,
-  .hiring-grid{
-    grid-template-columns:1fr;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .field.full{
-    grid-column:auto;
-  }
-
-  .hero h1,
-  .hiring-hero h1{
-    letter-spacing:-2.5px;
-  }
-
-  .home-image,
-  .dark-image{
-    height:230px;
-  }
-
-  .rental-head h2,
-  .contractor-head h2{
-    font-size:34px;
-  }
-}
+    :root {
+        --navy: #071426;
+        --deep-blue: #0b1f3a;
+        --royal-blue: #1769aa;
+        --sky: #48b8f5;
+        --matte-blue: #dcecf4;
+        --form-blue: #eaf5fa;
+        --white: #ffffff;
+        --text: #17263a;
+        --muted: #6d7d90;
+        --border: #c9dce6;
+        --shadow: 0 16px 38px rgba(4, 20, 40, .12);
+    }
+    * {
+        box-sizing: border-box;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        margin: 0;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                     Roboto, Helvetica, Arial, sans-serif;
+        background: var(--matte-blue);
+        color: var(--text);
+        min-height: 100vh;
+    }
+    /* =========================
+       COMPACT HEADER
+       ========================= */
+    .top-header {
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 88% 0%, rgba(72,184,245,.22), transparent 28%),
+            linear-gradient(135deg, #041020, #0a2444 58%, #0d4779);
+        color: white;
+        padding: 22px 20px 42px;
+    }
+    .top-header::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 50%;
+        right: -100px;
+        top: -150px;
+    }
+    .top-header::after {
+        content: "";
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        border: 1px solid rgba(72,184,245,.18);
+        border-radius: 50%;
+        right: 25px;
+        top: -105px;
+    }
+    .header-inner {
+        max-width: 1120px;
+        margin: auto;
+        position: relative;
+        z-index: 2;
+    }
+    .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+    .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(145deg, var(--sky), #1971b5);
+        box-shadow: 0 8px 18px rgba(0,0,0,.22);
+        overflow: hidden;
+    }
+    .brand-mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .brand-text {
+        line-height: 1.1;
+    }
+    .brand-text strong {
+        display: block;
+        letter-spacing: 1.8px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+    .brand-text span {
+        display: block;
+        margin-top: 4px;
+        color: #a9dfff;
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+    .header-content {
+        max-width: 720px;
+    }
+    .eyebrow {
+        color: #78cef8;
+        text-transform: uppercase;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 2.4px;
+        margin-bottom: 9px;
+    }
+    .header-content h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(32px, 5vw, 52px);
+        font-weight: 500;
+        letter-spacing: -.5px;
+        line-height: 1.03;
+    }
+    .header-content p {
+        max-width: 620px;
+        margin: 12px 0 0;
+        color: #c7d9e8;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+    .header-line {
+        margin-top: 17px;
+        width: 70px;
+        height: 2px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, var(--sky), transparent);
+    }
+    /* =========================
+       FORM WRAPPER
+       ========================= */
+    .page {
+        max-width: 1120px;
+        margin: -22px auto 45px;
+        padding: 0 14px;
+        position: relative;
+        z-index: 5;
+    }
+    .application-shell {
+        background: var(--form-blue);
+        border: 1px solid rgba(255,255,255,.75);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+    .intro-bar {
+        padding: 15px 22px;
+        background: #e4f1f6;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .intro-bar strong {
+        color: var(--deep-blue);
+        font-size: 12px;
+    }
+    .intro-bar span {
+        color: var(--muted);
+        font-size: 11px;
+    }
+    /* =========================
+       FAIR HOUSING NOTICE
+       ========================= */
+    .fair-housing {
+        margin: 18px 22px 5px;
+        padding: 15px 17px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #071426, #0e3158);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .fair-housing h3 {
+        margin: 0 0 5px;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .fair-housing p {
+        margin: 0;
+        color: #c8dceb;
+        line-height: 1.5;
+        font-size: 10px;
+        max-width: 900px;
+    }
+    /* =========================
+       SECTIONS
+       ========================= */
+    .section {
+        padding: 22px;
+        border-bottom: 1px solid var(--border);
+    }
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .number {
+        width: 31px;
+        height: 31px;
+        flex: 0 0 31px;
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+        color: white;
+        font-size: 10px;
+        font-weight: 800;
+        background: linear-gradient(145deg, var(--royal-blue), var(--sky));
+        box-shadow: 0 5px 12px rgba(23,105,170,.18);
+    }
+    .section-heading h2 {
+        margin: 0;
+        color: var(--deep-blue);
+        font-size: 15px;
+        font-weight: 750;
+    }
+    .section-heading p {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 10px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px 14px;
+    }
+    .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .field.full {
+        grid-column: 1 / -1;
+    }
+    label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #304257;
+    }
+    .required {
+        color: #1686c7;
+    }
+    input,
+    select,
+    textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.72);
+        color: var(--text);
+        padding: 9px 10px;
+        border-radius: 8px;
+        outline: none;
+        font: inherit;
+        font-size: 11px;
+        transition: .2s ease;
+    }
+    textarea {
+        min-height: 62px;
+        resize: vertical;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--sky);
+        box-shadow: 0 0 0 3px rgba(72,184,245,.13);
+        background: white;
+    }
+    /* =========================
+       FILE UPLOADS
+       ========================= */
+    .upload-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .upload-box {
+        border: 1.5px dashed #a8cde1;
+        background: rgba(255,255,255,.45);
+        border-radius: 11px;
+        padding: 14px;
+    }
+    .upload-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #dff4ff;
+        color: #1479ae;
+        display: grid;
+        place-items: center;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .upload-box strong {
+        display: block;
+        font-size: 11px;
+        color: var(--deep-blue);
+        margin-bottom: 3px;
+    }
+    .upload-box small {
+        display: block;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+    input[type="file"] {
+        padding: 6px;
+        background: white;
+        font-size: 9px;
+    }
+    /* =========================
+       PAYMENT
+       ========================= */
+    .fee-card {
+        border-radius: 11px;
+        padding: 14px;
+        background: rgba(255,255,255,.48);
+        border: 1px solid #c5dfe9;
+        margin-bottom: 13px;
+    }
+    .fee-card strong {
+        color: var(--deep-blue);
+        font-size: 11px;
+    }
+    .fee-card p {
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.45;
+        margin: 4px 0 0;
+    }
+    .fee-display {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 9px;
+        margin-top: 9px;
+        border-top: 1px solid #d7e8f2;
+    }
+    .fee-display span {
+        color: var(--muted);
+        font-size: 10px;
+    }
+    .fee-display strong {
+        font-size: 15px;
+        color: var(--royal-blue);
+    }
+    /* =========================
+       AUTHORIZATION
+       ========================= */
+    .authorization {
+        padding: 13px;
+        border-radius: 10px;
+        background: rgba(255,255,255,.48);
+        border: 1px solid #c9e0ea;
+        color: #506276;
+        font-size: 10px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+    .check-row {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 10px;
+        border-radius: 9px;
+        background: rgba(255,255,255,.5);
+        border: 1px solid var(--border);
+    }
+    .check-row input {
+        width: 15px;
+        height: 15px;
+        margin: 0;
+        accent-color: var(--royal-blue);
+        flex: 0 0 15px;
+    }
+    .check-row label {
+        font-weight: 600;
+        line-height: 1.45;
+    }
+    /* =========================
+       PHONE SIGNATURE PAD
+       ========================= */
+    .signature-pad-wrap {
+        position: relative;
+    }
+    .signature-pad {
+        width: 100%;
+        height: 125px;
+        display: block;
+        background: #ffffff;
+        border: 1px solid #b9d4e1;
+        border-radius: 10px;
+        touch-action: none;
+        cursor: crosshair;
+    }
+    .signature-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 7px;
+    }
+    .signature-hint {
+        color: var(--muted);
+        font-size: 9px;
+    }
+    .clear-signature {
+        border: 1px solid #b9d4e1;
+        background: #f7fcff;
+        color: var(--royal-blue);
+        border-radius: 7px;
+        padding: 6px 9px;
+        font-size: 9px;
+        cursor: pointer;
+    }
+    /* =========================
+       SUBMIT AREA
+       ========================= */
+    .submit-area {
+        padding: 25px 22px 27px;
+        text-align: center;
+        background:
+            radial-gradient(circle at 50% 0%, rgba(72,184,245,.18), transparent 38%),
+            linear-gradient(145deg, #071426, #0b284a);
+        color: white;
+    }
+    .submit-area h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 23px;
+        font-weight: 500;
+        margin: 0 0 6px;
+    }
+    .submit-area p {
+        color: #bfd4e4;
+        max-width: 650px;
+        margin: 0 auto 15px;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+    .submit-button,
+    .deposit-button {
+        border: 0;
+        cursor: pointer;
+        border-radius: 9px;
+        padding: 11px 22px;
+        color: white;
+        background: linear-gradient(135deg, #1595d0, #48b8f5);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .3px;
+        box-shadow: 0 8px 18px rgba(0,0,0,.22);
+        transition: .2s ease;
+    }
+    .submit-button:hover,
+    .deposit-button:hover {
+        transform: translateY(-1px);
+    }
+    .security-note {
+        margin-top: 11px;
+        color: #8eabc0;
+        font-size: 9px;
+    }
+    /* =========================
+       SUCCESS / HOLD HOUSE PANEL
+       ========================= */
+    .success-panel {
+        display: none;
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 12px;
+        background: #f4fbff;
+        color: var(--text);
+        border: 1px solid #b9dce9;
+        text-align: left;
+    }
+    .success-panel.show {
+        display: block;
+    }
+    .success-panel h3 {
+        margin: 0 0 6px;
+        color: var(--success);
+        font-size: 15px;
+    }
+    .success-panel p {
+        margin: 0 0 13px;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.5;
+    }
+    .deposit-options {
+        display: none;
+        margin-top: 13px;
+    }
+    .deposit-options.show {
+        display: block;
+    }
+    .deposit-options label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .deposit-options select {
+        margin-bottom: 10px;
+    }
+    .deposit-note {
+        margin-top: 9px;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.45;
+    }
+    /* =========================
+       FOOTER
+       ========================= */
+    footer {
+        text-align: center;
+        padding: 20px 15px 30px;
+        color: #60778a;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+    footer strong {
+        color: var(--deep-blue);
+    }
+    /* =========================
+       RESPONSIVE
+       ========================= */
+    @media (max-width: 760px) {
+        .top-header {
+            padding: 18px 15px 34px;
+        }
+        .brand-row {
+            margin-bottom: 22px;
+        }
+        .header-content h1 {
+            font-size: 37px;
+        }
+        .header-content p {
+            font-size: 12px;
+        }
+        .page {
+            margin-top: -17px;
+            padding: 0 8px;
+        }
+        .section,
+        .intro-bar,
+        .submit-area {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .fair-housing {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+        .grid,
+        .grid.three,
+        .upload-grid {
+            grid-template-columns: 1fr;
+        }
+        .field.full {
+            grid-column: auto;
+        }
+        .signature-pad {
+            height: 145px;
+        }
+    }
 </style>
 </head>
-
 <body>
-
-<!-- =========================
-     TOP BAR
-========================= -->
-
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="logo">
-      Rental<span>+</span>
+<header class="top-header">
+    <div class="header-inner">
+    <div class="brand-row">
+        <div class="brand-mark">
+            <!-- Replace this URL with your preferred single-family-house image -->
+            <img
+                src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=160&q=80"
+                alt="Single-family house"
+            >
+        </div>
+        <div class="brand-text">
+            <strong>RESIDENTIAL LEASING</strong>
+            <span>Private Rental Application Portal</span>
+        </div>
     </div>
-
-    <select class="language" id="language" onchange="translatePage()">
-      <option value="en">English</option>
-      <option value="es">Español</option>
-      <option value="uk">Українська</option>
-      <option value="ru">Русский</option>
-      <option value="ar">العربية</option>
-    </select>
-  </div>
+    <div class="header-content">
+        <div class="eyebrow">Residential Leasing</div>
+        <h1>Rental Application</h1>
+        <p>
+            A simple, secure application for your next home.
+            Please provide complete and accurate information for review.
+        </p>
+        <div class="header-line"></div>
+    </div>
+</div>
 </header>
-
-
-<!-- =========================
-     HOME
-========================= -->
-
-<main class="home" id="home">
-
-<section class="hero">
-
-<h1>
-  Find Your<br>
-  <span class="blue">Next Home.</span>
-</h1>
-
-<p>
-  Complete a rental application or apply to join our
-  professional property-services contractor team.
-</p>
-
-</section>
-
-
-<section class="home-grid">
-
-<!-- RENTAL -->
-
-<article class="home-card">
-
-<div class="home-image rental-image">
-
-<div class="image-title">
-<h2>Rental Application</h2>
-<p>Apply for a rental property</p>
+<main class="page">
+<div class="application-shell">
+<div class="intro-bar">
+    <strong>APPLICATION PROCESSING</strong>
+    <span>Complete all required fields marked with *</span>
 </div>
-
+<div class="fair-housing">
+    <h3>Fair Housing & Application Processing</h3>
+    <p>
+        Applications are considered without unlawful discrimination based
+        on protected characteristics under applicable federal, state, and
+        local law. Processing begins after the application and applicable
+        fee are received.
+    </p>
 </div>
-
-<div class="home-body">
-
-<p>
-Submit your information to apply for a residential
-rental property.
-</p>
-
-<button class="blue-btn" onclick="openRental()">
-Start Rental Application
-</button>
-
+<form id="rentalApplication" enctype="multipart/form-data">
+    <!-- 01 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">01</div>
+            <div>
+                <h2>Property Information</h2>
+                <p>Tell us about the home you are applying for.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field full">
+                <label>Property Address <span class="required">*</span></label>
+                <input type="text" name="propertyAddress" required>
+            </div>
+            <div class="field">
+                <label>Desired Move-In Date</label>
+                <input type="date" name="moveInDate">
+            </div>
+            <div class="field">
+                <label>Desired Lease Term</label>
+                <select name="leaseTerm">
+                    <option value="">Select lease term</option>
+                    <option>6 Months</option>
+                    <option>12 Months</option>
+                    <option>18 Months</option>
+                    <option>24 Months</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+    </section>
+    <!-- 02 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">02</div>
+            <div>
+                <h2>Applicant Information</h2>
+                <p>Your basic contact and residence information.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>First Name <span class="required">*</span></label>
+                <input type="text" name="firstName" required>
+            </div>
+            <div class="field">
+                <label>Last Name <span class="required">*</span></label>
+                <input type="text" name="lastName" required>
+            </div>
+            <div class="field">
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="field">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" required>
+            </div>
+            <div class="field full">
+                <label>Current Address <span class="required">*</span></label>
+                <input type="text" name="currentAddress" required>
+            </div>
+            <div class="field">
+                <label>City</label>
+                <input type="text" name="city">
+            </div>
+            <div class="field">
+                <label>State</label>
+                <input type="text" name="state">
+            </div>
+            <div class="field">
+                <label>ZIP Code</label>
+                <input type="text" name="zip">
+            </div>
+            <div class="field">
+                <label>Time at Current Address</label>
+                <input type="text" name="timeAtAddress" placeholder="e.g. 2 years">
+            </div>
+        </div>
+    </section>
+    <!-- 03 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">03</div>
+            <div>
+                <h2>Employment & Income</h2>
+                <p>Employment and income information for lawful screening.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Employer</label>
+                <input type="text" name="employer">
+            </div>
+            <div class="field">
+                <label>Job Title</label>
+                <input type="text" name="jobTitle">
+            </div>
+            <div class="field">
+                <label>Employer Phone</label>
+                <input type="tel" name="employerPhone">
+            </div>
+            <div class="field">
+                <label>Employment Start Date</label>
+                <input type="date" name="employmentStartDate">
+            </div>
+            <div class="field">
+                <label>Monthly Gross Income</label>
+                <input type="number" name="monthlyIncome" min="0" step="0.01">
+            </div>
+            <div class="field">
+                <label>Other Monthly Income</label>
+                <input type="number" name="otherIncome" min="0" step="0.01">
+            </div>
+            <div class="field full">
+                <label>Other Income Source</label>
+                <input type="text" name="otherIncomeSource">
+            </div>
+        </div>
+    </section>
+    <!-- 04 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">04</div>
+            <div>
+                <h2>Rental History</h2>
+                <p>Previous housing information.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Previous Landlord</label>
+                <input type="text" name="previousLandlord">
+            </div>
+            <div class="field">
+                <label>Landlord Phone</label>
+                <input type="tel" name="landlordPhone">
+            </div>
+            <div class="field full">
+                <label>Previous Rental Address</label>
+                <input type="text" name="previousRentalAddress">
+            </div>
+            <div class="field">
+                <label>Previous Monthly Rent</label>
+                <input type="number" name="previousRent" min="0" step="0.01">
+            </div>
+            <div class="field">
+                <label>Reason for Moving</label>
+                <input type="text" name="reasonForMoving">
+            </div>
+        </div>
+    </section>
+    <!-- 05 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">05</div>
+            <div>
+                <h2>Household Information</h2>
+                <p>Tell us about the household occupying the home.</p>
+            </div>
+        </div>
+        <div class="grid three">
+            <div class="field">
+                <label>Number of Adults <span class="required">*</span></label>
+                <input type="number" name="numberAdults" min="1" value="1" required>
+            </div>
+            <div class="field">
+                <label>Number of Children</label>
+                <input type="number" name="numberChildren" min="0">
+            </div>
+            <div class="field">
+                <label>Additional Occupants</label>
+                <input type="text" name="additionalOccupants">
+            </div>
+        </div>
+    </section>
+    <!-- 06 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">06</div>
+            <div>
+                <h2>Vehicle Information</h2>
+                <p>Optional vehicle information.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Vehicle Make</label>
+                <input type="text" name="vehicleMake">
+            </div>
+            <div class="field">
+                <label>Vehicle Model</label>
+                <input type="text" name="vehicleModel">
+            </div>
+            <div class="field">
+                <label>Vehicle Year</label>
+                <input type="text" name="vehicleYear">
+            </div>
+            <div class="field">
+                <label>License Plate</label>
+                <input type="text" name="licensePlate">
+            </div>
+        </div>
+    </section>
+    <!-- 07 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">07</div>
+            <div>
+                <h2>Pet Information</h2>
+                <p>Provide information about pets occupying the property.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Do you have pets?</label>
+                <select name="hasPets">
+                    <option value="">Select</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Number of Pets</label>
+                <input type="number" name="numberPets" min="0">
+            </div>
+            <div class="field full">
+                <label>Pet Details</label>
+                <textarea name="petDetails"
+                    placeholder="Type, breed, approximate weight, etc."></textarea>
+            </div>
+        </div>
+    </section>
+    <!-- 08 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">08</div>
+            <div>
+                <h2>Personal Reference</h2>
+                <p>An optional personal reference.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Reference Name</label>
+                <input type="text" name="referenceName">
+            </div>
+            <div class="field">
+                <label>Relationship</label>
+                <input type="text" name="referenceRelationship">
+            </div>
+            <div class="field">
+                <label>Phone</label>
+                <input type="tel" name="referencePhone">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="referenceEmail">
+            </div>
+        </div>
+    </section>
+    <!-- 09 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">09</div>
+            <div>
+                <h2>Identity Verification</h2>
+                <p>Government-issued identification.</p>
+            </div>
+        </div>
+        <div class="authorization">
+            Upload a clear image of the front and back of your
+            government-issued identification document if required.
+            Handle identity documents securely and retain them only as
+            long as legally and operationally necessary.
+        </div>
+        <div class="upload-grid">
+            <div class="upload-box">
+                <div class="upload-icon">▣</div>
+                <strong>ID / Driver's License — Front *</strong>
+                <small>
+                    Upload a clear image of the front of the document.
+                </small>
+                <input
+                    type="file"
+                    name="idFront"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+            </div>
+            <div class="upload-box">
+                <div class="upload-icon">▣</div>
+                <strong>ID / Driver's License — Back *</strong>
+                <small>
+                    Upload a clear image of the back of the document.
+                </small>
+                <input
+                    type="file"
+                    name="idBack"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+            </div>
+        </div>
+    </section>
+    <!-- 10 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">10</div>
+            <div>
+                <h2>Application Fee & Payment Method</h2>
+                <p>Application processing information.</p>
+            </div>
+        </div>
+        <div class="fee-card">
+            <strong>Application Fee</strong>
+            <p>
+                The application fee is $75 for each adult occupant age 18
+                or older. Processing begins after the applicable fee is
+                received.
+            </p>
+            <div class="fee-display">
+                <span>Estimated application fee</span>
+                <strong>$75.00</strong>
+            </div>
+        </div>
+        <div class="field">
+            <label>
+                Preferred payment method <span class="required">*</span>
+            </label>
+            <select name="paymentMethod" required>
+                <option value="">
+                    Select payment method
+                </option>
+                <option>Chime</option>
+                <option>Venmo</option>
+                <option>OnePay</option>
+                <option>USDT</option>
+            </select>
+        </div>
+    </section>
+    <!-- 11 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">11</div>
+            <div>
+                <h2>Authorization</h2>
+                <p>Please read carefully before submitting.</p>
+            </div>
+        </div>
+        <div class="authorization">
+            I certify that the information provided in this application
+            is true and complete to the best of my knowledge. I authorize
+            the property owner or authorized representative to verify
+            information relevant to this rental application, where
+            permitted by applicable law.
+        </div>
+        <div class="check-row">
+            <input
+                type="checkbox"
+                id="authorization"
+                name="authorization"
+                required
+            >
+            <label for="authorization">
+                I have read and agree to the authorization above.
+                <span class="required">*</span>
+            </label>
+        </div>
+    </section>
+    <!-- 12 -->
+    <section class="section">
+        <div class="section-heading">
+            <div class="number">12</div>
+            <div>
+                <h2>Applicant Signature</h2>
+                <p>Sign directly on your phone, tablet, or computer.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="field">
+                <label>Applicant Full Name <span class="required">*</span></label>
+                <input type="text" name="signatureName" required>
+            </div>
+            <div class="field">
+                <label>Date <span class="required">*</span></label>
+                <input type="date" name="signatureDate" required>
+            </div>
+            <div class="field full">
+                <label>Draw Your Signature <span class="required">*</span></label>
+                <div class="signature-pad-wrap">
+                    <canvas
+                        id="signaturePad"
+                        class="signature-pad"
+                        aria-label="Signature drawing area"
+                    ></canvas>
+                    <input
+                        type="hidden"
+                        name="signatureImage"
+                        id="signatureImage"
+                        required
+                    >
+                    <div class="signature-actions">
+                        <span class="signature-hint">
+                            Use your finger or mouse to sign above.
+                        </span>
+                        <button
+                            type="button"
+                            class="clear-signature"
+                            id="clearSignature"
+                        >
+                            Clear Signature
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- SUBMIT -->
+    <div class="submit-area">
+        <h2>Submit Your Application</h2>
+        <p>
+            By submitting this application, you acknowledge that the
+            information provided may be used for lawful rental screening
+            purposes in accordance with applicable federal, state, and
+            local law.
+        </p>
+        <button
+            type="submit"
+            class="submit-button"
+        >
+            Submit Rental Application
+        </button>
+        <div class="security-note">
+            Please review your information carefully before submitting.
+        </div>
+        <div
+            id="successPanel"
+            class="success-panel"
+            aria-live="polite"
+        >
+            <h3>Thank you — your application was submitted.</h3>
+            <p>
+                Your application has been received. Would you like to put
+                down part of the security deposit to request that the
+                house be held while your application is reviewed?
+            </p>
+            <button
+                type="button"
+                class="deposit-button"
+                id="showDepositOptions"
+            >
+                Yes, I would like to request a hold
+            </button>
+            <div
+                class="deposit-options"
+                id="depositOptions"
+            >
+                <label for="depositAmount">
+                    Select the amount you would like to put down:
+                </label>
+                <select id="depositAmount">
+                    <option value="">Select amount</option>
+                    <option value="250">$250</option>
+                    <option value="500">$500</option>
+                    <option value="750">$750</option>
+                    <option value="1000">$1,000</option>
+                    <option value="other">Other amount</option>
+                </select>
+                <button
+                    type="button"
+                    class="deposit-button"
+                    id="requestHoldButton"
+                >
+                    Continue With Hold Request
+                </button>
+                <div class="deposit-note">
+                    A hold request is not a guarantee that the property
+                    will be reserved. Any deposit, refundability,
+                    application, and lease terms must be confirmed in
+                    writing by the authorized property representative
+                    before payment is made.
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 </div>
-
-</article>
-
-
-<!-- HIRING -->
-
-<article class="home-card">
-
-<div class="home-image hiring-image">
-
-<div class="image-title">
-<h2>Hiring</h2>
-<p>Join our contractor network</p>
-</div>
-
-</div>
-
-<div class="home-body">
-
-<p>
-We're looking for dependable cleaners and skilled
-handymen for property-service work.
-</p>
-
-<button class="blue-btn" onclick="openHiring()">
-View Contractor Applications
-</button>
-
-</div>
-
-</article>
-
-</section>
-
 </main>
-
-
-<!-- =========================
-     HIRING MENU
-========================= -->
-
-<section class="hiring-menu" id="hiringMenu">
-
-<div class="hiring-hero">
-
-<h1>
-Contractor<br>
-<span class="shiny">Applications.</span>
-</h1>
-
-<p>
-Choose the service you would like to apply for.
-</p>
-
-</div>
-
-
-<div class="hiring-grid">
-
-<!-- CLEANER -->
-
-<article class="dark-card">
-
-<div class="dark-image cleaner-header">
-
-<div class="dark-title">
-<h2>🧹 Cleaner</h2>
-</div>
-
-</div>
-
-<div class="dark-body">
-
-<p>
-Residential cleaning, turnover cleaning,
-deep cleaning and property preparation.
-</p>
-
-<button class="yellow-btn"
-onclick="openContractor('cleaner')">
-Apply as Cleaner
-</button>
-
-</div>
-
-</article>
-
-
-<!-- HANDYMAN -->
-
-<article class="dark-card">
-
-<div class="dark-image handyman-header">
-
-<div class="dark-title">
-<h2>🔧 Handyman</h2>
-</div>
-
-</div>
-
-<div class="dark-body">
-
-<p>
-Property maintenance, repairs, installations
-and approved handyman services.
-</p>
-
-<button class="yellow-btn"
-onclick="openContractor('handyman')">
-Apply as Handyman
-</button>
-
-</div>
-
-</article>
-
-</div>
-
-<div class="back">
-<button onclick="goHome()">← Back</button>
-</div>
-
-</section>
-
-
-<!-- =========================
-     RENTAL APPLICATION
-========================= -->
-
-<section class="application rental-app" id="rentalApplication">
-
-<div class="rental-head">
-
-<div class="rental-head-inner">
-
-<h2>Rental Application</h2>
-
-<p>
-Complete the information below to apply for a rental property.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="rental-form">
-
-<div class="back" style="margin-top:20px;">
-<button
-onclick="goHome()"
-style="color:#101828;border-color:#d0d5dd;background:white;">
-← Back
-</button>
-</div>
-
-
-<form onsubmit="submitApplication(event,'Rental')">
-
-<!-- PERSONAL -->
-
-<div class="white-card">
-
-<div class="form-title">
-Applicant Information
-</div>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Full Legal Name</label>
-<input required type="text">
-</div>
-
-<div class="field">
-<label>Phone Number</label>
-<input required type="tel">
-</div>
-
-<div class="field">
-<label>Email Address</label>
-<input required type="email">
-</div>
-
-<div class="field">
-<label>Date of Birth</label>
-<input type="date">
-</div>
-
-<div class="field full">
-<label>Current Address</label>
-<input type="text">
-</div>
-
-</div>
-
-</div>
-
-
-<!-- PROPERTY -->
-
-<div class="white-card">
-
-<div class="form-title">
-Rental Property
-</div>
-
-<div class="form-grid">
-
-<div class="field full">
-<label>Property Address</label>
-<input required type="text">
-</div>
-
-<div class="field">
-<label>Desired Move-In Date</label>
-<input type="date">
-</div>
-
-<div class="field">
-<label>Number of Occupants</label>
-<input type="number" min="1">
-</div>
-
-<div class="field">
-<label>Pets</label>
-<input type="text" placeholder="None / describe pets">
-</div>
-
-<div class="field">
-<label>Desired Lease Term</label>
-<input type="text" placeholder="Example: 12 months">
-</div>
-
-</div>
-
-</div>
-
-
-<!-- EMPLOYMENT -->
-
-<div class="white-card">
-
-<div class="form-title">
-Employment & Income
-</div>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Employer</label>
-<input type="text">
-</div>
-
-<div class="field">
-<label>Job Title</label>
-<input type="text">
-</div>
-
-<div class="field">
-<label>Monthly Gross Income</label>
-<input type="number">
-</div>
-
-<div class="field">
-<label>Years Employed</label>
-<input type="number">
-</div>
-
-</div>
-
-</div>
-
-
-<!-- REFERENCES -->
-
-<div class="white-card">
-
-<div class="form-title">
-Rental / Personal Reference
-</div>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Reference Name</label>
-<input type="text">
-</div>
-
-<div class="field">
-<label>Reference Phone</label>
-<input type="tel">
-</div>
-
-<div class="field full">
-<label>Additional Information</label>
-<textarea></textarea>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="white-card">
-
-<label class="check" style="color:#344054;">
-<input type="checkbox" required>
-<span>
-I certify that the information provided in this application
-is accurate and complete to the best of my knowledge.
-</span>
-</label>
-
-<button class="submit-blue" type="submit">
-Submit Rental Application
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     CLEANER APPLICATION
-========================= -->
-
-<section class="application contractor-app" id="cleanerApplication">
-
-<div class="contractor-head">
-
-<h2>🧹 <span class="shiny">Cleaner</span></h2>
-
-<p>
-Independent Contractor Application & Agreement
-</p>
-
-</div>
-
-
-<div class="dark-form">
-
-<div class="back" style="margin-top:0;">
-<button onclick="openHiring()">← Back</button>
-</div>
-
-
-<form onsubmit="submitApplication(event,'Cleaner')">
-
-
-<div class="dark-card-form">
-
-<div class="form-title">
-Contractor Information
-</div>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Full Legal Name</label>
-<input required type="text">
-</div>
-
-<div class="field">
-<label>Phone Number</label>
-<input required type="tel">
-</div>
-
-<div class="field">
-<label>Email Address</label>
-<input required type="email">
-</div>
-
-<div class="field">
-<label>City / State</label>
-<input type="text">
-</div>
-
-<div class="field full">
-<label>Cleaning Experience</label>
-<textarea></textarea>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="dark-card-form">
-
-<div class="form-title">
-Cleaner Contractor Agreement
-</div>
-
-<div class="agreement">
-
-<h3>1. Services</h3>
-<p>
-The Contractor may provide residential cleaning,
-move-in/move-out cleaning, turnover cleaning, deep
-cleaning, kitchen and bathroom cleaning, floor care,
-trash removal and other agreed cleaning services.
-</p>
-
-<h3>2. Work Standards</h3>
-<p>
-Services must be performed professionally, safely and
-according to the agreed scope of work.
-</p>
-
-<h3>3. Payment</h3>
-<p>
-The parties will agree on the applicable service rate
-or project price before work begins.
-</p>
-
-<h3>4. Property Access</h3>
-<p>
-Keys, access codes and property information must be
-kept confidential and used only for authorized work.
-</p>
-
-<h3>5. Documentation</h3>
-<p>
-The Contractor may be asked to provide photographs or
-written confirmation of completed work and report
-property issues discovered during service.
-</p>
-
-<h3>6. Independent Contractor</h3>
-<p>
-The Contractor is engaged as an independent contractor
-and is responsible for their own taxes, licenses,
-permits, insurance and business expenses to the extent
-required by applicable law.
-</p>
-
-<h3>7. Safety & Property Care</h3>
-<p>
-The Contractor agrees to exercise reasonable care and
-promptly report damage, hazards or other significant
-property issues.
-</p>
-
-<h3>8. Termination</h3>
-<p>
-Either party may terminate the working relationship
-subject to applicable written agreements and law.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="dark-card-form">
-
-<label class="check">
-<input required type="checkbox">
-<span>
-I have reviewed the Cleaner Independent Contractor
-Agreement and agree to the applicable terms.
-</span>
-</label>
-
-<div class="signature-box">
-
-<label>Contractor Electronic Signature</label>
-<input required type="text"
-placeholder="Type your full legal name">
-
-<label style="margin-top:14px;">Date</label>
-<input required type="date">
-
-</div>
-
-<button class="submit-yellow" type="submit"
-style="margin-top:18px;">
-Submit Cleaner Application
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-     HANDYMAN APPLICATION
-========================= -->
-
-<section class="application contractor-app" id="handymanApplication">
-
-<div class="contractor-head">
-
-<h2>🔧 <span class="shiny">Handyman</span></h2>
-
-<p>
-Independent Contractor Application & Agreement
-</p>
-
-</div>
-
-
-<div class="dark-form">
-
-<div class="back" style="margin-top:0;">
-<button onclick="openHiring()">← Back</button>
-</div>
-
-
-<form onsubmit="submitApplication(event,'Handyman')">
-
-
-<div class="dark-card-form">
-
-<div class="form-title">
-Contractor Information
-</div>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Full Legal Name</label>
-<input required type="text">
-</div>
-
-<div class="field">
-<label>Phone Number</label>
-<input required type="tel">
-</div>
-
-<div class="field">
-<label>Email Address</label>
-<input required type="email">
-</div>
-
-<div class="field">
-<label>City / State</label>
-<input type="text">
-</div>
-
-<div class="field full">
-<label>Skills / Services Offered</label>
-<textarea
-placeholder="Examples: painting, drywall, doors, fixtures, repairs, installations..."></textarea>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="dark-card-form">
-
-<div class="form-title">
-Handyman Contractor Agreement
-</div>
-
-<div class="agreement">
-
-<h3>1. Services</h3>
-<p>
-The Contractor may provide general property maintenance,
-minor repairs, installations, painting, drywall work,
-fixture replacement, hardware installation, inspections
-and other specifically approved services.
-</p>
-
-<h3>2. Authorization</h3>
-<p>
-Work outside the agreed scope requires authorization.
-Work requiring permits or regulated professional services
-must comply with applicable law.
-</p>
-
-<h3>3. Materials</h3>
-<p>
-Material purchases and reimbursements should be approved
-before purchase unless otherwise agreed in writing.
-</p>
-
-<h3>4. Payment</h3>
-<p>
-Labor rates, project prices and payment terms will be
-agreed upon before work begins.
-</p>
-
-<h3>5. Property Access</h3>
-<p>
-Keys, access codes and property information must remain
-confidential and may only be used for authorized work.
-</p>
-
-<h3>6. Documentation</h3>
-<p>
-The Contractor may be required to provide photographs,
-receipts and descriptions of completed work.
-</p>
-
-<h3>7. Independent Contractor</h3>
-<p>
-The Contractor is engaged as an independent contractor
-and is responsible for their own taxes, licenses,
-permits, insurance and business expenses to the extent
-required by applicable law.
-</p>
-
-<h3>8. Safety & Compliance</h3>
-<p>
-The Contractor agrees to perform work safely and comply
-with applicable requirements.
-</p>
-
-<h3>9. Termination</h3>
-<p>
-Either party may terminate the working relationship
-subject to applicable written agreements and law.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="dark-card-form">
-
-<label class="check">
-<input required type="checkbox">
-<span>
-I have reviewed the Handyman Independent Contractor
-Agreement and agree to the applicable terms.
-</span>
-</label>
-
-<div class="signature-box">
-
-<label>Contractor Electronic Signature</label>
-<input required type="text"
-placeholder="Type your full legal name">
-
-<label style="margin-top:14px;">Date</label>
-<input required type="date">
-
-</div>
-
-<button class="submit-yellow" type="submit"
-style="margin-top:18px;">
-Submit Handyman Application
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</section>
-
-
 <footer>
-© 2026 Rental & Contractor Services
+<strong>© 2026 Residential Leasing</strong>
+· Equal Housing Opportunity
+<br>
+Application processing is subject to applicable federal,
+state, and local laws.
 </footer>
-
-
 <script>
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function hideEverything(){
-
-document.getElementById("home").style.display="none";
-
-document.getElementById("hiringMenu")
-.classList.remove("active");
-
-document.querySelectorAll(".application")
-.forEach(function(el){
-  el.classList.remove("active");
+/*
+    ==========================================================
+    SIGNATURE PAD
+    ==========================================================
+*/
+const canvas = document.getElementById("signaturePad");
+const signatureInput = document.getElementById("signatureImage");
+const clearSignatureButton =
+    document.getElementById("clearSignature");
+const context = canvas.getContext("2d");
+let drawing = false;
+let hasSignature = false;
+function resizeSignatureCanvas() {
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.lineWidth = 2;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.strokeStyle = "#123f73";
+}
+function getPointerPosition(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
+function startDrawing(event) {
+    event.preventDefault();
+    drawing = true;
+    hasSignature = true;
+    const position = getPointerPosition(event);
+    context.beginPath();
+    context.moveTo(position.x, position.y);
+}
+function drawSignature(event) {
+    if (!drawing) {
+        return;
+    }
+    event.preventDefault();
+    const position = getPointerPosition(event);
+    context.lineTo(position.x, position.y);
+    context.stroke();
+}
+function stopDrawing() {
+    if (!drawing) {
+        return;
+    }
+    drawing = false;
+    signatureInput.value = canvas.toDataURL("image/png");
+}
+canvas.addEventListener("pointerdown", startDrawing);
+canvas.addEventListener("pointermove", drawSignature);
+canvas.addEventListener("pointerup", stopDrawing);
+canvas.addEventListener("pointerleave", stopDrawing);
+canvas.addEventListener("pointercancel", stopDrawing);
+clearSignatureButton.addEventListener("click", function() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    signatureInput.value = "";
+    hasSignature = false;
 });
-
-window.scrollTo(0,0);
-}
-
-
-function goHome(){
-
-hideEverything();
-
-document.getElementById("home").style.display="block";
-
-window.scrollTo(0,0);
-}
-
-
-function openRental(){
-
-hideEverything();
-
-document.getElementById("rentalApplication")
-.classList.add("active");
-
-window.scrollTo(0,0);
-}
-
-
-function openHiring(){
-
-hideEverything();
-
-document.getElementById("hiringMenu")
-.classList.add("active");
-
-window.scrollTo(0,0);
-}
-
-
-function openContractor(type){
-
-hideEverything();
-
-if(type==="cleaner"){
-
-document.getElementById("cleanerApplication")
-.classList.add("active");
-
-}else{
-
-document.getElementById("handymanApplication")
-.classList.add("active");
-
-}
-
-window.scrollTo(0,0);
-}
-
-
-/* =========================
-   DEMO SUBMISSION
-========================= */
-
-function submitApplication(event,type){
-
-event.preventDefault();
-
-alert(
-"Thank you. Your "+type+
-" application has been completed and is ready for review."
-);
-
-}
-
-
-/* =========================
-   TRANSLATION
-========================= */
-
-const translations={
-
-en:{
-title:"Find Your Next Home.",
-},
-
-es:{
-title:"Encuentra tu próximo hogar."
-},
-
-uk:{
-title:"Знайдіть свій наступний дім."
-},
-
-ru:{
-title:"Найдите свой следующий дом."
-},
-
-ar:{
-title:"اعثر على منزلك القادم."
-}
-
-};
-
-function translatePage(){
-
-const lang=
-document.getElementById("language").value;
-
-document.documentElement.dir=
-lang==="ar" ? "rtl" : "ltr";
-
-}
-
+window.addEventListener("resize", function() {
+    if (!hasSignature) {
+        resizeSignatureCanvas();
+    }
+});
+resizeSignatureCanvas();
+/*
+    ==========================================================
+    APPLICATION SUBMISSION
+    ==========================================================
+    Replace the placeholder below with your Apps Script Web App URL.
+*/
+document
+.getElementById("rentalApplication")
+.addEventListener("submit", function(event) {
+    event.preventDefault();
+    if (!hasSignature || !signatureInput.value) {
+        alert("Please draw your signature before submitting.");
+        return;
+    }
+    const scriptURL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+    const form = this;
+    const submitButton =
+        form.querySelector(".submit-button");
+    const successPanel =
+        document.getElementById("successPanel");
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+    const formData = new FormData(form);
+    fetch(scriptURL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            form.reset();
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            signatureInput.value = "";
+            hasSignature = false;
+            successPanel.classList.add("show");
+            successPanel.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        } else {
+            alert(
+                result.message ||
+                "Unable to submit the application."
+            );
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert(
+            "There was a problem submitting your application. " +
+            "Please try again."
+        );
+    })
+    .finally(() => {
+        submitButton.disabled = false;
+        submitButton.textContent =
+            "Submit Rental Application";
+    });
+});
+/*
+    ==========================================================
+    SECURITY DEPOSIT HOLD REQUEST
+    ==========================================================
+    Connect this button to your approved payment processor or
+    secure payment page. Do not collect card or bank details
+    directly in this HTML form.
+*/
+document
+.getElementById("showDepositOptions")
+.addEventListener("click", function() {
+    document
+    .getElementById("depositOptions")
+    .classList.add("show");
+    this.style.display = "none";
+});
+document
+.getElementById("requestHoldButton")
+.addEventListener("click", function() {
+    const amount =
+        document.getElementById("depositAmount").value;
+    if (!amount) {
+        alert("Please select a deposit amount.");
+        return;
+    }
+    /*
+        Replace this alert with a redirect to your approved,
+        secure payment processor or payment link.
+        Example:
+        window.location.href =
+            "YOUR_SECURE_PAYMENT_LINK";
+    */
+    alert(
+        "Your hold request has been noted. " +
+        "Please use the authorized secure payment link " +
+        "provided by the property representative."
+    );
+});
 </script>
-
 </body>
 </html>
