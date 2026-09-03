@@ -1,4119 +1,785 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Residential Leasing | Applications</title>
-
-<style>
-:root {
-    --navy:#071426;
-    --deep-blue:#0b1f3a;
-    --royal-blue:#1769aa;
-    --sky:#48b8f5;
-    --matte-blue:#dcecf4;
-    --form-blue:#eaf5fa;
-    --white:#ffffff;
-    --text:#17263a;
-    --muted:#6d7d90;
-    --border:#c9dce6;
-    --shadow:0 16px 38px rgba(4,20,40,.12);
-}
-
-* {
-    box-sizing:border-box;
-}
-
-html {
-    scroll-behavior:smooth;
-}
-
-body {
-    margin:0;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",
-    Roboto,Helvetica,Arial,sans-serif;
-    background:var(--matte-blue);
-    color:var(--text);
-    min-height:100vh;
-}
-
-/* HEADER */
-
-.top-header {
-    position:relative;
-    overflow:hidden;
-    background:
-        radial-gradient(circle at 88% 0%,rgba(72,184,245,.22),transparent 28%),
-        linear-gradient(135deg,#041020,#0a2444 58%,#0d4779);
-    color:white;
-    padding:22px 20px 42px;
-}
-
-.top-header::before {
-    content:"";
-    position:absolute;
-    width:260px;
-    height:260px;
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:50%;
-    right:-100px;
-    top:-150px;
-}
-
-.top-header::after {
-    content:"";
-    position:absolute;
-    width:190px;
-    height:190px;
-    border:1px solid rgba(72,184,245,.18);
-    border-radius:50%;
-    right:25px;
-    top:-105px;
-}
-
-.header-inner {
-    max-width:1120px;
-    margin:auto;
-    position:relative;
-    z-index:2;
-}
-
-.brand-row {
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:25px;
-}
-
-.brand-mark {
-    width:42px;
-    height:42px;
-    border-radius:11px;
-    display:grid;
-    place-items:center;
-    background:linear-gradient(145deg,var(--sky),#1971b5);
-    box-shadow:0 8px 18px rgba(0,0,0,.22);
-    overflow:hidden;
-}
-
-.brand-mark img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.brand-text {
-    line-height:1.1;
-}
-
-.brand-text strong {
-    display:block;
-    letter-spacing:1.8px;
-    font-size:12px;
-    font-weight:800;
-}
-
-.brand-text span {
-    display:block;
-    margin-top:4px;
-    color:#a9dfff;
-    font-size:10px;
-    letter-spacing:1.2px;
-    text-transform:uppercase;
-}
-
-.header-content {
-    max-width:720px;
-}
-
-.eyebrow {
-    color:#78cef8;
-    text-transform:uppercase;
-    font-size:10px;
-    font-weight:800;
-    letter-spacing:2.4px;
-    margin-bottom:9px;
-}
-
-.header-content h1 {
-    margin:0;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:clamp(32px,5vw,52px);
-    font-weight:500;
-    letter-spacing:-.5px;
-    line-height:1.03;
-}
-
-.header-content p {
-    max-width:620px;
-    margin:12px 0 0;
-    color:#c7d9e8;
-    font-size:13px;
-    line-height:1.55;
-}
-
-.header-line {
-    margin-top:17px;
-    width:70px;
-    height:2px;
-    border-radius:99px;
-    background:linear-gradient(90deg,var(--sky),transparent);
-}
-
-/* PAGE */
-
-.page {
-    max-width:1120px;
-    margin:-22px auto 45px;
-    padding:0 14px;
-    position:relative;
-    z-index:5;
-}
-
-.application-shell {
-    background:var(--form-blue);
-    border:1px solid rgba(255,255,255,.75);
-    border-radius:18px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-}
-
-/* NAVIGATION */
-
-.portal-nav {
-    padding:14px 22px;
-    background:#e4f1f6;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-}
-
-.portal-button {
-    border:1px solid #b9d5e2;
-    background:white;
-    color:var(--deep-blue);
-    border-radius:9px;
-    padding:9px 14px;
-    font-size:10px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-.portal-button.active {
-    color:white;
-    border-color:transparent;
-    background:linear-gradient(135deg,var(--royal-blue),var(--sky));
-    box-shadow:0 5px 12px rgba(23,105,170,.18);
-}
-
-/* INTRO */
-
-.intro-bar {
-    padding:15px 22px;
-    background:#e4f1f6;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-}
-
-.intro-bar strong {
-    color:var(--deep-blue);
-    font-size:12px;
-}
-
-.intro-bar span {
-    color:var(--muted);
-    font-size:11px;
-}
-
-/* PORTALS */
-
-.portal {
-    display:none;
-}
-
-.portal.active {
-    display:block;
-}
-
-/* FAIR HOUSING */
-
-.fair-housing {
-    margin:18px 22px 5px;
-    padding:15px 17px;
-    border-radius:12px;
-    background:linear-gradient(135deg,#071426,#0e3158);
-    color:white;
-}
-
-.fair-housing h3 {
-    margin:0 0 5px;
-    font-size:11px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-}
-
-.fair-housing p {
-    margin:0;
-    color:#c8dceb;
-    line-height:1.5;
-    font-size:10px;
-    max-width:900px;
-}
-
-/* SECTIONS */
-
-.section {
-    padding:22px;
-    border-bottom:1px solid var(--border);
-}
-
-.section-heading {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:16px;
-}
-
-.number {
-    width:31px;
-    height:31px;
-    flex:0 0 31px;
-    border-radius:9px;
-    display:grid;
-    place-items:center;
-    color:white;
-    font-size:10px;
-    font-weight:800;
-    background:linear-gradient(145deg,var(--royal-blue),var(--sky));
-    box-shadow:0 5px 12px rgba(23,105,170,.18);
-}
-
-.section-heading h2 {
-    margin:0;
-    color:var(--deep-blue);
-    font-size:15px;
-    font-weight:750;
-}
-
-.section-heading p {
-    margin:2px 0 0;
-    color:var(--muted);
-    font-size:10px;
-}
-
-.grid {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:11px 14px;
-}
-
-.grid.three {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-}
-
-.field {
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-}
-
-.field.full {
-    grid-column:1/-1;
-}
-
-label {
-    font-size:10px;
-    font-weight:700;
-    color:#304257;
-}
-
-.required {
-    color:#1686c7;
-}
-
-input,
-select,
-textarea {
-    width:100%;
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.72);
-    color:var(--text);
-    padding:9px 10px;
-    border-radius:8px;
-    outline:none;
-    font:inherit;
-    font-size:11px;
-    transition:.2s ease;
-}
-
-textarea {
-    min-height:70px;
-    resize:vertical;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    border-color:var(--sky);
-    box-shadow:0 0 0 3px rgba(72,184,245,.13);
-    background:white;
-}
-
-/* UPLOADS */
-
-.upload-grid {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.upload-box {
-    border:1.5px dashed #a8cde1;
-    background:rgba(255,255,255,.45);
-    border-radius:11px;
-    padding:14px;
-}
-
-.upload-icon {
-    width:30px;
-    height:30px;
-    border-radius:8px;
-    background:#dff4ff;
-    color:#1479ae;
-    display:grid;
-    place-items:center;
-    font-size:14px;
-    margin-bottom:8px;
-}
-
-.upload-box strong {
-    display:block;
-    font-size:11px;
-    color:var(--deep-blue);
-    margin-bottom:3px;
-}
-
-.upload-box small {
-    display:block;
-    color:var(--muted);
-    font-size:9px;
-    line-height:1.4;
-    margin-bottom:8px;
-}
-
-input[type=file] {
-    padding:6px;
-    background:white;
-    font-size:9px;
-}
-
-/* AUTHORIZATION */
-
-.authorization {
-    padding:13px;
-    border-radius:10px;
-    background:rgba(255,255,255,.48);
-    border:1px solid #c9e0ea;
-    color:#506276;
-    font-size:10px;
-    line-height:1.5;
-    margin-bottom:12px;
-}
-
-.check-row {
-    display:flex;
-    gap:8px;
-    align-items:flex-start;
-    padding:10px;
-    border-radius:9px;
-    background:rgba(255,255,255,.5);
-    border:1px solid var(--border);
-}
-
-.check-row input {
-    width:15px;
-    height:15px;
-    margin:0;
-    accent-color:var(--royal-blue);
-    flex:0 0 15px;
-}
-
-.check-row label {
-    font-weight:600;
-    line-height:1.45;
-}
-
-/* SIGNATURE */
-
-.signature-pad {
-    width:100%;
-    height:125px;
-    display:block;
-    background:#fff;
-    border:1px solid #b9d4e1;
-    border-radius:10px;
-    touch-action:none;
-    cursor:crosshair;
-}
-
-.signature-actions {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-top:7px;
-}
-
-.signature-hint {
-    color:var(--muted);
-    font-size:9px;
-}
-
-.clear-signature {
-    border:1px solid #b9d4e1;
-    background:#f7fcff;
-    color:var(--royal-blue);
-    border-radius:7px;
-    padding:6px 9px;
-    font-size:9px;
-    cursor:pointer;
-}
-
-/* SUBMIT */
-
-.submit-area {
-    padding:25px 22px 27px;
-    text-align:center;
-    background:
-        radial-gradient(circle at 50% 0%,rgba(72,184,245,.18),transparent 38%),
-        linear-gradient(145deg,#071426,#0b284a);
-    color:white;
-}
-
-.submit-area h2 {
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:23px;
-    font-weight:500;
-    margin:0 0 6px;
-}
-
-.submit-area p {
-    color:#bfd4e4;
-    max-width:650px;
-    margin:0 auto 15px;
-    font-size:10px;
-    line-height:1.5;
-}
-
-.submit-button,
-.deposit-button {
-    border:0;
-    cursor:pointer;
-    border-radius:9px;
-    padding:11px 22px;
-    color:white;
-    background:linear-gradient(135deg,#1595d0,#48b8f5);
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:.3px;
-    box-shadow:0 8px 18px rgba(0,0,0,.22);
-    transition:.2s ease;
-}
-
-.submit-button:hover,
-.deposit-button:hover {
-    transform:translateY(-1px);
-}
-
-.submit-button:disabled {
-    opacity:.65;
-    cursor:wait;
-}
-
-.security-note {
-    margin-top:11px;
-    color:#8eabc0;
-    font-size:9px;
-}
-
-/* RESULT */
-
-.result-panel {
-    display:none;
-    margin:18px 22px;
-    padding:18px;
-    border-radius:12px;
-    background:#f4fbff;
-    color:var(--text);
-    border:1px solid #b9dce9;
-}
-
-.result-panel.show {
-    display:block;
-}
-
-.result-panel h3 {
-    margin:0 0 6px;
-    color:var(--royal-blue);
-    font-size:15px;
-}
-
-.result-panel p {
-    margin:0 0 13px;
-    color:var(--muted);
-    font-size:10px;
-    line-height:1.5;
-}
-
-/* DEPOSIT */
-
-.deposit-options {
-    display:none;
-    margin-top:13px;
-}
-
-.deposit-options.show {
-    display:block;
-}
-
-.deposit-options select {
-    margin-bottom:10px;
-}
-
-.receipt-area {
-    display:none;
-    margin-top:13px;
-    padding:14px;
-    border-radius:11px;
-    border:1px dashed #a8cde1;
-    background:white;
-}
-
-.receipt-area.show {
-    display:block;
-}
-
-.receipt-area p {
-    margin-bottom:10px;
-}
-
-.status {
-    margin-top:10px;
-    font-size:10px;
-    line-height:1.5;
-}
-
-.status.success {
-    color:#176b45;
-}
-
-.status.error {
-    color:#a52a2a;
-}
-
-.deposit-note {
-    margin-top:10px;
-    color:var(--muted);
-    font-size:9px;
-    line-height:1.45;
-}
-
-/* FOOTER */
-
-footer {
-    text-align:center;
-    padding:20px 15px 30px;
-    color:#60778a;
-    font-size:10px;
-    line-height:1.6;
-}
-
-footer strong {
-    color:var(--deep-blue);
-}
-
-/* MOBILE */
-
-@media(max-width:760px) {
-
-    .top-header {
-        padding:18px 15px 34px;
-    }
-
-    .brand-row {
-        margin-bottom:22px;
-    }
-
-    .header-content h1 {
-        font-size:37px;
-    }
-
-    .header-content p {
-        font-size:12px;
-    }
-
-    .page {
-        margin-top:-17px;
-        padding:0 8px;
-    }
-
-    .section,
-    .intro-bar,
-    .submit-area,
-    .portal-nav {
-        padding-left:15px;
-        padding-right:15px;
-    }
-
-    .fair-housing {
-        margin-left:15px;
-        margin-right:15px;
-    }
-
-    .grid,
-    .grid.three,
-    .upload-grid {
-        grid-template-columns:1fr;
-    }
-
-    .field.full {
-        grid-column:auto;
-    }
-
-    .signature-pad {
-        height:145px;
-    }
-
-    .portal-button {
-        flex:1;
-        min-width:100px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<header class="top-header">
-<div class="header-inner">
-
-<div class="brand-row">
-
-<div class="brand-mark">
-<img
-src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=160&q=80"
-alt="Single-family house">
-</div>
-
-<div class="brand-text">
-<strong>RESIDENTIAL LEASING</strong>
-<span>Private Application Portal</span>
-</div>
-
-</div>
-
-<div class="header-content">
-
-<div class="eyebrow" id="headerEyebrow">
-Residential Leasing
-</div>
-
-<h1 id="pageTitle">
-Rental Application
-</h1>
-
-<p id="pageDescription">
-A simple, secure application for your next home.
-Please provide complete and accurate information for review.
-</p>
-
-<div class="header-line"></div>
-
-</div>
-</div>
-</header>
-
-
-<main class="page">
-
-<div class="application-shell">
-
-
-<!-- NAVIGATION -->
-
-<div class="portal-nav">
-
-<button
-type="button"
-class="portal-button active"
-data-portal="rental">
-Rental Application
-</button>
-
-<button
-type="button"
-class="portal-button"
-data-portal="cleaner">
-Cleaner Contractor
-</button>
-
-<button
-type="button"
-class="portal-button"
-data-portal="handyman">
-Handyman Contractor
-</button>
-
-</div>
-
-
-<div class="intro-bar">
-
-<strong id="processLabel">
-APPLICATION PROCESSING
-</strong>
-
-<span>
-Complete all required fields marked with *
-</span>
-
-</div>
-
-
-<!-- =====================================================
-RENTAL PORTAL
-===================================================== -->
-
-<div
-id="rentalPortal"
-class="portal active">
-
-<div class="fair-housing">
-
-<h3>
-Fair Housing & Application Processing
-</h3>
-
-<p>
-Applications are considered without unlawful discrimination
-based on protected characteristics under applicable federal,
-state, and local law. Processing begins after the application
-and applicable fee are received.
-</p>
-
-</div>
-
-
-<form
-id="rentalApplication"
-enctype="multipart/form-data">
-
-
-<!-- 01 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">01</div>
-
-<div>
-
-<h2>
-Property Information
-</h2>
-
-<p>
-Tell us about the home you are applying for.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field full">
-
-<label>
-Property Address
-<span class="required">*</span>
-</label>
-
-<input
-type="text"
-name="propertyAddress"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Desired Move-In Date
-</label>
-
-<input
-type="date"
-name="moveInDate">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Desired Lease Term
-</label>
-
-<select name="leaseTerm">
-
-<option value="">
-Select lease term
-</option>
-
-<option>6 Months</option>
-<option>12 Months</option>
-<option>18 Months</option>
-<option>24 Months</option>
-<option>Other</option>
-
-</select>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 02 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">02</div>
-
-<div>
-
-<h2>
-Applicant Information
-</h2>
-
-<p>
-Your basic contact and residence information.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-First Name
-<span class="required">*</span>
-</label>
-
-<input
-type="text"
-name="firstName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Last Name
-<span class="required">*</span>
-</label>
-
-<input
-type="text"
-name="lastName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Email Address
-<span class="required">*</span>
-</label>
-
-<input
-type="email"
-name="email"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Phone Number
-<span class="required">*</span>
-</label>
-
-<input
-type="tel"
-name="phone"
-required>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Current Address
-<span class="required">*</span>
-</label>
-
-<input
-type="text"
-name="currentAddress"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-City
-</label>
-
-<input
-type="text"
-name="city">
-
-</div>
-
-
-<div class="field">
-
-<label>
-State
-</label>
-
-<input
-type="text"
-name="state">
-
-</div>
-
-
-<div class="field">
-
-<label>
-ZIP Code
-</label>
-
-<input
-type="text"
-name="zip">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Time at Current Address
-</label>
-
-<input
-type="text"
-name="timeAtAddress"
-placeholder="e.g. 2 years">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 03 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">03</div>
-
-<div>
-
-<h2>
-Employment & Income
-</h2>
-
-<p>
-Employment and income information for lawful screening.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>Employer</label>
-
-<input
-type="text"
-name="employer">
-
-</div>
-
-
-<div class="field">
-
-<label>Job Title</label>
-
-<input
-type="text"
-name="jobTitle">
-
-</div>
-
-
-<div class="field">
-
-<label>Employer Phone</label>
-
-<input
-type="tel"
-name="employerPhone">
-
-</div>
-
-
-<div class="field">
-
-<label>Employment Start Date</label>
-
-<input
-type="date"
-name="employmentStartDate">
-
-</div>
-
-
-<div class="field">
-
-<label>Monthly Gross Income</label>
-
-<input
-type="number"
-name="monthlyIncome"
-min="0"
-step="0.01">
-
-</div>
-
-
-<div class="field">
-
-<label>Other Monthly Income</label>
-
-<input
-type="number"
-name="otherIncome"
-min="0"
-step="0.01">
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Other Income Source
-</label>
-
-<input
-type="text"
-name="otherIncomeSource">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 04 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">04</div>
-
-<div>
-
-<h2>
-Rental History
-</h2>
-
-<p>
-Previous housing information.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Previous Landlord
-</label>
-
-<input
-type="text"
-name="previousLandlord">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Landlord Phone
-</label>
-
-<input
-type="tel"
-name="landlordPhone">
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Previous Rental Address
-</label>
-
-<input
-type="text"
-name="previousRentalAddress">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Previous Monthly Rent
-</label>
-
-<input
-type="number"
-name="previousRent"
-min="0"
-step="0.01">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Reason for Moving
-</label>
-
-<input
-type="text"
-name="reasonForMoving">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 05 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">05</div>
-
-<div>
-
-<h2>
-Household Information
-</h2>
-
-<p>
-Tell us about the household occupying the home.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid three">
-
-<div class="field">
-
-<label>
-Number of Adults
-<span class="required">*</span>
-</label>
-
-<input
-type="number"
-name="numberAdults"
-min="1"
-value="1"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Number of Children
-</label>
-
-<input
-type="number"
-name="numberChildren"
-min="0">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Additional Occupants
-</label>
-
-<input
-type="text"
-name="additionalOccupants">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 06 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">06</div>
-
-<div>
-
-<h2>
-Vehicle Information
-</h2>
-
-<p>
-Optional vehicle information.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-<label>Vehicle Make</label>
-<input type="text" name="vehicleMake">
-</div>
-
-<div class="field">
-<label>Vehicle Model</label>
-<input type="text" name="vehicleModel">
-</div>
-
-<div class="field">
-<label>Vehicle Year</label>
-<input type="text" name="vehicleYear">
-</div>
-
-<div class="field">
-<label>License Plate</label>
-<input type="text" name="licensePlate">
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 07 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">07</div>
-
-<div>
-
-<h2>
-Pet Information
-</h2>
-
-<p>
-Provide information about pets occupying the property.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Do you have pets?
-</label>
-
-<select name="hasPets">
-
-<option value="">
-Select
-</option>
-
-<option>Yes</option>
-<option>No</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Number of Pets
-</label>
-
-<input
-type="number"
-name="numberPets"
-min="0">
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Pet Details
-</label>
-
-<textarea
-name="petDetails"
-placeholder="Type, breed, approximate weight, etc."></textarea>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 08 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">08</div>
-
-<div>
-
-<h2>
-Personal Reference
-</h2>
-
-<p>
-An optional personal reference.
-</p>
-
-</div>
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Reference Name
-</label>
-
-<input
-type="text"
-name="referenceName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Relationship
-</label>
-
-<input
-type="text"
-name="referenceRelationship">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Phone
-</label>
-
-<input
-type="tel"
-name="referencePhone">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Email
-</label>
-
-<input
-type="email"
-name="referenceEmail">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 09 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">09</div>
-
-<div>
-
-<h2>
-Identity Verification
-</h2>
-
-<p>
-Government-issued identification.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="authorization">
-
-Upload a clear image of the front and back of your
-government-issued identification document if required.
-Handle identity documents securely and retain them only as
-long as legally and operationally necessary.
-
-</div>
-
-
-<div class="upload-grid">
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-ID / Driver's License — Front *
-</strong>
-
-<small>
-Upload a clear image of the front of the document.
-</small>
-
-<input
-type="file"
-name="idFront"
-accept="image/jpeg,image/png,image/webp"
-required>
-
-</div>
-
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-ID / Driver's License — Back *
-</strong>
-
-<small>
-Upload a clear image of the back of the document.
-</small>
-
-<input
-type="file"
-name="idBack"
-accept="image/jpeg,image/png,image/webp"
-required>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 10 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">10</div>
-
-<div>
-
-<h2>
-Application Fee
-</h2>
-
-<p>
-Application processing information.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="authorization">
-
-<strong>
-Application Fee
-</strong>
-
-<br><br>
-
-The application fee is $75 for each adult occupant age
-18 or older. Confirm the amount and payment instructions
-through your authorized rental process before sending funds.
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Number of Adults Paying Fee
-<span class="required">*</span>
-</label>
-
-<input
-type="number"
-name="feeAdults"
-min="1"
-value="1"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Preferred Payment Method
-<span class="required">*</span>
-</label>
-
-<select
-name="paymentMethod"
-required>
-
-<option value="">
-Select payment method
-</option>
-
-<option>
-Apple Pay
-</option>
-
-<option>
-Chime
-</option>
-
-<option>
-Venmo
-</option>
-
-<option>
-Crypto Currency.
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 11 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">11</div>
-
-<div>
-
-<h2>
-Authorization
-</h2>
-
-<p>
-Please read carefully before submitting.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="authorization">
-
-I certify that the information provided in this application
-is true and complete to the best of my knowledge. I authorize
-the property owner or authorized representative to verify
-information relevant to this rental application, where
-permitted by applicable law.
-
-</div>
-
-
-<div class="check-row">
-
-<input
-type="checkbox"
-id="rentalAuthorization"
-name="authorization"
-required>
-
-<label for="rentalAuthorization">
-
-I have read and agree to the authorization above.
-<span class="required">*</span>
-
-</label>
-
-</div>
-
-</section>
-
-
-<!-- 12 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">12</div>
-
-<div>
-
-<h2>
-Applicant Signature
-</h2>
-
-<p>
-Sign directly on your phone, tablet, or computer.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Applicant Full Name
-<span class="required">*</span>
-</label>
-
-<input
-type="text"
-name="signatureName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Date
-<span class="required">*</span>
-</label>
-
-<input
-type="date"
-name="signatureDate"
-id="rentalSignatureDate"
-required>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Draw Your Signature
-<span class="required">*</span>
-</label>
-
-<canvas
-id="rentalSignature"
-class="signature-pad"></canvas>
-
-<input
-type="hidden"
-name="signatureImage"
-id="rentalSignatureImage">
-
-<div class="signature-actions">
-
-<span class="signature-hint">
-Use your finger or mouse to sign above.
-</span>
-
-<button
-type="button"
-class="clear-signature"
-data-clear="rentalSignature">
-Clear Signature
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<div class="submit-area">
-
-<h2>
-Submit Your Application
-</h2>
-
-<p>
-By submitting this application, you acknowledge that the
-information provided may be used for lawful rental screening
-purposes in accordance with applicable federal, state, and
-local law.
-</p>
-
-<button
-type="submit"
-class="submit-button">
-Submit Rental Application
-</button>
-
-<div class="security-note">
-Please review your information carefully before submitting.
-</div>
-
-</div>
-
-</form>
-
-
-<!-- RENTAL SUCCESS -->
-
-<div
-id="rentalSuccess"
-class="result-panel">
-
-<h3>
-Application received
-</h3>
-
-<p>
-Your rental application has been submitted successfully.
-Would you like to request that the property be held while
-your application is being reviewed?
-</p>
-
-<button
-type="button"
-class="deposit-button"
-id="showDepositOptions">
-
-Yes, Request a Property Hold
-
-</button>
-
-
-<div
-id="depositOptions"
-class="deposit-options">
-
-<label for="depositAmount">
-
-Select the amount you would like to put down:
-
-</label>
-
-
-<select id="depositAmount">
-
-<option value="">
-Select amount
-</option>
-
-<option value="250">
-$250
-</option>
-
-<option value="500">
-$500
-</option>
-
-<option value="750">
-$750
-</option>
-
-<option value="1000">
-$1,000
-</option>
-
-<option value="other">
-Other amount
-</option>
-
-</select>
-
-
-<button
-type="button"
-class="deposit-button"
-id="requestHoldButton">
-
-Continue
-
-</button>
-
-
-<div
-id="receiptArea"
-class="receipt-area">
-
-<strong>
-Hold / Deposit Payment
-</strong>
-
-<p>
-Use only the authorized payment page supplied by the
-property representative. After payment, upload your
-receipt or proof of payment below.
-</p>
-
-
-<button
-type="button"
-class="deposit-button"
-id="paymentLinkButton">
-
-Open Authorized Payment Page
-
-</button>
-
-
-<div class="field" style="margin-top:12px">
-
-<label>
-Payment Receipt / Proof of Payment
-</label>
-
-<input
-type="file"
-id="depositReceipt"
-accept="image/jpeg,image/png,image/webp,application/pdf">
-
-</div>
-
-
-<button
-type="button"
-class="deposit-button"
-id="submitReceiptButton"
-style="margin-top:10px">
-
-Submit Receipt
-
-</button>
-
-
-<div
-id="receiptStatus"
-class="status">
-</div>
-
-</div>
-
-
-<div class="deposit-note">
-
-A hold request is not a guarantee that the property will
-be reserved. Deposit, refundability, application, and lease
-terms must be confirmed in writing by the authorized property
-representative before payment is made.
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-CLEANER PORTAL
-===================================================== -->
-
-<div
-id="cleanerPortal"
-class="portal">
-
-<div class="fair-housing">
-
-<h3>
-Cleaner Contractor Application
-</h3>
-
-<p>
-Apply for property cleaning, turnover, move-out and
-maintenance-cleaning opportunities.
-</p>
-
-</div>
-
-
-<form
-id="cleanerApplication"
-enctype="multipart/form-data">
-
-
-<!-- 01 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">01</div>
-
-<div>
-
-<h2>
-Contractor Information
-</h2>
-
-<p>
-Tell us about your cleaning business or services.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-First Name
-<span class="required">*</span>
-</label>
-
-<input
-name="firstName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Last Name
-<span class="required">*</span>
-</label>
-
-<input
-name="lastName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Business / Display Name
-</label>
-
-<input
-name="businessName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Phone
-<span class="required">*</span>
-</label>
-
-<input
-type="tel"
-name="phone"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Email
-<span class="required">*</span>
-</label>
-
-<input
-type="email"
-name="email"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Primary Service Area
-<span class="required">*</span>
-</label>
-
-<input
-name="serviceArea"
-placeholder="City and nearby areas"
-required>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 02 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">02</div>
-
-<div>
-
-<h2>
-Cleaning Experience
-</h2>
-
-<p>
-Tell us about your experience and services.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Years of Cleaning Experience
-<span class="required">*</span>
-</label>
-
-<input
-type="number"
-name="yearsExperience"
-min="0"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Cleaning Type
-<span class="required">*</span>
-</label>
-
-<select
-name="cleaningType"
-required>
-
-<option value="">
-Select
-</option>
-
-<option>
-Residential Cleaning
-</option>
-
-<option>
-Move-Out Cleaning
-</option>
-
-<option>
-Deep Cleaning
-</option>
-
-<option>
-Rental Turnover
-</option>
-
-<option>
-All of the Above
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Services Offered
-<span class="required">*</span>
-</label>
-
-<textarea
-name="services"
-required
-placeholder="Describe your cleaning services, specialties and equipment."></textarea>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Typical Rate
-</label>
-
-<input
-name="rate"
-placeholder="e.g. $150 per turnover">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Availability
-<span class="required">*</span>
-</label>
-
-<select
-name="availability"
-required>
-
-<option value="">
-Select
-</option>
-
-<option>
-Weekdays
-</option>
-
-<option>
-Weekends
-</option>
-
-<option>
-Both
-</option>
-
-<option>
-Flexible
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 03 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">03</div>
-
-<div>
-
-<h2>
-Work Samples
-</h2>
-
-<p>
-Optional photos of previous work.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="upload-grid">
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-Cleaning Work Photo 1
-</strong>
-
-<small>
-Upload a representative photo.
-</small>
-
-<input
-type="file"
-name="workPhoto1"
-accept="image/jpeg,image/png,image/webp">
-
-</div>
-
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-Cleaning Work Photo 2
-</strong>
-
-<small>
-Upload another representative photo.
-</small>
-
-<input
-type="file"
-name="workPhoto2"
-accept="image/jpeg,image/png,image/webp">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 04 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">04</div>
-
-<div>
-
-<h2>
-References & Notes
-</h2>
-
-<p>
-Optional professional information.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Reference Name
-</label>
-
-<input
-name="referenceName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Reference Phone
-</label>
-
-<input
-type="tel"
-name="referencePhone">
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Additional Experience / Notes
-</label>
-
-<textarea
-name="notes"
-placeholder="Recent clients, specialties, equipment, etc."></textarea>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 05 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">05</div>
-
-<div>
-
-<h2>
-Agreement & Signature
-</h2>
-
-<p>
-Confirm the information before submitting.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="authorization">
-
-I certify that the information in this contractor application
-is accurate to the best of my knowledge. Submission does not
-create an employment relationship, guarantee work, or guarantee
-acceptance as a contractor.
-
-</div>
-
-
-<div class="check-row">
-
-<input
-type="checkbox"
-name="authorization"
-id="cleanerAuthorization"
-required>
-
-<label for="cleanerAuthorization">
-
-I have read and agree to the statement above.
-<span class="required">*</span>
-
-</label>
-
-</div>
-
-
-<div
-class="grid"
-style="margin-top:12px">
-
-<div class="field">
-
-<label>
-Full Name
-<span class="required">*</span>
-</label>
-
-<input
-name="signatureName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Date
-<span class="required">*</span>
-</label>
-
-<input
-type="date"
-name="signatureDate"
-id="cleanerSignatureDate"
-required>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Draw Your Signature
-<span class="required">*</span>
-</label>
-
-<canvas
-id="cleanerSignature"
-class="signature-pad"></canvas>
-
-<input
-type="hidden"
-name="signatureImage"
-id="cleanerSignatureImage">
-
-<div class="signature-actions">
-
-<span class="signature-hint">
-Use your finger or mouse to sign above.
-</span>
-
-<button
-type="button"
-class="clear-signature"
-data-clear="cleanerSignature">
-
-Clear Signature
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<div class="submit-area">
-
-<h2>
-Submit Cleaner Application
-</h2>
-
-<p>
-Your application will be sent for review. Submission does
-not guarantee contractor work.
-</p>
-
-<button
-type="submit"
-class="submit-button">
-
-Submit Cleaner Application
-
-</button>
-
-<div class="security-note">
-Do not submit payment credentials through this form.
-</div>
-
-</div>
-
-</form>
-
-
-<div
-id="cleanerSuccess"
-class="result-panel">
-
-<h3>
-Cleaner application received
-</h3>
-
-<p>
-Thank you. Your cleaner contractor application has been
-submitted for review.
-</p>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-HANDYMAN PORTAL
-===================================================== -->
-
-<div
-id="handymanPortal"
-class="portal">
-
-<div class="fair-housing">
-
-<h3>
-Handyman Contractor Application
-</h3>
-
-<p>
-Apply for property repairs, maintenance, turnovers and
-general handyman opportunities.
-</p>
-
-</div>
-
-
-<form
-id="handymanApplication"
-enctype="multipart/form-data">
-
-
-<!-- 01 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">01</div>
-
-<div>
-
-<h2>
-Contractor Information
-</h2>
-
-<p>
-Tell us about your handyman services.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-First Name
-<span class="required">*</span>
-</label>
-
-<input
-name="firstName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Last Name
-<span class="required">*</span>
-</label>
-
-<input
-name="lastName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Business / Display Name
-</label>
-
-<input
-name="businessName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Phone
-<span class="required">*</span>
-</label>
-
-<input
-type="tel"
-name="phone"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Email
-<span class="required">*</span>
-</label>
-
-<input
-type="email"
-name="email"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Primary Service Area
-<span class="required">*</span>
-</label>
-
-<input
-name="serviceArea"
-placeholder="City and nearby areas"
-required>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 02 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">02</div>
-
-<div>
-
-<h2>
-Skills & Experience
-</h2>
-
-<p>
-Tell us what types of work you perform.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Years of Experience
-<span class="required">*</span>
-</label>
-
-<input
-type="number"
-name="yearsExperience"
-min="0"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Availability
-<span class="required">*</span>
-</label>
-
-<select
-name="availability"
-required>
-
-<option value="">
-Select
-</option>
-
-<option>
-Weekdays
-</option>
-
-<option>
-Weekends
-</option>
-
-<option>
-Both
-</option>
-
-<option>
-Flexible
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Services / Skills
-<span class="required">*</span>
-</label>
-
-<textarea
-name="services"
-required
-placeholder="Painting, drywall, fixtures, doors, flooring, assembly, repairs, etc."></textarea>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Typical Rate
-</label>
-
-<input
-name="rate"
-placeholder="e.g. $35/hr">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Can You Travel to Vacant Properties?
-</label>
-
-<select name="travel">
-
-<option value="">
-Select
-</option>
-
-<option>
-Yes
-</option>
-
-<option>
-No
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 03 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">03</div>
-
-<div>
-
-<h2>
-Work Samples
-</h2>
-
-<p>
-Optional photos of previous work.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="upload-grid">
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-Handyman Work Photo 1
-</strong>
-
-<small>
-Upload a representative photo.
-</small>
-
-<input
-type="file"
-name="workPhoto1"
-accept="image/jpeg,image/png,image/webp">
-
-</div>
-
-
-<div class="upload-box">
-
-<div class="upload-icon">
-▣
-</div>
-
-<strong>
-Handyman Work Photo 2
-</strong>
-
-<small>
-Upload another representative photo.
-</small>
-
-<input
-type="file"
-name="workPhoto2"
-accept="image/jpeg,image/png,image/webp">
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 04 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">04</div>
-
-<div>
-
-<h2>
-References & Notes
-</h2>
-
-<p>
-Optional professional information.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="field">
-
-<label>
-Reference Name
-</label>
-
-<input
-name="referenceName">
-
-</div>
-
-
-<div class="field">
-
-<label>
-Reference Phone
-</label>
-
-<input
-type="tel"
-name="referencePhone">
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Additional Experience / Notes
-</label>
-
-<textarea
-name="notes"
-placeholder="Recent projects, specialties, tools, licenses, etc."></textarea>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- 05 -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div class="number">05</div>
-
-<div>
-
-<h2>
-Agreement & Signature
-</h2>
-
-<p>
-Confirm the information before submitting.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="authorization">
-
-I certify that the information in this contractor application
-is accurate to the best of my knowledge. Submission does not
-create an employment relationship, guarantee work, or guarantee
-acceptance as a contractor.
-
-</div>
-
-
-<div class="check-row">
-
-<input
-type="checkbox"
-name="authorization"
-id="handymanAuthorization"
-required>
-
-<label for="handymanAuthorization">
-
-I have read and agree to the statement above.
-<span class="required">*</span>
-
-</label>
-
-</div>
-
-
-<div
-class="grid"
-style="margin-top:12px">
-
-<div class="field">
-
-<label>
-Full Name
-<span class="required">*</span>
-</label>
-
-<input
-name="signatureName"
-required>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Date
-<span class="required">*</span>
-</label>
-
-<input
-type="date"
-name="signatureDate"
-id="handymanSignatureDate"
-required>
-
-</div>
-
-
-<div class="field full">
-
-<label>
-Draw Your Signature
-<span class="required">*</span>
-</label>
-
-<canvas
-id="handymanSignature"
-class="signature-pad"></canvas>
-
-<input
-type="hidden"
-name="signatureImage"
-id="handymanSignatureImage">
-
-<div class="signature-actions">
-
-<span class="signature-hint">
-Use your finger or mouse to sign above.
-</span>
-
-<button
-type="button"
-class="clear-signature"
-data-clear="handymanSignature">
-
-Clear Signature
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<div class="submit-area">
-
-<h2>
-Submit Handyman Application
-</h2>
-
-<p>
-Your application will be sent for review. Submission does
-not guarantee contractor work.
-</p>
-
-<button
-type="submit"
-class="submit-button">
-
-Submit Handyman Application
-
-</button>
-
-<div class="security-note">
-Do not submit payment credentials through this form.
-</div>
-
-</div>
-
-</form>
-
-
-<div
-id="handymanSuccess"
-class="result-panel">
-
-<h3>
-Handyman application received
-</h3>
-
-<p>
-Thank you. Your handyman contractor application has been
-submitted for review.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</main>
-
-
-<footer>
-
-<strong>
-© 2026 Residential Leasing
-</strong>
-
-· Equal Housing Opportunity
-
-<br>
-
-Application processing is subject to applicable federal,
-state, and local laws.
-
-</footer>
-
-
 <script>
+const SUBMIT_URL = "/.netlify/functions/submit";
+const SECURE_PAYMENT_URL = "";
 
-/* =========================================================
-CONFIGURATION
-=========================================================
+document.addEventListener("DOMContentLoaded", function () {
 
-PUT YOUR REAL APPS SCRIPT WEB APP URL HERE.
+  /* =========================
+     PORTAL SWITCHING
+  ========================= */
 
-Example:
+  const portalButtons = document.querySelectorAll("[data-portal]");
+  const portals = document.querySelectorAll("[data-portal-content]");
 
-const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/XXXXXXXX/exec";
+  portalButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const target = button.getAttribute("data-portal");
 
-PUT YOUR APPROVED PAYMENT PAGE HERE.
-
-Do not put card/bank credential collection into this HTML.
-========================================================= */
-
-const APPS_SCRIPT_URL =
-"YOUR_APPS_SCRIPT_WEB_APP_URL";
-
-const APPS_SCRIPT_URL = "/.netlify/functions/submit"; =
-"YOUR_SECURE_PAYMENT_PAGE_URL";
-
-
-/* =========================================================
-PORTAL SWITCHING
-========================================================= */
-
-const portalButtons =
-document.querySelectorAll(".portal-button");
-
-const portals = {
-    rental:document.getElementById("rentalPortal"),
-    cleaner:document.getElementById("cleanerPortal"),
-    handyman:document.getElementById("handymanPortal")
-};
-
-const pageTitle =
-document.getElementById("pageTitle");
-
-const pageDescription =
-document.getElementById("pageDescription");
-
-const processLabel =
-document.getElementById("processLabel");
-
-const headerEyebrow =
-document.getElementById("headerEyebrow");
-
-
-portalButtons.forEach(button => {
-
-    button.addEventListener("click",function(){
-
-        const selected =
-        this.dataset.portal;
-
-        portalButtons.forEach(btn =>
-            btn.classList.remove("active")
+      portalButtons.forEach(function (btn) {
+        btn.classList.toggle(
+          "active",
+          btn.getAttribute("data-portal") === target
         );
+      });
 
-        this.classList.add("active");
+      portals.forEach(function (portal) {
+        portal.style.display =
+          portal.getAttribute("data-portal-content") === target
+            ? ""
+            : "none";
+      });
 
-
-        Object.values(portals).forEach(portal =>
-            portal.classList.remove("active")
-        );
-
-        portals[selected].classList.add("active");
-
-
-        if(selected === "rental"){
-
-            headerEyebrow.textContent =
-            "Residential Leasing";
-
-            pageTitle.textContent =
-            "Rental Application";
-
-            pageDescription.textContent =
-            "A simple, secure application for your next home. Please provide complete and accurate information for review.";
-
-            processLabel.textContent =
-            "APPLICATION PROCESSING";
-
-        }
-
-
-        if(selected === "cleaner"){
-
-            headerEyebrow.textContent =
-            "Contractor Services";
-
-            pageTitle.textContent =
-            "Cleaner Contractor Application";
-
-            pageDescription.textContent =
-            "Apply for property cleaning and turnover service opportunities.";
-
-            processLabel.textContent =
-            "CLEANER CONTRACTOR";
-
-        }
-
-
-        if(selected === "handyman"){
-
-            headerEyebrow.textContent =
-            "Contractor Services";
-
-            pageTitle.textContent =
-            "Handyman Contractor Application";
-
-            pageDescription.textContent =
-            "Apply for property maintenance and handyman service opportunities.";
-
-            processLabel.textContent =
-            "HANDYMAN CONTRACTOR";
-
-        }
-
-
-        window.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
-
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     });
-
-});
-
-
-/* =========================================================
-SIGNATURE PAD ENGINE
-========================================================= */
-
-function createSignaturePad(
-    canvasId,
-    inputId
-){
-
-    const canvas =
-    document.getElementById(canvasId);
-
-    const input =
-    document.getElementById(inputId);
-
-    const ctx =
-    canvas.getContext("2d");
-
-    let drawing=false;
-
-    let hasSignature=false;
+  });
 
 
-    function resizeCanvas(){
+  /* =========================
+     SIGNATURE PAD
+  ========================= */
 
-        const ratio =
-        Math.max(window.devicePixelRatio || 1,1);
+  function setupSignaturePad(canvasId, hiddenInputId) {
 
-        const rect =
-        canvas.getBoundingClientRect();
+    const canvas = document.getElementById(canvasId);
+    const hiddenInput = document.getElementById(hiddenInputId);
 
-        canvas.width =
-        rect.width * ratio;
+    if (!canvas) return;
 
-        canvas.height =
-        rect.height * ratio;
+    const ctx = canvas.getContext("2d");
 
-        ctx.setTransform(
-            ratio,
+    let drawing = false;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) return;
+
+      const oldImage = canvas.width && canvas.height
+        ? canvas.toDataURL()
+        : null;
+
+      const ratio = window.devicePixelRatio || 1;
+
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+
+      ctx.scale(ratio, ratio);
+
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#071426";
+
+      if (oldImage) {
+        const image = new Image();
+
+        image.onload = function () {
+          ctx.drawImage(
+            image,
             0,
             0,
-            ratio,
-            0,
-            0
-        );
-
-        ctx.lineWidth=2;
-
-        ctx.lineCap="round";
-
-        ctx.lineJoin="round";
-
-        ctx.strokeStyle="#123f73";
-
-    }
-
-
-    function getPosition(event){
-
-        const rect =
-        canvas.getBoundingClientRect();
-
-        return {
-
-            x:event.clientX-rect.left,
-
-            y:event.clientY-rect.top
-
+            rect.width,
+            rect.height
+          );
         };
 
+        image.src = oldImage;
+      }
     }
-
-
-    canvas.addEventListener(
-        "pointerdown",
-        function(event){
-
-            event.preventDefault();
-
-            drawing=true;
-
-            hasSignature=true;
-
-            const pos =
-            getPosition(event);
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                pos.x,
-                pos.y
-            );
-
-        }
-    );
-
-
-    canvas.addEventListener(
-        "pointermove",
-        function(event){
-
-            if(!drawing){
-                return;
-            }
-
-            event.preventDefault();
-
-            const pos =
-            getPosition(event);
-
-            ctx.lineTo(
-                pos.x,
-                pos.y
-            );
-
-            ctx.stroke();
-
-        }
-    );
-
-
-    function stopDrawing(){
-
-        if(!drawing){
-            return;
-        }
-
-        drawing=false;
-
-        input.value =
-        canvas.toDataURL("image/png");
-
-    }
-
-
-    canvas.addEventListener(
-        "pointerup",
-        stopDrawing
-    );
-
-    canvas.addEventListener(
-        "pointerleave",
-        stopDrawing
-    );
-
-    canvas.addEventListener(
-        "pointercancel",
-        stopDrawing
-    );
-
-
-    const clearButton =
-    document.querySelector(
-        `[data-clear="${canvasId}"]`
-    );
-
-
-    clearButton.addEventListener(
-        "click",
-        function(){
-
-            ctx.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-            input.value="";
-
-            hasSignature=false;
-
-        }
-    );
-
 
     resizeCanvas();
 
+    window.addEventListener("resize", resizeCanvas);
 
-    window.addEventListener(
-        "resize",
-        function(){
+    function getPosition(event) {
 
-            if(!hasSignature){
-                resizeCanvas();
-            }
+      const rect = canvas.getBoundingClientRect();
 
-        }
-    );
+      if (event.touches && event.touches.length) {
+        return {
+          x: event.touches[0].clientX - rect.left,
+          y: event.touches[0].clientY - rect.top
+        };
+      }
+
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+    function startDrawing(event) {
+      event.preventDefault();
+
+      drawing = true;
+
+      const pos = getPosition(event);
+
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(event) {
+
+      if (!drawing) return;
+
+      event.preventDefault();
+
+      const pos = getPosition(event);
+
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing(event) {
+
+      if (!drawing) return;
+
+      event.preventDefault();
+
+      drawing = false;
+
+      if (hiddenInput) {
+        hiddenInput.value = canvas.toDataURL("image/png");
+      }
+    }
+
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mouseleave", stopDrawing);
+
+    canvas.addEventListener("touchstart", startDrawing, {
+      passive: false
+    });
+
+    canvas.addEventListener("touchmove", draw, {
+      passive: false
+    });
+
+    canvas.addEventListener("touchend", stopDrawing, {
+      passive: false
+    });
+
+    canvas.addEventListener("touchcancel", stopDrawing, {
+      passive: false
+    });
+
+    canvas.addEventListener("click", function () {
+      if (hiddenInput) {
+        hiddenInput.value = canvas.toDataURL("image/png");
+      }
+    });
+  }
 
 
-    return {
-
-        hasSignature:function(){
-            return hasSignature;
-        }
-
-    };
-
-}
-
-
-const rentalSignature =
-createSignaturePad(
+  setupSignaturePad(
     "rentalSignature",
     "rentalSignatureImage"
-);
+  );
 
-
-const cleanerSignature =
-createSignaturePad(
+  setupSignaturePad(
     "cleanerSignature",
     "cleanerSignatureImage"
-);
+  );
 
-
-const handymanSignature =
-createSignaturePad(
+  setupSignaturePad(
     "handymanSignature",
     "handymanSignatureImage"
-);
+  );
 
 
-/* SET TODAY'S DATE */
+  /* =========================
+     FILE TO BASE64
+  ========================= */
 
-const today =
-new Date().toISOString().split("T")[0];
+  function fileToBase64(file) {
 
+    return new Promise(function (resolve, reject) {
 
-document.getElementById(
-    "rentalSignatureDate"
-).value=today;
-
-
-document.getElementById(
-    "cleanerSignatureDate"
-).value=today;
-
-
-document.getElementById(
-    "handymanSignatureDate"
-).value=today;
-
-
-/* =========================================================
-GENERIC FORM SUBMISSION
-========================================================= */
-
-async function submitApplication(
-    form,
-    resultPanel,
-    applicationType,
-    buttonLabel
-){
-
-    const button =
-    form.querySelector(".submit-button");
-
-
-    if(
-        APPS_SCRIPT_URL ===
-        "YOUR_APPS_SCRIPT_WEB_APP_URL"
-    ){
-
-        alert(
-            "The form is ready, but your Apps Script Web App URL has not been connected yet."
-        );
-
+      if (!file) {
+        resolve(null);
         return;
+      }
 
-    }
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        resolve({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          data: reader.result
+        });
+      };
+
+      reader.onerror = function () {
+        reject(new Error("Could not read file."));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
 
 
-    button.disabled=true;
+  async function collectFiles(form) {
 
-    button.textContent="Submitting...";
+    const files = {};
 
-
-    const formData =
-    new FormData(form);
-
-
-    formData.append(
-        "applicationType",
-        applicationType
+    const inputs = form.querySelectorAll(
+      'input[type="file"]'
     );
 
+    for (const input of inputs) {
 
-    try{
+      if (!input.files || !input.files.length) {
+        continue;
+      }
 
-        const response =
-        await fetch(
-            APPS_SCRIPT_URL,
-            {
-                method:"POST",
-                body:formData
-            }
-        );
+      const fieldName = input.name || input.id;
 
+      if (!fieldName) continue;
 
-        const text =
-        await response.text();
+      if (input.multiple) {
 
+        files[fieldName] = [];
 
-        let result;
+        for (const file of input.files) {
 
+          /*
+           * Limit individual upload size.
+           * This helps prevent very large submissions.
+           */
 
-        try{
+          if (file.size > 8 * 1024 * 1024) {
+            throw new Error(
+              file.name +
+              " is larger than 8 MB. Please choose a smaller file."
+            );
+          }
 
-            result =
-            JSON.parse(text);
-
-        }catch(error){
-
-            result={
-                success:response.ok
-            };
-
+          files[fieldName].push(
+            await fileToBase64(file)
+          );
         }
 
+      } else {
 
-        if(
-            !response.ok ||
-            result.success === false
-        ){
+        const file = input.files[0];
+
+        if (file.size > 8 * 1024 * 1024) {
+          throw new Error(
+            file.name +
+            " is larger than 8 MB. Please choose a smaller file."
+          );
+        }
+
+        files[fieldName] =
+          await fileToBase64(file);
+      }
+    }
+
+    return files;
+  }
+
+
+  /* =========================
+     FORM DATA
+  ========================= */
+
+  async function formToJSON(form) {
+
+    const data = {};
+
+    const elements = form.querySelectorAll(
+      "input, select, textarea"
+    );
+
+    elements.forEach(function (element) {
+
+      const name = element.name || element.id;
+
+      if (!name) return;
+
+      if (element.type === "file") {
+        return;
+      }
+
+      if (element.type === "checkbox") {
+
+        data[name] = element.checked;
+
+        return;
+      }
+
+      if (element.type === "radio") {
+
+        if (element.checked) {
+          data[name] = element.value;
+        }
+
+        return;
+      }
+
+      data[name] = element.value;
+    });
+
+    data.files = await collectFiles(form);
+
+    return data;
+  }
+
+
+  /* =========================
+     APPLICATION TYPE
+  ========================= */
+
+  function getApplicationType(form) {
+
+    const typeInput =
+      form.querySelector(
+        '[name="applicationType"]'
+      );
+
+    if (typeInput && typeInput.value) {
+      return typeInput.value;
+    }
+
+    const id = form.id || "";
+
+    if (id.toLowerCase().includes("cleaner")) {
+      return "cleaner";
+    }
+
+    if (id.toLowerCase().includes("handyman")) {
+      return "handyman";
+    }
+
+    return "rental";
+  }
+
+
+  /* =========================
+     BUTTON LOADING
+  ========================= */
+
+  function setButtonLoading(button, loading) {
+
+    if (!button) return;
+
+    if (loading) {
+
+      button.dataset.originalText =
+        button.innerHTML;
+
+      button.disabled = true;
+
+      button.innerHTML =
+        "Submitting…";
+
+    } else {
+
+      button.disabled = false;
+
+      if (button.dataset.originalText) {
+        button.innerHTML =
+          button.dataset.originalText;
+      }
+    }
+  }
+
+
+  /* =========================
+     SUCCESS MESSAGE
+  ========================= */
+
+  function showSuccess(form, result) {
+
+    let panel =
+      form.querySelector(
+        ".application-success"
+      );
+
+    if (!panel) {
+
+      panel = document.createElement("div");
+
+      panel.className =
+        "application-success";
+
+      panel.style.cssText = `
+        margin:24px 0;
+        padding:24px;
+        border-radius:16px;
+        background:#eaf5fa;
+        border:1px solid #48b8f5;
+        color:#071426;
+        font-family:inherit;
+      `;
+
+      form.parentNode.insertBefore(
+        panel,
+        form
+      );
+    }
+
+    const applicationId =
+      result.applicationId || "Received";
+
+    panel.innerHTML = `
+      <h3 style="margin-top:0;">
+        Application Submitted Successfully
+      </h3>
+
+      <p>
+        Thank you. Your application has been received.
+      </p>
+
+      <p>
+        <strong>Application Number:</strong>
+        ${applicationId}
+      </p>
+
+      <p>
+        Please save this application number
+        for your records.
+      </p>
+    `;
+
+    panel.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+
+
+  /* =========================
+     ERROR MESSAGE
+  ========================= */
+
+  function showError(form, message) {
+
+    let panel =
+      form.querySelector(
+        ".application-error"
+      );
+
+    if (!panel) {
+
+      panel = document.createElement("div");
+
+      panel.className =
+        "application-error";
+
+      panel.style.cssText = `
+        margin:24px 0;
+        padding:20px;
+        border-radius:16px;
+        background:#fff1f1;
+        border:1px solid #d9534f;
+        color:#721c24;
+        font-family:inherit;
+      `;
+
+      form.parentNode.insertBefore(
+        panel,
+        form
+      );
+    }
+
+    panel.innerHTML = `
+      <strong>Submission problem</strong>
+      <p style="margin-bottom:0;">
+        ${message}
+      </p>
+    `;
+
+    panel.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+
+
+  /* =========================
+     SUBMIT FORMS
+  ========================= */
+
+  const forms =
+    document.querySelectorAll("form");
+
+  forms.forEach(function (form) {
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const submitButton =
+          form.querySelector(
+            'button[type="submit"], input[type="submit"]'
+          );
+
+        setButtonLoading(
+          submitButton,
+          true
+        );
+
+        try {
+
+          const data =
+            await formToJSON(form);
+
+          data.applicationType =
+            getApplicationType(form);
+
+          data.submittedAt =
+            new Date().toISOString();
+
+          /*
+           * Basic signature requirement.
+           */
+
+          const signature =
+            data.signatureName;
+
+          if (
+            form.id.toLowerCase().includes("rental") &&
+            (!signature ||
+             signature.trim() === "")
+          ) {
 
             throw new Error(
-                result.message ||
-                "The application could not be submitted."
+              "Please enter your signature name."
+            );
+          }
+
+          const response =
+            await fetch(
+              SUBMIT_URL,
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify(data)
+              }
             );
 
-        }
+          let result = {};
 
+          try {
+            result =
+              await response.json();
+          } catch (e) {
+            result = {};
+          }
 
-        form.reset();
+          if (
+            !response.ok ||
+            result.success === false
+          ) {
 
+            throw new Error(
+              result.message ||
+              "The application could not be submitted."
+            );
+          }
 
-        resultPanel.classList.add(
-            "show"
-        );
+          if (result.applicationId) {
 
+            localStorage.setItem(
+              "lastApplicationId",
+              result.applicationId
+            );
+          }
 
-        resultPanel.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
-        });
+          showSuccess(
+            form,
+            result
+          );
 
+          /*
+           * Keep the form on the page.
+           * Do not reload the page.
+           */
 
-    }catch(error){
+        } catch (error) {
 
-        console.error(error);
+          console.error(
+            "Submission error:",
+            error
+          );
 
-        alert(
+          showError(
+            form,
             error.message ||
-            "There was a problem submitting your application. Please try again."
-        );
+            "Something went wrong. Please try again."
+          );
 
+        } finally {
 
-    }finally{
-
-        button.disabled=false;
-
-        button.textContent=
-        buttonLabel;
-
-    }
-
-}
-
-
-/* =========================================================
-RENTAL SUBMISSION
-========================================================= */
-
-document
-.getElementById("rentalApplication")
-.addEventListener(
-    "submit",
-    function(event){
-
-        event.preventDefault();
-
-
-        if(
-            !document.getElementById(
-                "rentalSignatureImage"
-            ).value
-        ){
-
-            alert(
-                "Please draw your signature before submitting."
-            );
-
-            return;
-
+          setButtonLoading(
+            submitButton,
+            false
+          );
         }
+      }
+    );
+  });
 
 
-        submitApplication(
-            this,
-            document.getElementById(
-                "rentalSuccess"
-            ),
-            "rental",
-            "Submit Rental Application"
-        );
+  /* =========================
+     PAYMENT PAGE BUTTON
+  ========================= */
 
-    }
-);
+  const paymentButtons =
+    document.querySelectorAll(
+      "[data-payment-button]"
+    );
 
+  paymentButtons.forEach(function (button) {
 
-/* =========================================================
-CLEANER SUBMISSION
-========================================================= */
+    button.addEventListener(
+      "click",
+      function () {
 
-document
-.getElementById("cleanerApplication")
-.addEventListener(
-    "submit",
-    function(event){
+        if (!SECURE_PAYMENT_URL) {
 
-        event.preventDefault();
+          alert(
+            "The secure payment page has not been connected yet."
+          );
 
-
-        if(
-            !document.getElementById(
-                "cleanerSignatureImage"
-            ).value
-        ){
-
-            alert(
-                "Please draw your signature before submitting."
-            );
-
-            return;
-
+          return;
         }
-
-
-        submitApplication(
-            this,
-            document.getElementById(
-                "cleanerSuccess"
-            ),
-            "cleaner",
-            "Submit Cleaner Application"
-        );
-
-    }
-);
-
-
-/* =========================================================
-HANDYMAN SUBMISSION
-========================================================= */
-
-document
-.getElementById("handymanApplication")
-.addEventListener(
-    "submit",
-    function(event){
-
-        event.preventDefault();
-
-
-        if(
-            !document.getElementById(
-                "handymanSignatureImage"
-            ).value
-        ){
-
-            alert(
-                "Please draw your signature before submitting."
-            );
-
-            return;
-
-        }
-
-
-        submitApplication(
-            this,
-            document.getElementById(
-                "handymanSuccess"
-            ),
-            "handyman",
-            "Submit Handyman Application"
-        );
-
-    }
-);
-
-
-/* =========================================================
-PROPERTY HOLD
-========================================================= */
-
-document
-.getElementById("showDepositOptions")
-.addEventListener(
-    "click",
-    function(){
-
-        document
-        .getElementById("depositOptions")
-        .classList.add("show");
-
-        this.style.display="none";
-
-    }
-);
-
-
-/* =========================================================
-DEPOSIT AMOUNT
-========================================================= */
-
-document
-.getElementById("requestHoldButton")
-.addEventListener(
-    "click",
-    function(){
-
-        const amount =
-        document.getElementById(
-            "depositAmount"
-        ).value;
-
-
-        if(!amount){
-
-            alert(
-                "Please select a deposit amount."
-            );
-
-            return;
-
-        }
-
-
-        document
-        .getElementById("receiptArea")
-        .classList.add("show");
-
-    }
-);
-
-
-/* =========================================================
-AUTHORIZED PAYMENT PAGE
-========================================================= */
-
-document
-.getElementById("paymentLinkButton")
-.addEventListener(
-    "click",
-    function(){
-
-        if(
-            SECURE_PAYMENT_URL ===
-            "YOUR_SECURE_PAYMENT_PAGE_URL"
-        ){
-
-            alert(
-                "Your authorized payment page has not been connected yet."
-            );
-
-            return;
-
-        }
-
 
         window.location.href =
-        SECURE_PAYMENT_URL;
-
-    }
-);
-
-
-/* =========================================================
-PAYMENT RECEIPT UPLOAD
-========================================================= */
-
-document
-.getElementById("submitReceiptButton")
-.addEventListener(
-    "click",
-    async function(){
-
-        const file =
-        document.getElementById(
-            "depositReceipt"
-        ).files[0];
+          SECURE_PAYMENT_URL;
+      }
+    );
+  });
 
 
-        const status =
-        document.getElementById(
-            "receiptStatus"
+  /* =========================
+     DEPOSIT RECEIPT
+  ========================= */
+
+  const receiptForms =
+    document.querySelectorAll(
+      '[data-form-type="deposit-receipt"]'
+    );
+
+  receiptForms.forEach(function (form) {
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+        const button =
+          form.querySelector(
+            'button[type="submit"], input[type="submit"]'
+          );
+
+        setButtonLoading(
+          button,
+          true
         );
 
+        try {
 
-        if(!file){
+          const data =
+            await formToJSON(form);
 
-            status.className=
-            "status error";
+          data.applicationType =
+            "deposit_receipt";
 
-            status.textContent=
-            "Please select your payment receipt first.";
+          data.submittedAt =
+            new Date().toISOString();
 
-            return;
-
-        }
-
-
-        if(
-            APPS_SCRIPT_URL ===
-            "YOUR_APPS_SCRIPT_WEB_APP_URL"
-        ){
-
-            status.className=
-            "status error";
-
-            status.textContent=
-            "Connect your Apps Script Web App URL first.";
-
-            return;
-
-        }
-
-
-        status.className=
-        "status";
-
-        status.textContent=
-        "Uploading receipt...";
-
-
-        const formData =
-        new FormData();
-
-
-        formData.append(
-            "applicationType",
-            "deposit_receipt"
-        );
-
-
-        formData.append(
-            "depositAmount",
-            document.getElementById(
-                "depositAmount"
-            ).value
-        );
-
-
-        formData.append(
-            "receipt",
-            file
-        );
-
-
-        try{
-
-            const response =
+          const response =
             await fetch(
-                APPS_SCRIPT_URL,
-                {
-                    method:"POST",
-                    body:formData
-                }
+              SUBMIT_URL,
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify(data)
+              }
             );
 
+          const result =
+            await response.json();
 
-            const text =
-            await response.text();
+          if (
+            !response.ok ||
+            result.success === false
+          ) {
 
+            throw new Error(
+              result.message ||
+              "Receipt could not be submitted."
+            );
+          }
 
-            let result;
+          showSuccess(
+            form,
+            result
+          );
 
+        } catch (error) {
 
-            try{
-
-                result =
-                JSON.parse(text);
-
-            }catch(error){
-
-                result={
-                    success:response.ok
-                };
-
-            }
-
-
-            if(
-                !response.ok ||
-                result.success === false
-            ){
-
-                throw new Error(
-                    result.message ||
-                    "Receipt upload failed."
-                );
-
-            }
-
-
-            status.className=
-            "status success";
-
-            status.textContent=
-            "Receipt submitted successfully.";
-
-
-        }catch(error){
-
-            console.error(error);
-
-            status.className=
-            "status error";
-
-            status.textContent=
+          showError(
+            form,
             error.message ||
-            "Receipt upload failed. Please try again.";
+            "Receipt submission failed."
+          );
 
+        } finally {
+
+          setButtonLoading(
+            button,
+            false
+          );
         }
+      }
+    );
+  });
 
-    }
-);
 
-<script>
-  const SUBMIT_URL = "/.netlify/functions/submit";
-  const SECURE_PAYMENT_URL = "";
+  /* =========================
+     REMEMBER LAST APPLICATION
+  ========================= */
 
-  // Your form submission code goes here...
+  const savedApplicationId =
+    localStorage.getItem(
+      "lastApplicationId"
+    );
+
+  if (savedApplicationId) {
+
+    console.log(
+      "Last application:",
+      savedApplicationId
+    );
+  }
+
+});
 </script>
 
 </body>
