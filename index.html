@@ -1,72 +1,144 @@
 <script>
+/* =========================================================
+   APPLICATION SYSTEM
+   ========================================================= */
+
 const SUBMIT_URL = "/.netlify/functions/submit";
+
+/*
+ * Add your secure payment URL here when you have one.
+ * Example:
+ * const SECURE_PAYMENT_URL = "https://example.com/payment";
+ */
 const SECURE_PAYMENT_URL = "";
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  /* =========================
+  /* =======================================================
      PORTAL SWITCHING
-  ========================= */
+     ======================================================= */
 
-  const portalButtons = document.querySelectorAll("[data-portal]");
-  const portals = document.querySelectorAll("[data-portal-content]");
+  const portalButtons =
+    document.querySelectorAll("[data-portal]");
+
+  const portals =
+    document.querySelectorAll("[data-portal-content]");
 
   portalButtons.forEach(function (button) {
+
     button.addEventListener("click", function () {
-      const target = button.getAttribute("data-portal");
+
+      const target =
+        button.getAttribute("data-portal");
 
       portalButtons.forEach(function (btn) {
+
         btn.classList.toggle(
           "active",
           btn.getAttribute("data-portal") === target
         );
+
       });
 
       portals.forEach(function (portal) {
+
+        const content =
+          portal.getAttribute("data-portal-content");
+
         portal.style.display =
-          portal.getAttribute("data-portal-content") === target
-            ? ""
-            : "none";
+          content === target ? "" : "none";
+
       });
 
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
+
     });
+
   });
 
 
-  /* =========================
+  /* =======================================================
      SIGNATURE PAD
-  ========================= */
+     ======================================================= */
 
   function setupSignaturePad(canvasId, hiddenInputId) {
 
-    const canvas = document.getElementById(canvasId);
-    const hiddenInput = document.getElementById(hiddenInputId);
+    const canvas =
+      document.getElementById(canvasId);
 
-    if (!canvas) return;
+    const hiddenInput =
+      document.getElementById(hiddenInputId);
 
-    const ctx = canvas.getContext("2d");
+    if (!canvas) {
+      return;
+    }
+
+    const ctx =
+      canvas.getContext("2d");
+
+    if (!ctx) {
+      return;
+    }
 
     let drawing = false;
+    let hasSignature = false;
+
 
     function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
 
-      if (!rect.width || !rect.height) return;
+      const rect =
+        canvas.getBoundingClientRect();
 
-      const oldImage = canvas.width && canvas.height
-        ? canvas.toDataURL()
-        : null;
+      if (!rect.width || !rect.height) {
+        return;
+      }
 
-      const ratio = window.devicePixelRatio || 1;
+      const oldWidth = canvas.width;
+      const oldHeight = canvas.height;
 
-      canvas.width = rect.width * ratio;
-      canvas.height = rect.height * ratio;
+      let oldImage = null;
 
-      ctx.scale(ratio, ratio);
+      if (oldWidth && oldHeight && hasSignature) {
+        try {
+          oldImage = canvas.toDataURL("image/png");
+        } catch (error) {
+          oldImage = null;
+        }
+      }
+
+      const ratio =
+        Math.max(window.devicePixelRatio || 1, 1);
+
+      canvas.width =
+        Math.round(rect.width * ratio);
+
+      canvas.height =
+        Math.round(rect.height * ratio);
+
+      canvas.style.width =
+        rect.width + "px";
+
+      canvas.style.height =
+        rect.height + "px";
+
+      /*
+       * Reset transform before applying the new scale.
+       * This prevents the scale from multiplying every
+       * time the window is resized.
+       */
+
+      ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
+      );
 
       ctx.lineWidth = 2;
       ctx.lineCap = "round";
@@ -74,9 +146,12 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.strokeStyle = "#071426";
 
       if (oldImage) {
-        const image = new Image();
+
+        const image =
+          new Image();
 
         image.onload = function () {
+
           ctx.drawImage(
             image,
             0,
@@ -84,95 +159,219 @@ document.addEventListener("DOMContentLoaded", function () {
             rect.width,
             rect.height
           );
+
         };
 
         image.src = oldImage;
       }
+
     }
 
-    resizeCanvas();
-
-    window.addEventListener("resize", resizeCanvas);
 
     function getPosition(event) {
 
-      const rect = canvas.getBoundingClientRect();
+      const rect =
+        canvas.getBoundingClientRect();
 
-      if (event.touches && event.touches.length) {
-        return {
-          x: event.touches[0].clientX - rect.left,
-          y: event.touches[0].clientY - rect.top
-        };
+      let clientX;
+      let clientY;
+
+      if (
+        event.touches &&
+        event.touches.length > 0
+      ) {
+
+        clientX =
+          event.touches[0].clientX;
+
+        clientY =
+          event.touches[0].clientY;
+
+      } else {
+
+        clientX =
+          event.clientX;
+
+        clientY =
+          event.clientY;
+
       }
 
       return {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        x: clientX - rect.left,
+        y: clientY - rect.top
       };
+
     }
 
+
     function startDrawing(event) {
+
       event.preventDefault();
 
       drawing = true;
 
-      const pos = getPosition(event);
+      hasSignature = true;
+
+      const position =
+        getPosition(event);
 
       ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
+
+      ctx.moveTo(
+        position.x,
+        position.y
+      );
+
     }
+
 
     function draw(event) {
 
-      if (!drawing) return;
+      if (!drawing) {
+        return;
+      }
 
       event.preventDefault();
 
-      const pos = getPosition(event);
+      const position =
+        getPosition(event);
 
-      ctx.lineTo(pos.x, pos.y);
+      ctx.lineTo(
+        position.x,
+        position.y
+      );
+
       ctx.stroke();
+
     }
+
+
+    function saveSignature() {
+
+      if (!hiddenInput) {
+        return;
+      }
+
+      if (!hasSignature) {
+        hiddenInput.value = "";
+        return;
+      }
+
+      try {
+
+        hiddenInput.value =
+          canvas.toDataURL("image/png");
+
+      } catch (error) {
+
+        console.error(
+          "Could not save signature:",
+          error
+        );
+
+      }
+
+    }
+
 
     function stopDrawing(event) {
 
-      if (!drawing) return;
+      if (!drawing) {
+        return;
+      }
 
-      event.preventDefault();
+      if (event) {
+        event.preventDefault();
+      }
 
       drawing = false;
 
-      if (hiddenInput) {
-        hiddenInput.value = canvas.toDataURL("image/png");
-      }
+      saveSignature();
+
     }
 
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseleave", stopDrawing);
 
-    canvas.addEventListener("touchstart", startDrawing, {
-      passive: false
-    });
+    /*
+     * Mouse
+     */
 
-    canvas.addEventListener("touchmove", draw, {
-      passive: false
-    });
+    canvas.addEventListener(
+      "mousedown",
+      startDrawing
+    );
 
-    canvas.addEventListener("touchend", stopDrawing, {
-      passive: false
-    });
+    canvas.addEventListener(
+      "mousemove",
+      draw
+    );
 
-    canvas.addEventListener("touchcancel", stopDrawing, {
-      passive: false
-    });
+    canvas.addEventListener(
+      "mouseup",
+      stopDrawing
+    );
 
-    canvas.addEventListener("click", function () {
-      if (hiddenInput) {
-        hiddenInput.value = canvas.toDataURL("image/png");
-      }
-    });
+    canvas.addEventListener(
+      "mouseleave",
+      stopDrawing
+    );
+
+
+    /*
+     * Touch
+     */
+
+    canvas.addEventListener(
+      "touchstart",
+      startDrawing,
+      { passive: false }
+    );
+
+    canvas.addEventListener(
+      "touchmove",
+      draw,
+      { passive: false }
+    );
+
+    canvas.addEventListener(
+      "touchend",
+      stopDrawing,
+      { passive: false }
+    );
+
+    canvas.addEventListener(
+      "touchcancel",
+      stopDrawing,
+      { passive: false }
+    );
+
+
+    /*
+     * Initial sizing
+     */
+
+    resizeCanvas();
+
+
+    /*
+     * Resize without multiplying the canvas scale.
+     */
+
+    window.addEventListener(
+      "resize",
+      resizeCanvas
+    );
+
+
+    /*
+     * Save signature if canvas changes.
+     */
+
+    canvas.addEventListener(
+      "click",
+      saveSignature
+    );
+
   }
 
 
@@ -192,9 +391,9 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
 
-  /* =========================
-     FILE TO BASE64
-  ========================= */
+  /* =======================================================
+     FILE → BASE64
+     ======================================================= */
 
   function fileToBase64(file) {
 
@@ -205,137 +404,239 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const reader = new FileReader();
+      const reader =
+        new FileReader();
 
       reader.onload = function () {
+
         resolve({
           name: file.name,
-          type: file.type,
+          type: file.type || "application/octet-stream",
           size: file.size,
           data: reader.result
         });
+
       };
 
       reader.onerror = function () {
-        reject(new Error("Could not read file."));
+
+        reject(
+          new Error(
+            "Could not read file: " +
+            file.name
+          )
+        );
+
       };
 
       reader.readAsDataURL(file);
+
     });
+
   }
 
+
+  /* =======================================================
+     COLLECT FILES
+     ======================================================= */
 
   async function collectFiles(form) {
 
     const files = {};
 
-    const inputs = form.querySelectorAll(
-      'input[type="file"]'
-    );
+    const inputs =
+      form.querySelectorAll(
+        'input[type="file"]'
+      );
+
 
     for (const input of inputs) {
 
-      if (!input.files || !input.files.length) {
+      if (
+        !input.files ||
+        input.files.length === 0
+      ) {
         continue;
       }
 
-      const fieldName = input.name || input.id;
 
-      if (!fieldName) continue;
+      const fieldName =
+        input.name ||
+        input.id;
+
+
+      if (!fieldName) {
+        continue;
+      }
+
+
+      /*
+       * Multiple files
+       */
 
       if (input.multiple) {
 
         files[fieldName] = [];
 
-        for (const file of input.files) {
 
-          /*
-           * Limit individual upload size.
-           * This helps prevent very large submissions.
-           */
+        for (
+          const file of input.files
+        ) {
 
-          if (file.size > 8 * 1024 * 1024) {
+          if (
+            file.size >
+            8 * 1024 * 1024
+          ) {
+
             throw new Error(
               file.name +
               " is larger than 8 MB. Please choose a smaller file."
             );
+
           }
 
+
+          const encoded =
+            await fileToBase64(file);
+
           files[fieldName].push(
-            await fileToBase64(file)
+            encoded
           );
+
         }
 
-      } else {
+      }
 
-        const file = input.files[0];
 
-        if (file.size > 8 * 1024 * 1024) {
+      /*
+       * Single file
+       */
+
+      else {
+
+        const file =
+          input.files[0];
+
+
+        if (
+          file.size >
+          8 * 1024 * 1024
+        ) {
+
           throw new Error(
             file.name +
             " is larger than 8 MB. Please choose a smaller file."
           );
+
         }
+
 
         files[fieldName] =
           await fileToBase64(file);
+
       }
+
     }
 
+
     return files;
+
   }
 
 
-  /* =========================
-     FORM DATA
-  ========================= */
+  /* =======================================================
+     FORM → JSON
+     ======================================================= */
 
   async function formToJSON(form) {
 
     const data = {};
 
-    const elements = form.querySelectorAll(
-      "input, select, textarea"
-    );
+    const elements =
+      form.querySelectorAll(
+        "input, select, textarea"
+      );
+
 
     elements.forEach(function (element) {
 
-      const name = element.name || element.id;
+      const name =
+        element.name ||
+        element.id;
 
-      if (!name) return;
 
-      if (element.type === "file") {
+      if (!name) {
         return;
       }
 
-      if (element.type === "checkbox") {
 
-        data[name] = element.checked;
+      /*
+       * Files are handled separately.
+       */
+
+      if (
+        element.type === "file"
+      ) {
+        return;
+      }
+
+
+      /*
+       * Checkbox
+       */
+
+      if (
+        element.type === "checkbox"
+      ) {
+
+        data[name] =
+          element.checked;
 
         return;
       }
 
-      if (element.type === "radio") {
+
+      /*
+       * Radio
+       */
+
+      if (
+        element.type === "radio"
+      ) {
 
         if (element.checked) {
-          data[name] = element.value;
+
+          data[name] =
+            element.value;
+
         }
 
         return;
       }
 
-      data[name] = element.value;
+
+      /*
+       * Normal input/select/textarea
+       */
+
+      data[name] =
+        element.value;
+
     });
 
-    data.files = await collectFiles(form);
+
+    data.files =
+      await collectFiles(form);
+
 
     return data;
+
   }
 
 
-  /* =========================
+  /* =======================================================
      APPLICATION TYPE
-  ========================= */
+     ======================================================= */
 
   function getApplicationType(form) {
 
@@ -344,68 +645,181 @@ document.addEventListener("DOMContentLoaded", function () {
         '[name="applicationType"]'
       );
 
-    if (typeInput && typeInput.value) {
+
+    if (
+      typeInput &&
+      typeInput.value
+    ) {
+
       return typeInput.value;
+
     }
 
-    const id = form.id || "";
 
-    if (id.toLowerCase().includes("cleaner")) {
+    const formId =
+      (
+        form.id ||
+        ""
+      ).toLowerCase();
+
+
+    if (
+      formId.includes("cleaner")
+    ) {
+
       return "cleaner";
+
     }
 
-    if (id.toLowerCase().includes("handyman")) {
+
+    if (
+      formId.includes("handyman")
+    ) {
+
       return "handyman";
+
     }
+
+
+    if (
+      formId.includes("deposit") ||
+      form.hasAttribute(
+        "data-form-type"
+      )
+    ) {
+
+      const formType =
+        form.getAttribute(
+          "data-form-type"
+        );
+
+      if (
+        formType ===
+        "deposit-receipt"
+      ) {
+
+        return "deposit_receipt";
+
+      }
+
+    }
+
 
     return "rental";
+
   }
 
 
-  /* =========================
+  /* =======================================================
      BUTTON LOADING
-  ========================= */
+     ======================================================= */
 
-  function setButtonLoading(button, loading) {
+  function setButtonLoading(
+    button,
+    loading
+  ) {
 
-    if (!button) return;
+    if (!button) {
+      return;
+    }
+
 
     if (loading) {
 
-      button.dataset.originalText =
-        button.innerHTML;
+      if (
+        !button.dataset.originalText
+      ) {
+
+        button.dataset.originalText =
+          button.innerHTML;
+
+      }
+
 
       button.disabled = true;
+
+      button.style.cursor =
+        "wait";
 
       button.innerHTML =
         "Submitting…";
 
-    } else {
+    }
+
+
+    else {
 
       button.disabled = false;
 
-      if (button.dataset.originalText) {
+      button.style.cursor =
+        "";
+
+      if (
+        button.dataset.originalText
+      ) {
+
         button.innerHTML =
           button.dataset.originalText;
+
       }
+
     }
+
   }
 
 
-  /* =========================
-     SUCCESS MESSAGE
-  ========================= */
+  /* =======================================================
+     SAFE HTML
+     ======================================================= */
 
-  function showSuccess(form, result) {
+  function escapeHTML(value) {
+
+    return String(value || "")
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  /* =======================================================
+     SUCCESS MESSAGE
+     ======================================================= */
+
+  function showSuccess(
+    form,
+    result
+  ) {
 
     let panel =
       form.querySelector(
         ".application-success"
       );
 
+
     if (!panel) {
 
-      panel = document.createElement("div");
+      panel =
+        document.createElement(
+          "div"
+        );
 
       panel.className =
         "application-success";
@@ -424,10 +838,18 @@ document.addEventListener("DOMContentLoaded", function () {
         panel,
         form
       );
+
     }
 
+
     const applicationId =
-      result.applicationId || "Received";
+      escapeHTML(
+        result &&
+        result.applicationId
+          ? result.applicationId
+          : "Received"
+      );
+
 
     panel.innerHTML = `
       <h3 style="margin-top:0;">
@@ -449,27 +871,36 @@ document.addEventListener("DOMContentLoaded", function () {
       </p>
     `;
 
+
     panel.scrollIntoView({
       behavior: "smooth",
       block: "center"
     });
+
   }
 
 
-  /* =========================
+  /* =======================================================
      ERROR MESSAGE
-  ========================= */
+     ======================================================= */
 
-  function showError(form, message) {
+  function showError(
+    form,
+    message
+  ) {
 
     let panel =
       form.querySelector(
         ".application-error"
       );
 
+
     if (!panel) {
 
-      panel = document.createElement("div");
+      panel =
+        document.createElement(
+          "div"
+        );
 
       panel.className =
         "application-error";
@@ -488,30 +919,153 @@ document.addEventListener("DOMContentLoaded", function () {
         panel,
         form
       );
+
     }
+
 
     panel.innerHTML = `
       <strong>Submission problem</strong>
+
       <p style="margin-bottom:0;">
-        ${message}
+        ${escapeHTML(
+          message ||
+          "Something went wrong. Please try again."
+        )}
       </p>
     `;
+
 
     panel.scrollIntoView({
       behavior: "smooth",
       block: "center"
     });
+
   }
 
 
-  /* =========================
-     SUBMIT FORMS
-  ========================= */
+  /* =======================================================
+     SEND DATA TO SERVER
+     ======================================================= */
+
+  async function submitApplication(
+    data
+  ) {
+
+    const response =
+      await fetch(
+        SUBMIT_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+            "Accept":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(data)
+        }
+      );
+
+
+    /*
+     * Read response as text first.
+     * This prevents a JSON parsing error from
+     * hiding the actual server error.
+     */
+
+    const responseText =
+      await response.text();
+
+
+    let result = {};
+
+
+    if (responseText) {
+
+      try {
+
+        result =
+          JSON.parse(
+            responseText
+          );
+
+      } catch (error) {
+
+        /*
+         * Server returned something other than JSON.
+         */
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Server error (" +
+            response.status +
+            "): " +
+            responseText.substring(
+              0,
+              300
+            )
+          );
+
+        }
+
+        throw new Error(
+          "The server returned an invalid response."
+        );
+
+      }
+
+    }
+
+
+    if (
+      !response.ok ||
+      result.success === false
+    ) {
+
+      throw new Error(
+        result.message ||
+        "The application could not be submitted."
+      );
+
+    }
+
+
+    return result;
+
+  }
+
+
+  /* =======================================================
+     NORMAL APPLICATION FORMS
+     ======================================================= */
 
   const forms =
-    document.querySelectorAll("form");
+    document.querySelectorAll(
+      "form"
+    );
+
 
   forms.forEach(function (form) {
+
+    /*
+     * Deposit receipt forms are handled separately below.
+     */
+
+    if (
+      form.getAttribute(
+        "data-form-type"
+      ) ===
+      "deposit-receipt"
+    ) {
+
+      return;
+
+    }
+
 
     form.addEventListener(
       "submit",
@@ -520,105 +1074,158 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         event.stopPropagation();
 
+
         const submitButton =
           form.querySelector(
             'button[type="submit"], input[type="submit"]'
           );
+
+
+        /*
+         * Prevent accidental double-click submissions.
+         */
+
+        if (
+          submitButton &&
+          submitButton.disabled
+        ) {
+
+          return;
+
+        }
+
 
         setButtonLoading(
           submitButton,
           true
         );
 
+
         try {
 
           const data =
-            await formToJSON(form);
+            await formToJSON(
+              form
+            );
+
+
+          const applicationType =
+            getApplicationType(
+              form
+            );
+
 
           data.applicationType =
-            getApplicationType(form);
+            applicationType;
+
 
           data.submittedAt =
             new Date().toISOString();
 
+
           /*
-           * Basic signature requirement.
+           * -------------------------------------------------
+           * SIGNATURE VALIDATION
+           * -------------------------------------------------
+           *
+           * A drawn signature is stored in:
+           *
+           * rentalSignatureImage
+           * cleanerSignatureImage
+           * handymanSignatureImage
+           *
+           * A typed signature can be stored in:
+           *
+           * signatureName
+           *
+           * Rental applications require at least one.
            */
 
-          const signature =
-            data.signatureName;
 
           if (
-            form.id.toLowerCase().includes("rental") &&
-            (!signature ||
-             signature.trim() === "")
+            applicationType ===
+            "rental"
           ) {
 
-            throw new Error(
-              "Please enter your signature name."
-            );
+            const typedSignature =
+              String(
+                data.signatureName ||
+                ""
+              ).trim();
+
+
+            const drawnSignature =
+              String(
+                data.rentalSignatureImage ||
+                ""
+              ).trim();
+
+
+            if (
+              !typedSignature &&
+              !drawnSignature
+            ) {
+
+              throw new Error(
+                "Please enter your signature name or sign in the signature box."
+              );
+
+            }
+
           }
 
-          const response =
-            await fetch(
-              SUBMIT_URL,
-              {
-                method: "POST",
 
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
+          /*
+           * Submit to backend.
+           */
 
-                body:
-                  JSON.stringify(data)
-              }
+          const result =
+            await submitApplication(
+              data
             );
 
-          let result = {};
 
-          try {
-            result =
-              await response.json();
-          } catch (e) {
-            result = {};
-          }
+          /*
+           * Save application number.
+           */
 
           if (
-            !response.ok ||
-            result.success === false
+            result &&
+            result.applicationId
           ) {
-
-            throw new Error(
-              result.message ||
-              "The application could not be submitted."
-            );
-          }
-
-          if (result.applicationId) {
 
             localStorage.setItem(
               "lastApplicationId",
               result.applicationId
             );
+
           }
+
+
+          /*
+           * Display success.
+           */
 
           showSuccess(
             form,
             result
           );
 
+
           /*
-           * Keep the form on the page.
-           * Do not reload the page.
+           * Do not reload or reset the form.
            */
 
-        } catch (error) {
+        }
+
+
+        catch (error) {
 
           console.error(
-            "Submission error:",
+            "Application submission error:",
             error
           );
+
 
           showError(
             form,
@@ -626,150 +1233,192 @@ document.addEventListener("DOMContentLoaded", function () {
             "Something went wrong. Please try again."
           );
 
-        } finally {
+        }
+
+
+        finally {
 
           setButtonLoading(
             submitButton,
             false
           );
+
         }
+
       }
     );
+
   });
 
 
-  /* =========================
-     PAYMENT PAGE BUTTON
-  ========================= */
+  /* =======================================================
+     PAYMENT BUTTONS
+     ======================================================= */
 
   const paymentButtons =
     document.querySelectorAll(
       "[data-payment-button]"
     );
 
-  paymentButtons.forEach(function (button) {
 
-    button.addEventListener(
-      "click",
-      function () {
+  paymentButtons.forEach(
+    function (button) {
 
-        if (!SECURE_PAYMENT_URL) {
+      button.addEventListener(
+        "click",
+        function () {
 
-          alert(
-            "The secure payment page has not been connected yet."
-          );
+          if (
+            !SECURE_PAYMENT_URL
+          ) {
 
-          return;
+            alert(
+              "The secure payment page has not been connected yet."
+            );
+
+            return;
+
+          }
+
+
+          window.location.href =
+            SECURE_PAYMENT_URL;
+
         }
+      );
 
-        window.location.href =
-          SECURE_PAYMENT_URL;
-      }
-    );
-  });
+    }
+  );
 
 
-  /* =========================
-     DEPOSIT RECEIPT
-  ========================= */
+  /* =======================================================
+     DEPOSIT RECEIPT FORMS
+     ======================================================= */
 
   const receiptForms =
     document.querySelectorAll(
       '[data-form-type="deposit-receipt"]'
     );
 
-  receiptForms.forEach(function (form) {
 
-    form.addEventListener(
-      "submit",
-      async function (event) {
+  receiptForms.forEach(
+    function (form) {
 
-        event.preventDefault();
+      form.addEventListener(
+        "submit",
+        async function (event) {
 
-        const button =
-          form.querySelector(
-            'button[type="submit"], input[type="submit"]'
-          );
+          event.preventDefault();
+          event.stopPropagation();
 
-        setButtonLoading(
-          button,
-          true
-        );
 
-        try {
-
-          const data =
-            await formToJSON(form);
-
-          data.applicationType =
-            "deposit_receipt";
-
-          data.submittedAt =
-            new Date().toISOString();
-
-          const response =
-            await fetch(
-              SUBMIT_URL,
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify(data)
-              }
+          const button =
+            form.querySelector(
+              'button[type="submit"], input[type="submit"]'
             );
 
-          const result =
-            await response.json();
 
           if (
-            !response.ok ||
-            result.success === false
+            button &&
+            button.disabled
           ) {
 
-            throw new Error(
-              result.message ||
-              "Receipt could not be submitted."
-            );
+            return;
+
           }
 
-          showSuccess(
-            form,
-            result
-          );
-
-        } catch (error) {
-
-          showError(
-            form,
-            error.message ||
-            "Receipt submission failed."
-          );
-
-        } finally {
 
           setButtonLoading(
             button,
-            false
+            true
           );
+
+
+          try {
+
+            const data =
+              await formToJSON(
+                form
+              );
+
+
+            data.applicationType =
+              "deposit_receipt";
+
+
+            data.submittedAt =
+              new Date().toISOString();
+
+
+            const result =
+              await submitApplication(
+                data
+              );
+
+
+            if (
+              result &&
+              result.applicationId
+            ) {
+
+              localStorage.setItem(
+                "lastApplicationId",
+                result.applicationId
+              );
+
+            }
+
+
+            showSuccess(
+              form,
+              result
+            );
+
+          }
+
+
+          catch (error) {
+
+            console.error(
+              "Receipt submission error:",
+              error
+            );
+
+
+            showError(
+              form,
+              error.message ||
+              "Receipt submission failed."
+            );
+
+          }
+
+
+          finally {
+
+            setButtonLoading(
+              button,
+              false
+            );
+
+          }
+
         }
-      }
-    );
-  });
+      );
+
+    }
+  );
 
 
-  /* =========================
+  /* =======================================================
      REMEMBER LAST APPLICATION
-  ========================= */
+     ======================================================= */
 
   const savedApplicationId =
     localStorage.getItem(
       "lastApplicationId"
     );
+
 
   if (savedApplicationId) {
 
@@ -777,10 +1426,17 @@ document.addEventListener("DOMContentLoaded", function () {
       "Last application:",
       savedApplicationId
     );
+
   }
+
+
+  /* =======================================================
+     SYSTEM READY
+     ======================================================= */
+
+  console.log(
+    "Application system initialized."
+  );
 
 });
 </script>
-
-</body>
-</html>
