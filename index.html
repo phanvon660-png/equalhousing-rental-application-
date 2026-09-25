@@ -1,693 +1,824 @@
-<script>
-/* =========================================================
-   RENTAL APPLICATION → NETLIFY BACKEND
-   ========================================================= */
+<!doctype html>
 
-const SUBMIT_ENDPOINT = "/.netlify/functions/submit";
-
-const form = document.getElementById("rentalApplication");
-const canvas = document.getElementById("signaturePad");
-const ctx = canvas.getContext("2d");
-const sig = document.getElementById("signatureImage");
-
-let drawing = false;
-let hasSignature = false;
-
-
-/* =========================================================
-   SIGNATURE PAD
-   ========================================================= */
-
-function resizeSignatureCanvas() {
-
-  const rect = canvas.getBoundingClientRect();
-
-  if (!rect.width || !rect.height) return;
-
-  const ratio =
-    Math.max(window.devicePixelRatio || 1, 1);
-
-  canvas.width =
-    Math.round(rect.width * ratio);
-
-  canvas.height =
-    Math.round(rect.height * ratio);
-
-  canvas.style.width =
-    rect.width + "px";
-
-  canvas.style.height =
-    rect.height + "px";
-
-  ctx.setTransform(
-    ratio,
-    0,
-    0,
-    ratio,
-    0,
-    0
-  );
-
-  ctx.lineWidth = 2.25;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  ctx.strokeStyle = "#123f73";
-}
-
-
-function getPosition(event) {
-
-  const rect =
-    canvas.getBoundingClientRect();
-
-  return {
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top
-  };
-
-}
-
-
-canvas.addEventListener(
-  "pointerdown",
-  function (event) {
-
-    event.preventDefault();
-
-    drawing = true;
-    hasSignature = true;
-
-    const position =
-      getPosition(event);
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      position.x,
-      position.y
-    );
-
-    if (canvas.setPointerCapture) {
-      canvas.setPointerCapture(
-        event.pointerId
-      );
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Residential leasing rental application portal">
+  <meta name="theme-color" content="#050505">
+  <title>Residential Leasing | Rental Application</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
-
-  }
-);
-
-
-canvas.addEventListener(
-  "pointermove",
-  function (event) {
-
-    if (!drawing) return;
-
-    event.preventDefault();
-
-    const position =
-      getPosition(event);
-
-    ctx.lineTo(
-      position.x,
-      position.y
-    );
-
-    ctx.stroke();
-
-  }
-);
-
-
-function stopDrawing() {
-
-  if (!drawing) return;
-
-  drawing = false;
-
-  if (hasSignature) {
-
-    sig.value =
-      canvas.toDataURL("image/png");
-
-  }
-
-}
-
-
-[
-  "pointerup",
-  "pointercancel",
-  "pointerleave"
-].forEach(function (eventName) {
-
-  canvas.addEventListener(
-    eventName,
-    stopDrawing
-  );
-
-});
-
-
-document
-  .getElementById("clearSignature")
-  .addEventListener(
-    "click",
-    function () {
-
-      ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      sig.value = "";
-
-      hasSignature = false;
-
+    html {
+      scroll-behavior: smooth;
     }
-  );
-
-
-resizeSignatureCanvas();
-
-
-window.addEventListener(
-  "resize",
-  function () {
-
-    if (!hasSignature) {
-      resizeSignatureCanvas();
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #050505;
+      color: #f5f5f5;
+      line-height: 1.5;
     }
-
-  }
-);
-
-
-/* =========================================================
-   DEFAULT DATE
-   ========================================================= */
-
-document
-  .getElementById("signatureDate")
-  .value =
-  new Date()
-    .toISOString()
-    .slice(0, 10);
-
-
-/* =========================================================
-   STATUS MESSAGE
-   ========================================================= */
-
-function message(text, type) {
-
-  const status =
-    document.getElementById("status");
-
-  status.textContent = text;
-
-  status.className =
-    "status show " + type;
-
-}
-
-
-/* =========================================================
-   FILE → BASE64
-   ========================================================= */
-
-function fileToBase64(file) {
-
-  return new Promise(
-    function (resolve, reject) {
-
-      if (!file) {
-        resolve(null);
+    .container {
+      width: min(100% - 32px, 900px);
+      margin: 0 auto;
+    }
+    header {
+      padding: 42px 0 30px;
+      border-bottom: 1px solid #1d1d1d;
+    }
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #38ff88;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+    }
+    .intro {
+      margin: 14px 0 0;
+      color: #a9a9a9;
+      max-width: 680px;
+      font-size: 16px;
+    }
+    .notice {
+      margin: 24px 0;
+      padding: 16px 18px;
+      border: 1px solid #1e5f3b;
+      border-radius: 14px;
+      background: #08130d;
+      color: #d8ffe7;
+      font-size: 14px;
+    }
+    form {
+      padding: 28px 0 50px;
+    }
+    .section {
+      margin-bottom: 28px;
+      padding: 22px;
+      border: 1px solid #202020;
+      border-radius: 18px;
+      background: #0b0b0b;
+    }
+    .section h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+      color: #38ff88;
+    }
+    .section p.section-note {
+      margin: -8px 0 20px;
+      color: #999;
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .full {
+      grid-column: 1 / -1;
+    }
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d8d8d8;
+    }
+    .required {
+      color: #38ff88;
+    }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #303030;
+      border-radius: 11px;
+      background: #111;
+      color: #fff;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #38ff88;
+      box-shadow: 0 0 0 3px rgba(56, 255, 136, .10);
+    }
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    select {
+      appearance: auto;
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: #666;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0;
+      color: #cfcfcf;
+      font-size: 14px;
+    }
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+      accent-color: #38ff88;
+    }
+    .help {
+      color: #777;
+      font-size: 12px;
+    }
+    .submit-area {
+      margin-top: 30px;
+      padding: 22px;
+      border: 1px solid #202020;
+      border-radius: 18px;
+      background: #0b0b0b;
+    }
+    .submit-button {
+      width: 100%;
+      border: 0;
+      border-radius: 13px;
+      padding: 16px 20px;
+      background: #38ff88;
+      color: #031009;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s, opacity .15s;
+    }
+    .submit-button:hover {
+      transform: translateY(-1px);
+    }
+    .submit-button:disabled {
+      cursor: wait;
+      opacity: .55;
+      transform: none;
+    }
+    .privacy {
+      margin-top: 14px;
+      color: #777;
+      font-size: 12px;
+      text-align: center;
+    }
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    .status.success {
+      display: block;
+      border: 1px solid #1e5f3b;
+      background: #08130d;
+      color: #bfffd3;
+    }
+    .status.error {
+      display: block;
+      border: 1px solid #6d2727;
+      background: #180909;
+      color: #ffbebe;
+    }
+    footer {
+      border-top: 1px solid #1d1d1d;
+      padding: 25px 0 40px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+    .hp {
+      position: absolute !important;
+      left: -9999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+    }
+    @media (max-width: 650px) {
+      .container {
+        width: min(100% - 22px, 900px);
+      }
+      header {
+        padding-top: 30px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .full {
+        grid-column: auto;
+      }
+      .section {
+        padding: 18px;
+        border-radius: 15px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">Residential Leasing</div>
+  <h1>Rental Application</h1>
+  <p class="intro">
+    Please complete the application below. All information submitted will
+    be reviewed as part of the residential leasing process.
+  </p>
+  <div class="notice">
+    <strong>Equal Housing Opportunity</strong><br>
+    Applications are reviewed according to applicable housing laws and
+    consistent rental criteria.
+  </div>
+</div>
+  </header>
+  <main class="container">
+<form
+  id="rentalApplication"
+  method="POST"
+  action="/.netlify/functions/submit"
+  enctype="application/x-www-form-urlencoded"
+  novalidate
+>
+  <!-- HONEYPOT -->
+  <div class="hp" aria-hidden="true">
+    <label for="website">Website</label>
+    <input
+      type="text"
+      id="website"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+    >
+  </div>
+  <!-- PERSONAL INFORMATION -->
+  <section class="section">
+    <h2>1. Applicant Information</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="firstName">
+          First Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          autocomplete="given-name"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="lastName">
+          Last Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          autocomplete="family-name"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="email">
+          Email Address <span class="required">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="email"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="phone">
+          Phone Number <span class="required">*</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          autocomplete="tel"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="dateOfBirth">
+          Date of Birth
+        </label>
+        <input
+          type="date"
+          id="dateOfBirth"
+          name="dateOfBirth"
+          autocomplete="bday"
+        >
+      </div>
+      <div class="field">
+        <label for="applicantCount">
+          Number of Applicants
+        </label>
+        <select id="applicantCount" name="applicantCount">
+          <option value="">Select</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5+">5+</option>
+        </select>
+      </div>
+    </div>
+  </section>
+  <!-- CURRENT ADDRESS -->
+  <section class="section">
+    <h2>2. Current Address</h2>
+    <div class="grid">
+      <div class="field full">
+        <label for="currentAddress">
+          Street Address <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="currentAddress"
+          name="currentAddress"
+          autocomplete="street-address"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="currentCity">
+          City <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="currentCity"
+          name="currentCity"
+          autocomplete="address-level2"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="currentState">
+          State <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="currentState"
+          name="currentState"
+          autocomplete="address-level1"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="currentZip">
+          ZIP Code <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="currentZip"
+          name="currentZip"
+          autocomplete="postal-code"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="currentLandlord">
+          Current / Previous Landlord Name
+        </label>
+        <input
+          type="text"
+          id="currentLandlord"
+          name="currentLandlord"
+        >
+      </div>
+      <div class="field">
+        <label for="landlordPhone">
+          Landlord Phone Number
+        </label>
+        <input
+          type="tel"
+          id="landlordPhone"
+          name="landlordPhone"
+        >
+      </div>
+    </div>
+  </section>
+  <!-- RENTAL INFORMATION -->
+  <section class="section">
+    <h2>3. Rental Information</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="propertyAddress">
+          Property Applying For <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="propertyAddress"
+          name="propertyAddress"
+          placeholder="Property address"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="desiredMoveIn">
+          Desired Move-In Date <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="desiredMoveIn"
+          name="desiredMoveIn"
+          required
+        >
+      </div>
+      <div class="field">
+        <label for="leaseTerm">
+          Desired Lease Term
+        </label>
+        <select id="leaseTerm" name="leaseTerm">
+          <option value="">Select</option>
+          <option value="12 months">12 months</option>
+          <option value="18 months">18 months</option>
+          <option value="24 months">24 months</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="monthlyRent">
+          Monthly Rent
+        </label>
+        <input
+          type="number"
+          id="monthlyRent"
+          name="monthlyRent"
+          min="0"
+          step="0.01"
+          placeholder="$"
+        >
+      </div>
+    </div>
+  </section>
+  <!-- EMPLOYMENT -->
+  <section class="section">
+    <h2>4. Employment & Income</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="employer">
+          Employer
+        </label>
+        <input
+          type="text"
+          id="employer"
+          name="employer"
+        >
+      </div>
+      <div class="field">
+        <label for="jobTitle">
+          Job Title
+        </label>
+        <input
+          type="text"
+          id="jobTitle"
+          name="jobTitle"
+        >
+      </div>
+      <div class="field">
+        <label for="employmentPhone">
+          Employer Phone
+        </label>
+        <input
+          type="tel"
+          id="employmentPhone"
+          name="employmentPhone"
+        >
+      </div>
+      <div class="field">
+        <label for="monthlyIncome">
+          Gross Monthly Income
+        </label>
+        <input
+          type="number"
+          id="monthlyIncome"
+          name="monthlyIncome"
+          min="0"
+          step="0.01"
+          placeholder="$"
+        >
+      </div>
+      <div class="field">
+        <label for="otherIncome">
+          Other Monthly Income
+        </label>
+        <input
+          type="number"
+          id="otherIncome"
+          name="otherIncome"
+          min="0"
+          step="0.01"
+          placeholder="$"
+        >
+      </div>
+      <div class="field">
+        <label for="incomeSource">
+          Other Income Source
+        </label>
+        <input
+          type="text"
+          id="incomeSource"
+          name="incomeSource"
+          placeholder="Optional"
+        >
+      </div>
+    </div>
+  </section>
+  <!-- HOUSEHOLD -->
+  <section class="section">
+    <h2>5. Household Information</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="adults">
+          Number of Adults
+        </label>
+        <input
+          type="number"
+          id="adults"
+          name="adults"
+          min="1"
+          max="20"
+        >
+      </div>
+      <div class="field">
+        <label for="children">
+          Number of Children
+        </label>
+        <input
+          type="number"
+          id="children"
+          name="children"
+          min="0"
+          max="20"
+        >
+      </div>
+      <div class="field">
+        <label for="pets">
+          Will there be pets?
+        </label>
+        <select id="pets" name="pets">
+          <option value="">Select</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="petDetails">
+          Pet Details
+        </label>
+        <input
+          type="text"
+          id="petDetails"
+          name="petDetails"
+          placeholder="Type / number of pets"
+        >
+      </div>
+    </div>
+  </section>
+  <!-- VEHICLES -->
+  <section class="section">
+    <h2>6. Vehicle Information</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="vehicles">
+          Number of Vehicles
+        </label>
+        <input
+          type="number"
+          id="vehicles"
+          name="vehicles"
+          min="0"
+          max="20"
+        >
+      </div>
+      <div class="field">
+        <label for="vehicleDetails">
+          Vehicle Details
+        </label>
+        <input
+          type="text"
+          id="vehicleDetails"
+          name="vehicleDetails"
+          placeholder="Make / model"
+        >
+      </div>
+    </div>
+  </section>
+  <!-- BACKGROUND / RENTAL HISTORY -->
+  <section class="section">
+    <h2>7. Rental History</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="previousRent">
+          Previous Monthly Rent
+        </label>
+        <input
+          type="number"
+          id="previousRent"
+          name="previousRent"
+          min="0"
+          step="0.01"
+          placeholder="$"
+        >
+      </div>
+      <div class="field">
+        <label for="reasonMoving">
+          Reason for Moving
+        </label>
+        <input
+          type="text"
+          id="reasonMoving"
+          name="reasonMoving"
+        >
+      </div>
+      <div class="field full">
+        <label for="rentalHistory">
+          Additional Rental History
+        </label>
+        <textarea
+          id="rentalHistory"
+          name="rentalHistory"
+          placeholder="Provide any additional information about your rental history."
+        ></textarea>
+      </div>
+    </div>
+  </section>
+  <!-- ADDITIONAL INFORMATION -->
+  <section class="section">
+    <h2>8. Additional Information</h2>
+    <div class="field">
+      <label for="additionalInfo">
+        Anything else you would like us to know?
+      </label>
+      <textarea
+        id="additionalInfo"
+        name="additionalInfo"
+        placeholder="Optional"
+      ></textarea>
+    </div>
+  </section>
+  <!-- CERTIFICATION -->
+  <section class="section">
+    <h2>9. Applicant Certification</h2>
+    <p class="section-note">
+      Please review the statements below before submitting your application.
+    </p>
+    <label class="check-row">
+      <input
+        type="checkbox"
+        name="certifyInformation"
+        value="Yes"
+        required
+      >
+      <span>
+        I certify that the information provided in this application is
+        true and complete to the best of my knowledge.
+        <span class="required">*</span>
+      </span>
+    </label>
+    <label class="check-row">
+      <input
+        type="checkbox"
+        name="authorizeVerification"
+        value="Yes"
+        required
+      >
+      <span>
+        I authorize the property owner or authorized leasing representative
+        to verify information provided in this application, including
+        rental and employment information, as permitted by applicable law.
+        <span class="required">*</span>
+      </span>
+    </label>
+    <label class="check-row">
+      <input
+        type="checkbox"
+        name="equalHousingAcknowledgment"
+        value="Yes"
+        required
+      >
+      <span>
+        I acknowledge that this application is subject to applicable
+        Fair Housing and equal housing requirements.
+        <span class="required">*</span>
+      </span>
+    </label>
+  </section>
+  <!-- SUBMIT -->
+  <div class="submit-area">
+    <button
+      type="submit"
+      class="submit-button"
+      id="submitButton"
+    >
+      Submit Rental Application
+    </button>
+    <div
+      id="status"
+      class="status"
+      role="alert"
+      aria-live="polite"
+    ></div>
+    <div class="privacy">
+      By submitting this application, you confirm that the information
+      provided is accurate and may be reviewed for rental screening
+      purposes in accordance with applicable law.
+    </div>
+  </div>
+</form>
+  </main>
+  <footer>
+    <div class="container">
+      Residential Leasing &nbsp;•&nbsp; Equal Housing Opportunity
+    </div>
+  </footer>
+  <script>
+    const form = document.getElementById("rentalApplication");
+    const submitButton = document.getElementById("submitButton");
+    const statusBox = document.getElementById("status");
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      statusBox.className = "status";
+      statusBox.textContent = "";
+      if (!form.checkValidity()) {
+        form.reportValidity();
         return;
       }
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        function () {
-
-          resolve({
-            name: file.name,
-            type:
-              file.type ||
-              "application/octet-stream",
-            size: file.size,
-            data: reader.result
-          });
-
-        };
-
-      reader.onerror =
-        function () {
-
-          reject(
-            new Error(
-              "Could not read " +
-              file.name
-            )
-          );
-
-        };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   COLLECT FILES
-   ========================================================= */
-
-async function collectFiles() {
-
-  const files = {};
-
-  const inputs =
-    form.querySelectorAll(
-      'input[type="file"]'
-    );
-
-  for (
-    const input of inputs
-  ) {
-
-    if (
-      !input.files ||
-      input.files.length === 0
-    ) {
-      continue;
-    }
-
-    const fieldName =
-      input.name ||
-      input.id;
-
-    if (!fieldName) continue;
-
-    const file =
-      input.files[0];
-
-    /*
-     * Keep the existing 8 MB limit.
-     */
-
-    if (
-      file.size >
-      8 * 1024 * 1024
-    ) {
-
-      throw new Error(
-        file.name +
-        " is larger than 8 MB. Please choose a smaller file."
-      );
-
-    }
-
-    files[fieldName] =
-      await fileToBase64(file);
-
-  }
-
-  return files;
-
-}
-
-
-/* =========================================================
-   FORM → JSON
-   ========================================================= */
-
-async function collectFormData() {
-
-  const data = {};
-
-  const elements =
-    form.querySelectorAll(
-      "input, select, textarea"
-    );
-
-  elements.forEach(
-    function (element) {
-
-      const name =
-        element.name ||
-        element.id;
-
-      if (!name) return;
-
-      /*
-       * Files are collected separately.
-       */
-
-      if (
-        element.type === "file"
-      ) {
-        return;
-      }
-
-      /*
-       * Checkbox
-       */
-
-      if (
-        element.type === "checkbox"
-      ) {
-
-        data[name] =
-          element.checked;
-
-        return;
-
-      }
-
-      /*
-       * Radio
-       */
-
-      if (
-        element.type === "radio"
-      ) {
-
-        if (element.checked) {
-
-          data[name] =
-            element.value;
-
-        }
-
-        return;
-
-      }
-
-      /*
-       * Normal fields
-       */
-
-      data[name] =
-        element.value;
-
-    }
-  );
-
-  data.files =
-    await collectFiles();
-
-  data.applicationType =
-    "rental";
-
-  data.submittedAt =
-    new Date().toISOString();
-
-  return data;
-
-}
-
-
-/* =========================================================
-   SUBMIT TO NETLIFY FUNCTION
-   ========================================================= */
-
-async function submitApplication(data) {
-
-  const response =
-    await fetch(
-      SUBMIT_ENDPOINT,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(data)
-      }
-    );
-
-  const responseText =
-    await response.text();
-
-  let result = {};
-
-  if (responseText) {
-
-    try {
-
-      result =
-        JSON.parse(
-          responseText
-        );
-
-    } catch (error) {
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Server error (" +
-          response.status +
-          "): " +
-          responseText.substring(
-            0,
-            300
-          )
-        );
-
-      }
-
-      throw new Error(
-        "The server returned an invalid response."
-      );
-
-    }
-
-  }
-
-  if (
-    !response.ok ||
-    result.success === false
-  ) {
-
-    throw new Error(
-      result.message ||
-      "The application could not be submitted."
-    );
-
-  }
-
-  return result;
-
-}
-
-
-/* =========================================================
-   SUBMIT FORM
-   ========================================================= */
-
-form.addEventListener(
-  "submit",
-  async function (event) {
-
-    event.preventDefault();
-
-    /*
-     * Browser validation should happen first.
-     */
-
-    if (!form.checkValidity()) {
-
-      form.reportValidity();
-
-      return;
-
-    }
-
-    /*
-     * Signature validation.
-     */
-
-    if (
-      !hasSignature ||
-      !sig.value
-    ) {
-
-      message(
-        "Please draw your signature before submitting.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    const button =
-      document.getElementById(
-        "submitButton"
-      );
-
-    button.disabled = true;
-
-    button.textContent =
-      "Submitting…";
-
-    message(
-      "Submitting your application securely…",
-      "ok"
-    );
-
-    try {
-
-      /*
-       * Collect all application information.
-       */
-
-      const data =
-        await collectFormData();
-
-      /*
-       * Send everything to the
-       * existing Netlify function.
-       */
-
-      const result =
-        await submitApplication(
-          data
-        );
-
-      /*
-       * Save application number if
-       * the backend provides one.
-       */
-
-      if (
-        result &&
-        result.applicationId
-      ) {
-
-        localStorage.setItem(
-          "lastApplicationId",
-          result.applicationId
-        );
-
-      }
-
-      /*
-       * Show success panel.
-       */
-
-      document
-        .getElementById(
-          "successPanel"
-        )
-        .classList
-        .add("show");
-
-      if (
-        result &&
-        result.applicationId
-      ) {
-
-        document
-          .querySelector(
-            "#successPanel p"
-          )
-          .textContent =
-          "Your application has been received. Application number: " +
-          result.applicationId +
-          ". Any separate holding deposit or payment should only be made through an authorized, secure payment page.";
-
-      }
-
-      message(
-        "Application submitted successfully.",
-        "ok"
-      );
-
-      /*
-       * Clear the form after successful
-       * submission.
-       */
-
-      form.reset();
-
-      ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      sig.value = "";
-
-      hasSignature = false;
-
-      /*
-       * Restore today's date.
-       */
-
-      document
-        .getElementById(
-          "signatureDate"
-        )
-        .value =
-        new Date()
-          .toISOString()
-          .slice(0, 10);
-
-      /*
-       * Scroll to confirmation.
-       */
-
-      document
-        .getElementById(
-          "successPanel"
-        )
-        .scrollIntoView({
-          behavior: "smooth",
-          block: "center"
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+      try {
+        const formData = new FormData(form);
+        const response = await fetch("/.netlify/functions/submit", {
+          method: "POST",
+          body: new URLSearchParams(formData)
         });
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Application submission error:",
-        error
-      );
-
-      message(
-        error.message ||
-        "There was a problem submitting the application. Please try again.",
-        "error"
-      );
-
-    }
-
-    finally {
-
-      button.disabled = false;
-
-      button.textContent =
-        "Submit Rental Application";
-
-    }
-
-  }
-);
-
-</script>
+        const contentType = response.headers.get("content-type") || "";
+        let result = null;
+        if (contentType.includes("application/json")) {
+          result = await response.json();
+        } else {
+          const text = await response.text();
+          try {
+            result = JSON.parse(text);
+          } catch {
+            result = {
+              message: text
+            };
+          }
+        }
+        if (!response.ok) {
+          throw new Error(
+            result?.message ||
+            result?.error ||
+            "The application could not be submitted."
+          );
+        }
+        statusBox.className = "status success";
+        statusBox.textContent =
+          result?.message ||
+          "Your rental application has been submitted successfully.";
+        form.reset();
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth"
+        });
+      } catch (error) {
+        statusBox.className = "status error";
+        statusBox.textContent =
+          error.message ||
+          "Something went wrong while submitting your application. Please try again.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit Rental Application";
+      }
+    });
+  </script>
+</body>
+</html>
