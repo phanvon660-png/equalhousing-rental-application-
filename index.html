@@ -1,403 +1,227 @@
 <script>
 /* =========================================================
-   APPLICATION SYSTEM
+   RENTAL APPLICATION → NETLIFY BACKEND
    ========================================================= */
 
-const SUBMIT_URL = "/.netlify/functions/submit";
+const SUBMIT_ENDPOINT = "/.netlify/functions/submit";
 
-/*
- * Add your secure payment URL here when you have one.
- * Example:
- * const SECURE_PAYMENT_URL = "https://example.com/payment";
- */
-const SECURE_PAYMENT_URL = "";
+const form = document.getElementById("rentalApplication");
+const canvas = document.getElementById("signaturePad");
+const ctx = canvas.getContext("2d");
+const sig = document.getElementById("signatureImage");
 
-
-document.addEventListener("DOMContentLoaded", function () {
-
-  /* =======================================================
-     PORTAL SWITCHING
-     ======================================================= */
-
-  const portalButtons =
-    document.querySelectorAll("[data-portal]");
-
-  const portals =
-    document.querySelectorAll("[data-portal-content]");
-
-  portalButtons.forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-      const target =
-        button.getAttribute("data-portal");
-
-      portalButtons.forEach(function (btn) {
-
-        btn.classList.toggle(
-          "active",
-          btn.getAttribute("data-portal") === target
-        );
-
-      });
-
-      portals.forEach(function (portal) {
-
-        const content =
-          portal.getAttribute("data-portal-content");
-
-        portal.style.display =
-          content === target ? "" : "none";
-
-      });
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    });
-
-  });
+let drawing = false;
+let hasSignature = false;
 
 
-  /* =======================================================
-     SIGNATURE PAD
-     ======================================================= */
+/* =========================================================
+   SIGNATURE PAD
+   ========================================================= */
 
-  function setupSignaturePad(canvasId, hiddenInputId) {
+function resizeSignatureCanvas() {
 
-    const canvas =
-      document.getElementById(canvasId);
+  const rect = canvas.getBoundingClientRect();
 
-    const hiddenInput =
-      document.getElementById(hiddenInputId);
+  if (!rect.width || !rect.height) return;
 
-    if (!canvas) {
-      return;
-    }
+  const ratio =
+    Math.max(window.devicePixelRatio || 1, 1);
 
-    const ctx =
-      canvas.getContext("2d");
+  canvas.width =
+    Math.round(rect.width * ratio);
 
-    if (!ctx) {
-      return;
-    }
+  canvas.height =
+    Math.round(rect.height * ratio);
 
-    let drawing = false;
-    let hasSignature = false;
+  canvas.style.width =
+    rect.width + "px";
+
+  canvas.style.height =
+    rect.height + "px";
+
+  ctx.setTransform(
+    ratio,
+    0,
+    0,
+    ratio,
+    0,
+    0
+  );
+
+  ctx.lineWidth = 2.25;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#123f73";
+}
 
 
-    function resizeCanvas() {
+function getPosition(event) {
 
-      const rect =
-        canvas.getBoundingClientRect();
+  const rect =
+    canvas.getBoundingClientRect();
 
-      if (!rect.width || !rect.height) {
-        return;
-      }
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
 
-      const oldWidth = canvas.width;
-      const oldHeight = canvas.height;
+}
 
-      let oldImage = null;
 
-      if (oldWidth && oldHeight && hasSignature) {
-        try {
-          oldImage = canvas.toDataURL("image/png");
-        } catch (error) {
-          oldImage = null;
-        }
-      }
+canvas.addEventListener(
+  "pointerdown",
+  function (event) {
 
-      const ratio =
-        Math.max(window.devicePixelRatio || 1, 1);
+    event.preventDefault();
 
-      canvas.width =
-        Math.round(rect.width * ratio);
+    drawing = true;
+    hasSignature = true;
 
-      canvas.height =
-        Math.round(rect.height * ratio);
+    const position =
+      getPosition(event);
 
-      canvas.style.width =
-        rect.width + "px";
+    ctx.beginPath();
 
-      canvas.style.height =
-        rect.height + "px";
+    ctx.moveTo(
+      position.x,
+      position.y
+    );
 
-      /*
-       * Reset transform before applying the new scale.
-       * This prevents the scale from multiplying every
-       * time the window is resized.
-       */
-
-      ctx.setTransform(
-        ratio,
-        0,
-        0,
-        ratio,
-        0,
-        0
+    if (canvas.setPointerCapture) {
+      canvas.setPointerCapture(
+        event.pointerId
       );
-
-      ctx.lineWidth = 2;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = "#071426";
-
-      if (oldImage) {
-
-        const image =
-          new Image();
-
-        image.onload = function () {
-
-          ctx.drawImage(
-            image,
-            0,
-            0,
-            rect.width,
-            rect.height
-          );
-
-        };
-
-        image.src = oldImage;
-      }
-
     }
 
-
-    function getPosition(event) {
-
-      const rect =
-        canvas.getBoundingClientRect();
-
-      let clientX;
-      let clientY;
-
-      if (
-        event.touches &&
-        event.touches.length > 0
-      ) {
-
-        clientX =
-          event.touches[0].clientX;
-
-        clientY =
-          event.touches[0].clientY;
-
-      } else {
-
-        clientX =
-          event.clientX;
-
-        clientY =
-          event.clientY;
-
-      }
-
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-      };
-
-    }
+  }
+);
 
 
-    function startDrawing(event) {
+canvas.addEventListener(
+  "pointermove",
+  function (event) {
 
-      event.preventDefault();
+    if (!drawing) return;
 
-      drawing = true;
+    event.preventDefault();
 
-      hasSignature = true;
+    const position =
+      getPosition(event);
 
-      const position =
-        getPosition(event);
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        position.x,
-        position.y
-      );
-
-    }
-
-
-    function draw(event) {
-
-      if (!drawing) {
-        return;
-      }
-
-      event.preventDefault();
-
-      const position =
-        getPosition(event);
-
-      ctx.lineTo(
-        position.x,
-        position.y
-      );
-
-      ctx.stroke();
-
-    }
-
-
-    function saveSignature() {
-
-      if (!hiddenInput) {
-        return;
-      }
-
-      if (!hasSignature) {
-        hiddenInput.value = "";
-        return;
-      }
-
-      try {
-
-        hiddenInput.value =
-          canvas.toDataURL("image/png");
-
-      } catch (error) {
-
-        console.error(
-          "Could not save signature:",
-          error
-        );
-
-      }
-
-    }
-
-
-    function stopDrawing(event) {
-
-      if (!drawing) {
-        return;
-      }
-
-      if (event) {
-        event.preventDefault();
-      }
-
-      drawing = false;
-
-      saveSignature();
-
-    }
-
-
-    /*
-     * Mouse
-     */
-
-    canvas.addEventListener(
-      "mousedown",
-      startDrawing
+    ctx.lineTo(
+      position.x,
+      position.y
     );
 
-    canvas.addEventListener(
-      "mousemove",
-      draw
-    );
+    ctx.stroke();
 
-    canvas.addEventListener(
-      "mouseup",
-      stopDrawing
-    );
-
-    canvas.addEventListener(
-      "mouseleave",
-      stopDrawing
-    );
+  }
+);
 
 
-    /*
-     * Touch
-     */
+function stopDrawing() {
 
-    canvas.addEventListener(
-      "touchstart",
-      startDrawing,
-      { passive: false }
-    );
+  if (!drawing) return;
 
-    canvas.addEventListener(
-      "touchmove",
-      draw,
-      { passive: false }
-    );
+  drawing = false;
 
-    canvas.addEventListener(
-      "touchend",
-      stopDrawing,
-      { passive: false }
-    );
+  if (hasSignature) {
 
-    canvas.addEventListener(
-      "touchcancel",
-      stopDrawing,
-      { passive: false }
-    );
-
-
-    /*
-     * Initial sizing
-     */
-
-    resizeCanvas();
-
-
-    /*
-     * Resize without multiplying the canvas scale.
-     */
-
-    window.addEventListener(
-      "resize",
-      resizeCanvas
-    );
-
-
-    /*
-     * Save signature if canvas changes.
-     */
-
-    canvas.addEventListener(
-      "click",
-      saveSignature
-    );
+    sig.value =
+      canvas.toDataURL("image/png");
 
   }
 
+}
 
-  setupSignaturePad(
-    "rentalSignature",
-    "rentalSignatureImage"
+
+[
+  "pointerup",
+  "pointercancel",
+  "pointerleave"
+].forEach(function (eventName) {
+
+  canvas.addEventListener(
+    eventName,
+    stopDrawing
   );
 
-  setupSignaturePad(
-    "cleanerSignature",
-    "cleanerSignatureImage"
+});
+
+
+document
+  .getElementById("clearSignature")
+  .addEventListener(
+    "click",
+    function () {
+
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      sig.value = "";
+
+      hasSignature = false;
+
+    }
   );
 
-  setupSignaturePad(
-    "handymanSignature",
-    "handymanSignatureImage"
-  );
+
+resizeSignatureCanvas();
 
 
-  /* =======================================================
-     FILE → BASE64
-     ======================================================= */
+window.addEventListener(
+  "resize",
+  function () {
 
-  function fileToBase64(file) {
+    if (!hasSignature) {
+      resizeSignatureCanvas();
+    }
 
-    return new Promise(function (resolve, reject) {
+  }
+);
+
+
+/* =========================================================
+   DEFAULT DATE
+   ========================================================= */
+
+document
+  .getElementById("signatureDate")
+  .value =
+  new Date()
+    .toISOString()
+    .slice(0, 10);
+
+
+/* =========================================================
+   STATUS MESSAGE
+   ========================================================= */
+
+function message(text, type) {
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent = text;
+
+  status.className =
+    "status show " + type;
+
+}
+
+
+/* =========================================================
+   FILE → BASE64
+   ========================================================= */
+
+function fileToBase64(file) {
+
+  return new Promise(
+    function (resolve, reject) {
 
       if (!file) {
         resolve(null);
@@ -407,171 +231,123 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader =
         new FileReader();
 
-      reader.onload = function () {
+      reader.onload =
+        function () {
 
-        resolve({
-          name: file.name,
-          type: file.type || "application/octet-stream",
-          size: file.size,
-          data: reader.result
-        });
+          resolve({
+            name: file.name,
+            type:
+              file.type ||
+              "application/octet-stream",
+            size: file.size,
+            data: reader.result
+          });
 
-      };
+        };
 
-      reader.onerror = function () {
+      reader.onerror =
+        function () {
 
-        reject(
-          new Error(
-            "Could not read file: " +
-            file.name
-          )
-        );
+          reject(
+            new Error(
+              "Could not read " +
+              file.name
+            )
+          );
 
-      };
+        };
 
       reader.readAsDataURL(file);
 
-    });
+    }
+  );
 
-  }
+}
 
 
-  /* =======================================================
-     COLLECT FILES
-     ======================================================= */
+/* =========================================================
+   COLLECT FILES
+   ========================================================= */
 
-  async function collectFiles(form) {
+async function collectFiles() {
 
-    const files = {};
+  const files = {};
 
-    const inputs =
-      form.querySelectorAll(
-        'input[type="file"]'
+  const inputs =
+    form.querySelectorAll(
+      'input[type="file"]'
+    );
+
+  for (
+    const input of inputs
+  ) {
+
+    if (
+      !input.files ||
+      input.files.length === 0
+    ) {
+      continue;
+    }
+
+    const fieldName =
+      input.name ||
+      input.id;
+
+    if (!fieldName) continue;
+
+    const file =
+      input.files[0];
+
+    /*
+     * Keep the existing 8 MB limit.
+     */
+
+    if (
+      file.size >
+      8 * 1024 * 1024
+    ) {
+
+      throw new Error(
+        file.name +
+        " is larger than 8 MB. Please choose a smaller file."
       );
-
-
-    for (const input of inputs) {
-
-      if (
-        !input.files ||
-        input.files.length === 0
-      ) {
-        continue;
-      }
-
-
-      const fieldName =
-        input.name ||
-        input.id;
-
-
-      if (!fieldName) {
-        continue;
-      }
-
-
-      /*
-       * Multiple files
-       */
-
-      if (input.multiple) {
-
-        files[fieldName] = [];
-
-
-        for (
-          const file of input.files
-        ) {
-
-          if (
-            file.size >
-            8 * 1024 * 1024
-          ) {
-
-            throw new Error(
-              file.name +
-              " is larger than 8 MB. Please choose a smaller file."
-            );
-
-          }
-
-
-          const encoded =
-            await fileToBase64(file);
-
-          files[fieldName].push(
-            encoded
-          );
-
-        }
-
-      }
-
-
-      /*
-       * Single file
-       */
-
-      else {
-
-        const file =
-          input.files[0];
-
-
-        if (
-          file.size >
-          8 * 1024 * 1024
-        ) {
-
-          throw new Error(
-            file.name +
-            " is larger than 8 MB. Please choose a smaller file."
-          );
-
-        }
-
-
-        files[fieldName] =
-          await fileToBase64(file);
-
-      }
 
     }
 
-
-    return files;
+    files[fieldName] =
+      await fileToBase64(file);
 
   }
 
+  return files;
 
-  /* =======================================================
-     FORM → JSON
-     ======================================================= */
-
-  async function formToJSON(form) {
-
-    const data = {};
-
-    const elements =
-      form.querySelectorAll(
-        "input, select, textarea"
-      );
+}
 
 
-    elements.forEach(function (element) {
+/* =========================================================
+   FORM → JSON
+   ========================================================= */
+
+async function collectFormData() {
+
+  const data = {};
+
+  const elements =
+    form.querySelectorAll(
+      "input, select, textarea"
+    );
+
+  elements.forEach(
+    function (element) {
 
       const name =
         element.name ||
         element.id;
 
-
-      if (!name) {
-        return;
-      }
-
+      if (!name) return;
 
       /*
-       * Files are handled separately.
+       * Files are collected separately.
        */
 
       if (
@@ -579,7 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ) {
         return;
       }
-
 
       /*
        * Checkbox
@@ -593,8 +368,8 @@ document.addEventListener("DOMContentLoaded", function () {
           element.checked;
 
         return;
-      }
 
+      }
 
       /*
        * Radio
@@ -612,831 +387,307 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return;
+
       }
 
-
       /*
-       * Normal input/select/textarea
+       * Normal fields
        */
 
       data[name] =
         element.value;
 
-    });
-
-
-    data.files =
-      await collectFiles(form);
-
-
-    return data;
-
-  }
-
-
-  /* =======================================================
-     APPLICATION TYPE
-     ======================================================= */
-
-  function getApplicationType(form) {
-
-    const typeInput =
-      form.querySelector(
-        '[name="applicationType"]'
-      );
-
-
-    if (
-      typeInput &&
-      typeInput.value
-    ) {
-
-      return typeInput.value;
-
     }
+  );
+
+  data.files =
+    await collectFiles();
+
+  data.applicationType =
+    "rental";
+
+  data.submittedAt =
+    new Date().toISOString();
+
+  return data;
+
+}
 
 
-    const formId =
-      (
-        form.id ||
-        ""
-      ).toLowerCase();
+/* =========================================================
+   SUBMIT TO NETLIFY FUNCTION
+   ========================================================= */
 
+async function submitApplication(data) {
 
-    if (
-      formId.includes("cleaner")
-    ) {
+  const response =
+    await fetch(
+      SUBMIT_ENDPOINT,
+      {
+        method: "POST",
 
-      return "cleaner";
+        headers: {
+          "Content-Type":
+            "application/json",
 
-    }
+          "Accept":
+            "application/json"
+        },
 
+        body:
+          JSON.stringify(data)
+      }
+    );
 
-    if (
-      formId.includes("handyman")
-    ) {
+  const responseText =
+    await response.text();
 
-      return "handyman";
+  let result = {};
 
-    }
+  if (responseText) {
 
+    try {
 
-    if (
-      formId.includes("deposit") ||
-      form.hasAttribute(
-        "data-form-type"
-      )
-    ) {
-
-      const formType =
-        form.getAttribute(
-          "data-form-type"
+      result =
+        JSON.parse(
+          responseText
         );
 
-      if (
-        formType ===
-        "deposit-receipt"
-      ) {
+    } catch (error) {
 
-        return "deposit_receipt";
+      if (!response.ok) {
+
+        throw new Error(
+          "Server error (" +
+          response.status +
+          "): " +
+          responseText.substring(
+            0,
+            300
+          )
+        );
 
       }
 
+      throw new Error(
+        "The server returned an invalid response."
+      );
+
     }
-
-
-    return "rental";
 
   }
 
-
-  /* =======================================================
-     BUTTON LOADING
-     ======================================================= */
-
-  function setButtonLoading(
-    button,
-    loading
+  if (
+    !response.ok ||
+    result.success === false
   ) {
 
-    if (!button) {
+    throw new Error(
+      result.message ||
+      "The application could not be submitted."
+    );
+
+  }
+
+  return result;
+
+}
+
+
+/* =========================================================
+   SUBMIT FORM
+   ========================================================= */
+
+form.addEventListener(
+  "submit",
+  async function (event) {
+
+    event.preventDefault();
+
+    /*
+     * Browser validation should happen first.
+     */
+
+    if (!form.checkValidity()) {
+
+      form.reportValidity();
+
       return;
+
     }
 
+    /*
+     * Signature validation.
+     */
 
-    if (loading) {
+    if (
+      !hasSignature ||
+      !sig.value
+    ) {
+
+      message(
+        "Please draw your signature before submitting.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    const button =
+      document.getElementById(
+        "submitButton"
+      );
+
+    button.disabled = true;
+
+    button.textContent =
+      "Submitting…";
+
+    message(
+      "Submitting your application securely…",
+      "ok"
+    );
+
+    try {
+
+      /*
+       * Collect all application information.
+       */
+
+      const data =
+        await collectFormData();
+
+      /*
+       * Send everything to the
+       * existing Netlify function.
+       */
+
+      const result =
+        await submitApplication(
+          data
+        );
+
+      /*
+       * Save application number if
+       * the backend provides one.
+       */
 
       if (
-        !button.dataset.originalText
+        result &&
+        result.applicationId
       ) {
 
-        button.dataset.originalText =
-          button.innerHTML;
+        localStorage.setItem(
+          "lastApplicationId",
+          result.applicationId
+        );
 
       }
 
+      /*
+       * Show success panel.
+       */
 
-      button.disabled = true;
+      document
+        .getElementById(
+          "successPanel"
+        )
+        .classList
+        .add("show");
 
-      button.style.cursor =
-        "wait";
+      if (
+        result &&
+        result.applicationId
+      ) {
 
-      button.innerHTML =
-        "Submitting…";
+        document
+          .querySelector(
+            "#successPanel p"
+          )
+          .textContent =
+          "Your application has been received. Application number: " +
+          result.applicationId +
+          ". Any separate holding deposit or payment should only be made through an authorized, secure payment page.";
+
+      }
+
+      message(
+        "Application submitted successfully.",
+        "ok"
+      );
+
+      /*
+       * Clear the form after successful
+       * submission.
+       */
+
+      form.reset();
+
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      sig.value = "";
+
+      hasSignature = false;
+
+      /*
+       * Restore today's date.
+       */
+
+      document
+        .getElementById(
+          "signatureDate"
+        )
+        .value =
+        new Date()
+          .toISOString()
+          .slice(0, 10);
+
+      /*
+       * Scroll to confirmation.
+       */
+
+      document
+        .getElementById(
+          "successPanel"
+        )
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
 
     }
 
+    catch (error) {
 
-    else {
+      console.error(
+        "Application submission error:",
+        error
+      );
+
+      message(
+        error.message ||
+        "There was a problem submitting the application. Please try again.",
+        "error"
+      );
+
+    }
+
+    finally {
 
       button.disabled = false;
 
-      button.style.cursor =
-        "";
-
-      if (
-        button.dataset.originalText
-      ) {
-
-        button.innerHTML =
-          button.dataset.originalText;
-
-      }
+      button.textContent =
+        "Submit Rental Application";
 
     }
 
   }
+);
 
-
-  /* =======================================================
-     SAFE HTML
-     ======================================================= */
-
-  function escapeHTML(value) {
-
-    return String(value || "")
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
-      );
-
-  }
-
-
-  /* =======================================================
-     SUCCESS MESSAGE
-     ======================================================= */
-
-  function showSuccess(
-    form,
-    result
-  ) {
-
-    let panel =
-      form.querySelector(
-        ".application-success"
-      );
-
-
-    if (!panel) {
-
-      panel =
-        document.createElement(
-          "div"
-        );
-
-      panel.className =
-        "application-success";
-
-      panel.style.cssText = `
-        margin:24px 0;
-        padding:24px;
-        border-radius:16px;
-        background:#eaf5fa;
-        border:1px solid #48b8f5;
-        color:#071426;
-        font-family:inherit;
-      `;
-
-      form.parentNode.insertBefore(
-        panel,
-        form
-      );
-
-    }
-
-
-    const applicationId =
-      escapeHTML(
-        result &&
-        result.applicationId
-          ? result.applicationId
-          : "Received"
-      );
-
-
-    panel.innerHTML = `
-      <h3 style="margin-top:0;">
-        Application Submitted Successfully
-      </h3>
-
-      <p>
-        Thank you. Your application has been received.
-      </p>
-
-      <p>
-        <strong>Application Number:</strong>
-        ${applicationId}
-      </p>
-
-      <p>
-        Please save this application number
-        for your records.
-      </p>
-    `;
-
-
-    panel.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-
-  }
-
-
-  /* =======================================================
-     ERROR MESSAGE
-     ======================================================= */
-
-  function showError(
-    form,
-    message
-  ) {
-
-    let panel =
-      form.querySelector(
-        ".application-error"
-      );
-
-
-    if (!panel) {
-
-      panel =
-        document.createElement(
-          "div"
-        );
-
-      panel.className =
-        "application-error";
-
-      panel.style.cssText = `
-        margin:24px 0;
-        padding:20px;
-        border-radius:16px;
-        background:#fff1f1;
-        border:1px solid #d9534f;
-        color:#721c24;
-        font-family:inherit;
-      `;
-
-      form.parentNode.insertBefore(
-        panel,
-        form
-      );
-
-    }
-
-
-    panel.innerHTML = `
-      <strong>Submission problem</strong>
-
-      <p style="margin-bottom:0;">
-        ${escapeHTML(
-          message ||
-          "Something went wrong. Please try again."
-        )}
-      </p>
-    `;
-
-
-    panel.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-
-  }
-
-
-  /* =======================================================
-     SEND DATA TO SERVER
-     ======================================================= */
-
-  async function submitApplication(
-    data
-  ) {
-
-    const response =
-      await fetch(
-        SUBMIT_URL,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-            "Accept":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(data)
-        }
-      );
-
-
-    /*
-     * Read response as text first.
-     * This prevents a JSON parsing error from
-     * hiding the actual server error.
-     */
-
-    const responseText =
-      await response.text();
-
-
-    let result = {};
-
-
-    if (responseText) {
-
-      try {
-
-        result =
-          JSON.parse(
-            responseText
-          );
-
-      } catch (error) {
-
-        /*
-         * Server returned something other than JSON.
-         */
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Server error (" +
-            response.status +
-            "): " +
-            responseText.substring(
-              0,
-              300
-            )
-          );
-
-        }
-
-        throw new Error(
-          "The server returned an invalid response."
-        );
-
-      }
-
-    }
-
-
-    if (
-      !response.ok ||
-      result.success === false
-    ) {
-
-      throw new Error(
-        result.message ||
-        "The application could not be submitted."
-      );
-
-    }
-
-
-    return result;
-
-  }
-
-
-  /* =======================================================
-     NORMAL APPLICATION FORMS
-     ======================================================= */
-
-  const forms =
-    document.querySelectorAll(
-      "form"
-    );
-
-
-  forms.forEach(function (form) {
-
-    /*
-     * Deposit receipt forms are handled separately below.
-     */
-
-    if (
-      form.getAttribute(
-        "data-form-type"
-      ) ===
-      "deposit-receipt"
-    ) {
-
-      return;
-
-    }
-
-
-    form.addEventListener(
-      "submit",
-      async function (event) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-
-        const submitButton =
-          form.querySelector(
-            'button[type="submit"], input[type="submit"]'
-          );
-
-
-        /*
-         * Prevent accidental double-click submissions.
-         */
-
-        if (
-          submitButton &&
-          submitButton.disabled
-        ) {
-
-          return;
-
-        }
-
-
-        setButtonLoading(
-          submitButton,
-          true
-        );
-
-
-        try {
-
-          const data =
-            await formToJSON(
-              form
-            );
-
-
-          const applicationType =
-            getApplicationType(
-              form
-            );
-
-
-          data.applicationType =
-            applicationType;
-
-
-          data.submittedAt =
-            new Date().toISOString();
-
-
-          /*
-           * -------------------------------------------------
-           * SIGNATURE VALIDATION
-           * -------------------------------------------------
-           *
-           * A drawn signature is stored in:
-           *
-           * rentalSignatureImage
-           * cleanerSignatureImage
-           * handymanSignatureImage
-           *
-           * A typed signature can be stored in:
-           *
-           * signatureName
-           *
-           * Rental applications require at least one.
-           */
-
-
-          if (
-            applicationType ===
-            "rental"
-          ) {
-
-            const typedSignature =
-              String(
-                data.signatureName ||
-                ""
-              ).trim();
-
-
-            const drawnSignature =
-              String(
-                data.rentalSignatureImage ||
-                ""
-              ).trim();
-
-
-            if (
-              !typedSignature &&
-              !drawnSignature
-            ) {
-
-              throw new Error(
-                "Please enter your signature name or sign in the signature box."
-              );
-
-            }
-
-          }
-
-
-          /*
-           * Submit to backend.
-           */
-
-          const result =
-            await submitApplication(
-              data
-            );
-
-
-          /*
-           * Save application number.
-           */
-
-          if (
-            result &&
-            result.applicationId
-          ) {
-
-            localStorage.setItem(
-              "lastApplicationId",
-              result.applicationId
-            );
-
-          }
-
-
-          /*
-           * Display success.
-           */
-
-          showSuccess(
-            form,
-            result
-          );
-
-
-          /*
-           * Do not reload or reset the form.
-           */
-
-        }
-
-
-        catch (error) {
-
-          console.error(
-            "Application submission error:",
-            error
-          );
-
-
-          showError(
-            form,
-            error.message ||
-            "Something went wrong. Please try again."
-          );
-
-        }
-
-
-        finally {
-
-          setButtonLoading(
-            submitButton,
-            false
-          );
-
-        }
-
-      }
-    );
-
-  });
-
-
-  /* =======================================================
-     PAYMENT BUTTONS
-     ======================================================= */
-
-  const paymentButtons =
-    document.querySelectorAll(
-      "[data-payment-button]"
-    );
-
-
-  paymentButtons.forEach(
-    function (button) {
-
-      button.addEventListener(
-        "click",
-        function () {
-
-          if (
-            !SECURE_PAYMENT_URL
-          ) {
-
-            alert(
-              "The secure payment page has not been connected yet."
-            );
-
-            return;
-
-          }
-
-
-          window.location.href =
-            SECURE_PAYMENT_URL;
-
-        }
-      );
-
-    }
-  );
-
-
-  /* =======================================================
-     DEPOSIT RECEIPT FORMS
-     ======================================================= */
-
-  const receiptForms =
-    document.querySelectorAll(
-      '[data-form-type="deposit-receipt"]'
-    );
-
-
-  receiptForms.forEach(
-    function (form) {
-
-      form.addEventListener(
-        "submit",
-        async function (event) {
-
-          event.preventDefault();
-          event.stopPropagation();
-
-
-          const button =
-            form.querySelector(
-              'button[type="submit"], input[type="submit"]'
-            );
-
-
-          if (
-            button &&
-            button.disabled
-          ) {
-
-            return;
-
-          }
-
-
-          setButtonLoading(
-            button,
-            true
-          );
-
-
-          try {
-
-            const data =
-              await formToJSON(
-                form
-              );
-
-
-            data.applicationType =
-              "deposit_receipt";
-
-
-            data.submittedAt =
-              new Date().toISOString();
-
-
-            const result =
-              await submitApplication(
-                data
-              );
-
-
-            if (
-              result &&
-              result.applicationId
-            ) {
-
-              localStorage.setItem(
-                "lastApplicationId",
-                result.applicationId
-              );
-
-            }
-
-
-            showSuccess(
-              form,
-              result
-            );
-
-          }
-
-
-          catch (error) {
-
-            console.error(
-              "Receipt submission error:",
-              error
-            );
-
-
-            showError(
-              form,
-              error.message ||
-              "Receipt submission failed."
-            );
-
-          }
-
-
-          finally {
-
-            setButtonLoading(
-              button,
-              false
-            );
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-  /* =======================================================
-     REMEMBER LAST APPLICATION
-     ======================================================= */
-
-  const savedApplicationId =
-    localStorage.getItem(
-      "lastApplicationId"
-    );
-
-
-  if (savedApplicationId) {
-
-    console.log(
-      "Last application:",
-      savedApplicationId
-    );
-
-  }
-
-
-  /* =======================================================
-     SYSTEM READY
-     ======================================================= */
-
-  console.log(
-    "Application system initialized."
-  );
-
-});
 </script>
